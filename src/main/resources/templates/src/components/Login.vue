@@ -1,9 +1,10 @@
 <template>
-
+<div>
+	<img src="../assets/logo.jpg" alt="" width="200">
+	<p class="title">Booking <span class="app">App</span></p>
 <div class = "container">
 	<b-form>
-		<div><img src = "../assets/logo.jpg" alt="" width="200"></div>
-			<div class="form-input">
+			<div class="form-input"><br>
 				<label><b>Email address</b></label>
 				<b-form-input v-model="email"
                   type="text"
@@ -21,32 +22,32 @@
                   :formatter="format"
     			></b-form-input>
 			</div>
-			<b-button @click="submit">Submit</b-button>
+			<b-button @click="submit" class="btn btn-success">Submit</b-button>
 			<div>
-			<a href="#">Recover password</a>
+			<a href="/Recover" id="forget">Recover password</a>
 			</div>
 		</b-form>	
->>>>>>> Stashed changes
 	</div>
+</div>
 </template>
 <!-- SCRIPT JavaScript -->
 <script>
-	export default {
-		data() {
-			return {
-				email: '',
-				password: ''
-			};
-		},
-		methods: {
-			format(value) {
-				return value.toLowerCase();
-			},
-			submit() {
-				console.log(this.email, this.password);
-			}
-		}
-	}
+export default {
+  data() {
+  	return {
+        email: '',
+        password: ''
+      };
+  },
+  methods: {
+    format(value) {
+      return value.toLowerCase();
+    },
+    submit() {
+    	console.log(this.email, this.password);
+    }
+  }
+}
 </script>
 
 
@@ -58,46 +59,43 @@
 
 <!-- STYLE CSS -->
 <style>
-	a{
-		text-decoration: none;
-	}
-	.container{
-		width: 500px;
-		height: 350px;
-		text-align: center;
-		background-color: #ccccff;
-		margin: 0 auto;
-		border-radius: 0 auto;
-		margin-top: 20px;
-	}
-
-	input{
-		height: 45px;
-		width: 300px;
-		font-size: 18px;
-		border: none;
-		margin-bottom: 20px;
-		border-radius: 4px;
-		background-color: #fff;
-		padding-left: 30px;
-	}
-
-	p{
-		font-size: 80px;
-		font-family: Arial;
-	}
-
-	.form-input{
-		text-align: left;
-		font-size: 20px;
-	}
-	#forget{
-		font-size: 18px;
-	}
-	.app{
-		color: skyblue;
-	}
-	.title{
-		color: blue;
-	}
+a{
+text-decoration: none;
+}
+.container{
+	width: 500px;
+	height: 350px;
+	text-align: center;
+	background-color: #ccccff;
+	margin: 0 auto;
+	border-radius: 0 auto;
+	margin-top: 20px;
+}
+input{
+	height: 45px;
+	width: 300px;
+	font-size: 18px;
+	border: none;
+	margin-bottom: 20px;
+	border-radius: 4px;
+	background-color: #fff;
+	padding-left: 30px;
+}
+p{
+font-size: 80px;
+font-family: Arial;
+}
+.form-input{
+text-align: left;
+font-size: 20px;
+}
+#forget{
+font-size: 18px;
+}
+.app{
+color: skyblue;
+}
+.title{
+color: blue;
+}
 </style>

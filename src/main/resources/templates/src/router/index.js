@@ -27,15 +27,13 @@ export default new Router({
       path: '/Login',
       name: 'Login',
       component: Login
-<<<<<<< Updated upstream
     },
     {   
       path: '/register',
       name: 'Register',
       component: Register
-=======
 
->>>>>>> Stashed changes
+
     }
   ]
 })
