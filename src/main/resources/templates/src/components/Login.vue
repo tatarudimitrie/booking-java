@@ -1,8 +1,10 @@
 <template>
+<div>
+	<img src="../assets/logo.jpg" alt="" width="200">
+	<p class="title">Booking <span class="app">App</span></p>
 <div class = "container">
 	<b-form>
-		<div><img src = "#";</div>
-			<div class="form-input">
+			<div class="form-input"><br>
 				<label><b>Email address</b></label>
 				<b-form-input v-model="email"
                   type="text"
@@ -20,12 +22,13 @@
                   :formatter="format"
     			></b-form-input>
 			</div>
-			<b-button @click="submit">Submit</b-button>
+			<b-button @click="submit" class="btn btn-success">Submit</b-button>
 			<div>
-			<a href="#">Recover password</a>
+			<a href="#" id="forget">Recover password</a>
 			</div>
 		</b-form>	
 	</div>
+</div>
 </template>
 <!-- SCRIPT JavaScript -->
 <script>
@@ -61,19 +64,14 @@ text-decoration: none;
 }
 .container{
 	width: 500px;
-	height: 400px;
+	height: 350px;
 	text-align: center;
-	background-color: #F3F3F3;
+	background-color: #ccccff;
 	margin: 0 auto;
 	border-radius: 0 auto;
-	margin-top: 150px;
+	margin-top: 20px;
 }
-.container img{
-	width: 120px;
-	height: 120px;
-	margin-top: -60px;
-	margin-bottom: 30px;
-}
+
 input{
 	height: 45px;
 	width: 300px;
@@ -84,14 +82,23 @@ input{
 	background-color: #fff;
 	padding-left: 30px;
 }
-.btn-login{
-	height: 45px;
-	padding: 15px 30px;
-	cursor: pointer;
-	border-radius: 4px;
-	border: none;
-	background-color: blue;
-	border-bottom: 4px solid blue;
-	margin-bottom: 20px;
+
+p{
+font-size: 80px;
+font-family: Arial;
+}
+
+.form-input{
+text-align: left;
+font-size: 20px;
+}
+#forget{
+font-size: 18px;
+}
+.app{
+color: skyblue;
+}
+.title{
+color: blue;
 }
 </style>
