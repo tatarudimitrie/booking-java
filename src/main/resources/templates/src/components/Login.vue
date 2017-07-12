@@ -1,33 +1,32 @@
 <template>
-	<div>
-		<img src="../assets/logo.jpg" alt="" width="200">
-		<p class="title">Booking <span class="app">App</span></p>
-		<div class="container">
-			<b-form>
-				<div class="form-input"><br>
-					<label><b>Email address</b></label>
-					<b-form-input v-model="email"
-					type="text"
-					placeholder="Enter email"
-					:state="email.length?'success':'warning'"
-					:formatter="format"
-					></b-form-input>
-				</div>
-				<div class="form-input">
-					<label><b>Password</b></label>
-					<b-form-input v-model="password"
-					type="text"
-					placeholder="Enter password"
-					:state="password.length?'success':'warning'"
-					:formatter="format"
-					></b-form-input>
-				</div>
-				<b-button @click="submit" class="btn btn-success">Submit</b-button>
-				<div>
-					<a href="/Recover">Recover password</a>
-				</div>
-			</b-form>	
-		</div>
+
+<div class = "container">
+	<b-form>
+		<div><img src = "../assets/logo.jpg" alt="" width="200"></div>
+			<div class="form-input">
+				<label><b>Email address</b></label>
+				<b-form-input v-model="email"
+                  type="text"
+                  placeholder="Enter email"
+                  :state="email.length?'success':'warning'"
+                  :formatter="format"
+    			></b-form-input>
+			</div>
+			<div class="form-input">
+				<label><b>Password</b></label>
+				<b-form-input v-model="password"
+                  type="text"
+                  placeholder="Enter password"
+                  :state="password.length?'success':'warning'"
+                  :formatter="format"
+    			></b-form-input>
+			</div>
+			<b-button @click="submit">Submit</b-button>
+			<div>
+			<a href="#">Recover password</a>
+			</div>
+		</b-form>	
+>>>>>>> Stashed changes
 	</div>
 </template>
 <!-- SCRIPT JavaScript -->

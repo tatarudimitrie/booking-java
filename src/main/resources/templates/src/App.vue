@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
     <router-view></router-view>
   </div>
 </template>
