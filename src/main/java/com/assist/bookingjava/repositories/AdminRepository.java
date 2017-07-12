@@ -4,11 +4,11 @@
 
 package com.assist.bookingjava.repositories;
 
-import com.assist.bookingjava.model.Admin;
+import com.assist.bookingjava.model.Admins;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface AdminRepository extends CrudRepository<Admin, Long> {
-    List<Admin> findByLastName(String lastName);
+public interface AdminRepository extends CrudRepository<Admins, Long> {
+    List<Admins> findByLastName(String lastName);
 }

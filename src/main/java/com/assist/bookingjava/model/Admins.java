@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "customer")
-public class Admin implements Serializable {
+public class Admins implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
     @Id
@@ -22,10 +22,10 @@ public class Admin implements Serializable {
     @Column(name = "lastname")
     private String lastName;
 
-    protected Admin() {
+    protected Admins() {
     }
 
-    public Admin(String firstName, String lastName) {
+    public Admins(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

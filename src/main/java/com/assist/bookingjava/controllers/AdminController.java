@@ -3,7 +3,7 @@
  */
 package com.assist.bookingjava.controllers;
 
-import com.assist.bookingjava.model.Admin;
+import com.assist.bookingjava.model.Admins;
 import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +18,11 @@ public class AdminController {
 
     @RequestMapping("/save")
     public String process(){
-        repository.save(new Admin("Jack", "Smith"));
-        repository.save(new Admin("Adam", "Johnson"));
-        repository.save(new Admin("Kim", "Smith"));
-        repository.save(new Admin("David", "Williams"));
-        repository.save(new Admin("Peter", "Davis"));
+        repository.save(new Admins("Jack", "Smith"));
+        repository.save(new Admins("Adam", "Johnson"));
+        repository.save(new Admins("Kim", "Smith"));
+        repository.save(new Admins("David", "Williams"));
+        repository.save(new Admins("Peter", "Davis"));
         return "Done";
     }
 
@@ -31,7 +31,7 @@ public class AdminController {
     public String findAll(){
         String result = "<html>";
 
-        for(Admin cust : repository.findAll()){
+        for(Admins cust : repository.findAll()){
             result += "<div>" + cust.toString() + "</div>";
         }
 
@@ -49,7 +49,7 @@ public class AdminController {
     public String fetchDataByLastName(@RequestParam("lastname") String lastName){
         String result = "<html>";
 
-        for(Admin cust: repository.findByLastName(lastName)){
+        for(Admins cust: repository.findByLastName(lastName)){
             result += "<div>" + cust.toString() + "</div>";
         }
 
