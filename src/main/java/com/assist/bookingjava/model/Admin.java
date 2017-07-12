@@ -29,6 +29,7 @@ public class Admin implements Serializable {
     public Admin(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        
     }
 
     @Override
