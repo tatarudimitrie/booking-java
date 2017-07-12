@@ -7,6 +7,7 @@ package com.assist.bookingjava.model;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/* Add comment test */
 @Entity
 @Table(name = "customer")
 public class Admins implements Serializable {
