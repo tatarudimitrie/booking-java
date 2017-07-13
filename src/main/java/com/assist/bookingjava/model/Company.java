@@ -1,8 +1,11 @@
 package com.assist.bookingjava.model;
 
+<<<<<<< Updated upstream
 
 
 
+=======
+>>>>>>> Stashed changes
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,6 +14,13 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "company")
+<<<<<<< Updated upstream
+=======
+/*@SecondaryTables({
+        @SecondaryTable(name="service", pkJoinColumns={
+                @PrimaryKeyJoinColumn(name="idService") })
+})*/
+>>>>>>> Stashed changes
 public class Company implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
@@ -18,9 +28,15 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idCompany;
 
+<<<<<<< Updated upstream
      //@ManyToOne
      //@JoinColumn(name="idAdmin", table="admins")
      private long idAdmin;
+=======
+   // @ManyToOne
+   //  @JoinColumn(name="idAdmin", table="admins")
+   // private long idAdmins;
+>>>>>>> Stashed changes
 
     @Column(name = "nameCompany")
     private String nameCompany;
@@ -35,8 +51,13 @@ public class Company implements Serializable {
     }
 
 
+<<<<<<< Updated upstream
     public Company(long idAdmin, String nameCompany, String descriptionCompany, String urlImage) {
         this.idAdmin = idAdmin;
+=======
+    public Company(long idAdmins, String nameCompany, String descriptionCompany, String urlImage) {
+       // this.idAdmins = idAdmins;
+>>>>>>> Stashed changes
         this.nameCompany = nameCompany;
         this.descriptionCompany = descriptionCompany;
         this.urlImage = urlImage;
@@ -46,12 +67,17 @@ public class Company implements Serializable {
     public String toString() {
         return "Company{" +
                 "idCompany=" + idCompany +
+<<<<<<< Updated upstream
                 ", admin=" + idAdmin +
+=======
+                ", admins=" +// idAdmins +
+>>>>>>> Stashed changes
                 ", nameCompany='" + nameCompany + '\'' +
                 ", descriptionCompany='" + descriptionCompany + '\'' +
                 ", urlImage='" + urlImage + '\'' +
                 '}';
     }
+<<<<<<< Updated upstream
 
 
     public long getIdCompany() {
@@ -97,3 +123,6 @@ public class Company implements Serializable {
 
 
 }
+=======
+}
+>>>>>>> Stashed changes

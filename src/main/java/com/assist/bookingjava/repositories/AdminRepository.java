@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+<<<<<<< Updated upstream
 
 
 
@@ -16,4 +17,9 @@ public interface AdminRepository extends CrudRepository<Admin, Long> {
 
     List<Admin> findByMail(String mail);
 
+=======
+public interface AdminRepository extends CrudRepository<Admin, Long> {
+    List<Admin> findByLastName(String lastName);
+>>>>>>> Stashed changes
 }
+

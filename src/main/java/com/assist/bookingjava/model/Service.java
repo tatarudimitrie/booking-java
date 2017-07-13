@@ -17,17 +17,14 @@ public class Service implements Serializable {
     private long idService;
 
     @ManyToOne
-    @JoinColumn(name = "id", table = "company")
-    private Admin school;
-
-    @Column(name = "firstname")
-    private String firstName;
+    @ForeignKey(name="FK_Company")
+    private Company idCompany;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "desc")
-    private String desc;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "duration")
     private String duration;
@@ -38,11 +35,9 @@ public class Service implements Serializable {
     @Column(name = "price")
     private double price;
 
-    public Service(Admin school, String firstName, String name, String desc, String duration, Date space, double price) {
-        this.school = school;
-        this.firstName = firstName;
+    public Service(String name, String description, String duration, Date space, double price) {
         this.name = name;
-        this.desc = desc;
+        this.description = description;
         this.duration = duration;
         this.space = space;
         this.price = price;
@@ -52,10 +47,8 @@ public class Service implements Serializable {
     public String toString() {
         return "Service{" +
                 "idService=" + idService +
-                ", school=" + school +
-                ", firstName='" + firstName + '\'' +
                 ", name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
+                ", description='" + description + '\'' +
                 ", duration='" + duration + '\'' +
                 ", space=" + space +
                 ", price=" + price +
