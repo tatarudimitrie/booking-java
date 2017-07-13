@@ -16,7 +16,7 @@ public class Company implements Serializable {
     private long idCompany;
 
     @ManyToOne
-    @JoinColumn(name="idAdmin", table="admins")
+    @JoinColumn(name="idAdmins", table="admins")
     private long idAdmins;
 
     @Column(name = "nameCompany")
@@ -49,4 +49,47 @@ public class Company implements Serializable {
                 ", urlImage='" + urlImage + '\'' +
                 '}';
     }
+
+
+    public long getIdCompany() {
+        return idCompany;
+    }
+
+    public long getIdAdmins() {
+        return idAdmins;
+    }
+
+    public String getNameCompany() {
+        return nameCompany;
+    }
+
+    public String getDescriptionCompany() {
+        return descriptionCompany;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setIdCompany(long idCompany) {
+        this.idCompany = idCompany;
+    }
+
+    public void setIdAdmins(long idAdmins) {
+        this.idAdmins = idAdmins;
+    }
+
+    public void setNameCompany(String nameCompany) {
+        this.nameCompany = nameCompany;
+    }
+
+    public void setDescriptionCompany(String descriptionCompany) {
+        this.descriptionCompany = descriptionCompany;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
+
+
 }
