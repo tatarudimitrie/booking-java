@@ -2,6 +2,7 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /* Add comment test */
 @Entity
@@ -22,6 +23,9 @@ public class Admin implements Serializable {
 
     @Column(name = "pass")
     private String pass;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "idCompany", orphanRemoval = true)
+    private Set<Company> companies;
 
     public Admin() {}
 
