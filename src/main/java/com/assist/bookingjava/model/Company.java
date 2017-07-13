@@ -15,8 +15,8 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idCompany;
 
-     @ManyToOne
-     @JoinColumn(name="idAdmin", table="admins")
+     //@ManyToOne
+     //@JoinColumn(name="idAdmin", table="admins")
      private long idAdmin;
 
     @Column(name = "nameCompany")
