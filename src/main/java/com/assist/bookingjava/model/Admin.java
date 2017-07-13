@@ -43,15 +43,8 @@ public class Admin implements Serializable {
         return name;
     }
 
-<<<<<<< Updated upstream
     public void setName(String name) {
         this.name = name;
-=======
-    public Admin(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-
->>>>>>> Stashed changes
     }
 
     public String getMail() {

@@ -16,15 +16,18 @@ public class Service implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idService;
 
-    @ManyToOne
-    @ForeignKey(name="FK_Company")
-    private Company idCompany;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idCompany")
+    private Company company;
+
+    @Column(name = "firstname")
+    private String firstName;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "description")
-    private String description;
+    private String desc;
 
     @Column(name = "duration")
     private String duration;
@@ -35,9 +38,11 @@ public class Service implements Serializable {
     @Column(name = "price")
     private double price;
 
-    public Service(String name, String description, String duration, Date space, double price) {
+    public Service(Company company, String firstName, String name, String desc, String duration, Date space, double price) {
+        this.company = company;
+        this.firstName = firstName;
         this.name = name;
-        this.description = description;
+        this.desc = desc;
         this.duration = duration;
         this.space = space;
         this.price = price;
@@ -47,8 +52,10 @@ public class Service implements Serializable {
     public String toString() {
         return "Service{" +
                 "idService=" + idService +
+               // ", school=" + school +
+                ", firstName='" + firstName + '\'' +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                ", desc='" + desc + '\'' +
                 ", duration='" + duration + '\'' +
                 ", space=" + space +
                 ", price=" + price +

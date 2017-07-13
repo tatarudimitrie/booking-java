@@ -22,13 +22,7 @@ public class ServiceController {
 
     @RequestMapping("/services")
     public String process(){
-        Date data=new Date();
-     /*  repository.save(new Service("Sd",
-                "Andrei",
-                "Leonte",
-                 data,
-                10.2
-                ));*/
+
 
         return "Done";
     }

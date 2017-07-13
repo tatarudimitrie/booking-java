@@ -1,26 +1,17 @@
 package com.assist.bookingjava.model;
 
-<<<<<<< Updated upstream
 
 
 
-=======
->>>>>>> Stashed changes
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by cosmin on 12.07.2017.
  */
 @Entity
 @Table(name = "company")
-<<<<<<< Updated upstream
-=======
-/*@SecondaryTables({
-        @SecondaryTable(name="service", pkJoinColumns={
-                @PrimaryKeyJoinColumn(name="idService") })
-})*/
->>>>>>> Stashed changes
 public class Company implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
@@ -28,15 +19,10 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idCompany;
 
-<<<<<<< Updated upstream
-     //@ManyToOne
-     //@JoinColumn(name="idAdmin", table="admins")
-     private long idAdmin;
-=======
-   // @ManyToOne
-   //  @JoinColumn(name="idAdmin", table="admins")
-   // private long idAdmins;
->>>>>>> Stashed changes
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "company", orphanRemoval = true)
+    private Set<Service> service;
+
 
     @Column(name = "nameCompany")
     private String nameCompany;
@@ -51,13 +37,8 @@ public class Company implements Serializable {
     }
 
 
-<<<<<<< Updated upstream
     public Company(long idAdmin, String nameCompany, String descriptionCompany, String urlImage) {
-        this.idAdmin = idAdmin;
-=======
-    public Company(long idAdmins, String nameCompany, String descriptionCompany, String urlImage) {
-       // this.idAdmins = idAdmins;
->>>>>>> Stashed changes
+      //  this.idAdmin = idAdmin;
         this.nameCompany = nameCompany;
         this.descriptionCompany = descriptionCompany;
         this.urlImage = urlImage;
@@ -67,26 +48,19 @@ public class Company implements Serializable {
     public String toString() {
         return "Company{" +
                 "idCompany=" + idCompany +
-<<<<<<< Updated upstream
-                ", admin=" + idAdmin +
-=======
-                ", admins=" +// idAdmins +
->>>>>>> Stashed changes
+            //    ", admin=" + idAdmin +
                 ", nameCompany='" + nameCompany + '\'' +
                 ", descriptionCompany='" + descriptionCompany + '\'' +
                 ", urlImage='" + urlImage + '\'' +
                 '}';
     }
-<<<<<<< Updated upstream
 
 
     public long getIdCompany() {
         return idCompany;
     }
 
-    public long getIdAdmins() {
-        return idAdmin;
-    }
+
 
     public String getNameCompany() {
         return nameCompany;
@@ -104,9 +78,6 @@ public class Company implements Serializable {
         this.idCompany = idCompany;
     }
 
-    public void setIdAdmins(long idAdmins) {
-        this.idAdmin = idAdmins;
-    }
 
     public void setNameCompany(String nameCompany) {
         this.nameCompany = nameCompany;
@@ -123,6 +94,3 @@ public class Company implements Serializable {
 
 
 }
-=======
-}
->>>>>>> Stashed changes
