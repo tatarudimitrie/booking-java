@@ -1,5 +1,8 @@
 package com.assist.bookingjava.model;
 
+
+
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -88,6 +91,7 @@ public class Company implements Serializable {
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
     }
+
 
 
 }

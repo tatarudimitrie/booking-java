@@ -63,9 +63,8 @@ public class Admin implements Serializable {
         return pass;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
+
+
 
     @Override
     public String toString() {
