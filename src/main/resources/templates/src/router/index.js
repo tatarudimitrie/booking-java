@@ -5,6 +5,8 @@ import Recover from '@/components/Recover'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Dashboard from '@/components/Dashboard'
+import Description from '@/components/Description'
+
 
 
 Vue.use(Router)
@@ -32,11 +34,22 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+
     },
     {   
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
     },
+
+
+
+    
+    {
+      path: '/description',
+      name: 'Description',
+      component: Description
+    }
+
   ]
 })
