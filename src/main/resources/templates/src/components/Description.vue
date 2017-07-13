@@ -31,8 +31,11 @@
 
 <div class="w3-display-left">
 <b-button @click="submit" class="btn btn-circle btn-xl">Logo</b-button>
-<h4>Upload Logo </h4>
-<h6>  (max.140*140) </h6>
+<br>
+<br>
+<b-form-file v-model="file"></b-form-file>
+<br> Selected file: {{file && file.name}}
+<br>
 </div>
 </div>
 </body>
