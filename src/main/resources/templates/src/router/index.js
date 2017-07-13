@@ -6,6 +6,7 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Dashboard from '@/components/Dashboard'
 import Description from '@/components/Description'
+import AddService from '@/components/AddService'
 
 
 
@@ -41,15 +42,15 @@ export default new Router({
       name: 'Dashboard',
       component: Dashboard
     },
-
-
-
-    
     {
       path: '/description',
       name: 'Description',
       component: Description
+    },
+     {   
+      path: '/addService',
+      name: 'AddService',
+      component: AddService
     }
-
   ]
 })
