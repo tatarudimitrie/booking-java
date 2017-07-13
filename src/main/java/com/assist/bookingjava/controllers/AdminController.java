@@ -12,47 +12,90 @@ import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class AdminController {
 
     @Autowired
-    AdminRepository repository;
+    AdminRepository adminRepository;
 
     @RequestMapping(method=RequestMethod.GET, value="/admins")
-    public String findAllAdmins(){
-        String result = "<html>";
+    public List<Admin> findAllAdmins(){
+        List<Admin> adminList = new ArrayList<>();
 
-        for(Admin a : repository.findAll()) {
-            result += "<div>" + a.toString() + "</div>";
+        for(Admin a : adminRepository.findAll()) {
+            adminList.add(a);
         }
 
-        return result + "</html>";
+        return adminList;
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/id/{id}")
-    public String findById(@PathVariable long id) {
-        String result = repository.findOne(id).toString();
-        return result;
+    public Admin getAdminById(@PathVariable long id) {
+        return adminRepository.findOne(id);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/name/{name}")
-    public String fetchDataByLastName(@PathVariable String name){
-        String result = "<html>";
+    public List<Admin> getAdminByName(@PathVariable String name){
+        List<Admin> adminList = new ArrayList<>();
 
-        for(Admin a: repository.findByName(name)){
-            result += "<div>" + a.toString() + "</div>";
+        for(Admin a: adminRepository.findByName(name)){
+            adminList.add(a);
         }
 
-        return result + "</html>";
+        return adminList;
+    }
+
+    @RequestMapping(method=RequestMethod.GET, value="/admins/mail/{mail}")
+    public List<Admin> getAdminByMail(@PathVariable String mail){
+        List<Admin> adminList = new ArrayList<>();
+
+        for(Admin a: adminRepository.findByName(mail)){
+            adminList.add(a);
+        }
+
+        return adminList;
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/add")
-    public String addAdmin() {
-        repository.save(new Admin("Jack", "jack@assist.ro", "Jack_pass"));
-        repository.save(new Admin("Adam Johnson", "johnson@assist.ro", "Johnson_pass"));
-        repository.save(new Admin("Kim Smith", "kim@assist.ro", "Kim_pass"));
-        repository.save(new Admin("David Williams", "david@assist.ro", "David_pass"));
-        repository.save(new Admin("Peter Davis", "peter@assist.ro", "Peter_pass"));
+    public String bulkAddAdmin() {
+        adminRepository.save(new Admin("Jack", "jack@assist.ro", "Jack_pass"));
+        adminRepository.save(new Admin("Adam Johnson", "johnson@assist.ro", "Johnson_pass"));
+        adminRepository.save(new Admin("Kim Smith", "kim@assist.ro", "Kim_pass"));
+        adminRepository.save(new Admin("David Williams", "david@assist.ro", "David_pass"));
+        adminRepository.save(new Admin("Peter Davis", "peter@assist.ro", "Peter_pass"));
         return "Done";
     }
+
+    @RequestMapping(method=RequestMethod.PUT, value="/admins")
+    public String addAdmin(@RequestBody Admin admin) {
+
+        if (adminRepository.findByMail(admin.getMail()).isEmpty()) {
+            adminRepository.save(admin);
+            return "OK";
+        } else {
+            return "Duplicate mail";
+        }
+
+        //TODO PASS ENCRYPT
+        //TODO CHECK PASS LENGTH
+    }
+
+    @RequestMapping(method=RequestMethod.POST, value="/admins")
+    public void editAdmin(@RequestBody Admin admin)
+    {
+        adminRepository.save(admin);
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/admins/{idAdmin}")
+    public void deleteAdmin(@PathVariable long idAdmin)
+    {
+        adminRepository.delete(idAdmin);
+    }
 }
+
+/*      ADMIN JSON TEMPLATE
+        {"name" : "Admin name", "mail" : "admin@assist.ro", "pass" : "pass"}
+*/
