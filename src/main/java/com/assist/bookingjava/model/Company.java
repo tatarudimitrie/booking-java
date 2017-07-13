@@ -15,8 +15,8 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idCompany;
 
-    @ManyToOne
-    @JoinColumn(name="idAdmin", table="admins")
+    //@ManyToOne
+    //@JoinColumn(name="idAdmin", table="admins")
     private long idAdmins;
 
     @Column(name = "nameCompany")
@@ -30,7 +30,6 @@ public class Company implements Serializable {
 
     protected Company() {
     }
-
 
     public Company(long idAdmins, String nameCompany, String descriptionCompany, String urlImage) {
         this.idAdmins = idAdmins;
