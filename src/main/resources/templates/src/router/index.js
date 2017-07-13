@@ -4,7 +4,7 @@ import Hello from '@/components/Hello'
 import Recover from '@/components/Recover'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-
+import Dashboard from '@/components/Dashboard'
 
 
 Vue.use(Router)
@@ -19,12 +19,12 @@ export default new Router({
     },
         {
       path: '/recover',
-      name: 'Recovers',
+      name: 'Recover',
       component: Recover
 
     },
     {
-      path: '/Login',
+      path: '/login',
       name: 'Login',
       component: Login
     },
@@ -32,8 +32,11 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
-
-
-    }
+    },
+    {   
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard
+    },
   ]
 })
