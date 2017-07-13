@@ -1,7 +1,16 @@
 package com.assist.bookingjava.repositories;
 
+
+
+import com.assist.bookingjava.model.Company;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
 /**
- * Created by root on 13.07.2017.
+ * Created by cosmin on 12.07.2017.
  */
-public class CompanyRepository {
+public interface CompanyRepository extends CrudRepository<Company, Long> {
+    List<Company> findByNameCompany(String nameCompany);
 }
+
