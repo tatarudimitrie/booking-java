@@ -10,6 +10,7 @@ package com.assist.bookingjava.controllers;
 import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,14 +23,14 @@ public class AdminController {
     AdminRepository adminRepository;
 
     @RequestMapping(method=RequestMethod.GET, value="/admins")
-    public List<Admin> findAllAdmins(){
+    public ResponseEntity findAllAdmins(){
         List<Admin> adminList = new ArrayList<>();
 
         for(Admin a : adminRepository.findAll()) {
             adminList.add(a);
         }
 
-        return adminList;
+        return ResponseEntity.ok(adminList);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/id/{id}")
@@ -48,18 +49,18 @@ public class AdminController {
         return adminList;
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/mail/{mail}")
-    public List<Admin> getAdminByMail(@PathVariable String mail){
+    @RequestMapping(method=RequestMethod.GET, value="/admins/email/{email}")
+    public List<Admin> getAdminByEmail(@PathVariable String email){
         List<Admin> adminList = new ArrayList<>();
 
-        for(Admin a: adminRepository.findByName(mail)){
+        for(Admin a: adminRepository.findByEmail(email)){
             adminList.add(a);
         }
 
         return adminList;
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/add")
+    @RequestMapping(method=RequestMethod.GET, value="/admins/input")
     public String bulkAddAdmin() {
         adminRepository.save(new Admin("Jack", "jack@assist.ro", "Jack_pass"));
         adminRepository.save(new Admin("Adam Johnson", "johnson@assist.ro", "Johnson_pass"));
@@ -72,7 +73,7 @@ public class AdminController {
     @RequestMapping(method=RequestMethod.PUT, value="/admins")
     public String addAdmin(@RequestBody Admin admin) {
 
-        if (adminRepository.findByMail(admin.getMail()).isEmpty()) {
+        if (adminRepository.findByEmail(admin.getEmail()).isEmpty()) {
             adminRepository.save(admin);
             return "OK";
         } else {
@@ -89,10 +90,10 @@ public class AdminController {
         adminRepository.save(admin);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/admins/{idAdmin}")
-    public void deleteAdmin(@PathVariable long idAdmin)
+    @RequestMapping(method=RequestMethod.DELETE, value="/admins/{id}")
+    public void deleteAdmin(@PathVariable long id)
     {
-        adminRepository.delete(idAdmin);
+        adminRepository.delete(id);
     }
 }
 

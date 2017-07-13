@@ -7,12 +7,14 @@
 		<br>
 			<div class="form-input">
 				<label><b>Your name</b></label>
+				<b-form fieldset>
 				<b-form-input v-model="name"
 				type="text"
 				placeholder="Enter your name"
 				:state="name.length?'success':'warning'"
 				:formatter="format"
 				></b-form-input>
+				</b-form fieldset>
 			</div>
 			<div class="form-input">
 				<label><b>Email address</b></label>
@@ -39,6 +41,7 @@
 				placeholder="Confirm password"
 				:state="pass_confirm.length?'success':'warning'"
 				:formatter="format"
+				:required="true"
 				></b-form-input>
 			</div>
 			<br>
@@ -52,6 +55,8 @@
 </template>
 
 <script>
+
+
 	export default {
 		data()  {
 			return {
