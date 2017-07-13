@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Table(name="ServiceRepository")
 public interface ServiceRepository extends CrudRepository<Service, Long> {
-    List<Service> findByName(String id);
+    List<Service> findByName(String name);
 }

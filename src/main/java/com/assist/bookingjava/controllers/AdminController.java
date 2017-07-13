@@ -49,18 +49,18 @@ public class AdminController {
         return adminList;
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/mail/{mail}")
-    public List<Admin> getAdminByMail(@PathVariable String mail){
+    @RequestMapping(method=RequestMethod.GET, value="/admins/email/{email}")
+    public List<Admin> getAdminByEmail(@PathVariable String email){
         List<Admin> adminList = new ArrayList<>();
 
-        for(Admin a: adminRepository.findByName(mail)){
+        for(Admin a: adminRepository.findByEmail(email)){
             adminList.add(a);
         }
 
         return adminList;
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/raw")
+    @RequestMapping(method=RequestMethod.GET, value="/admins/input")
     public String bulkAddAdmin() {
         adminRepository.save(new Admin("Jack", "jack@assist.ro", "Jack_pass"));
         adminRepository.save(new Admin("Adam Johnson", "johnson@assist.ro", "Johnson_pass"));
@@ -73,7 +73,7 @@ public class AdminController {
     @RequestMapping(method=RequestMethod.PUT, value="/admins")
     public String addAdmin(@RequestBody Admin admin) {
 
-        if (adminRepository.findByMail(admin.getMail()).isEmpty()) {
+        if (adminRepository.findByEmail(admin.getEmail()).isEmpty()) {
             adminRepository.save(admin);
             return "OK";
         } else {

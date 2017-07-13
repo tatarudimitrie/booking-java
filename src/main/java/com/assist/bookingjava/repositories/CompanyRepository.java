@@ -9,5 +9,5 @@ import java.util.List;
  * Created by cosmin on 12.07.2017.
  */
 public interface CompanyRepository extends CrudRepository<Company, Long> {
-    List<Company> findByNameCompany(String nameCompany);
+    List<Company> findByName(String name);
 }
