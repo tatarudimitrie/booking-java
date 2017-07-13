@@ -1,6 +1,6 @@
 package com.assist.bookingjava.controllers;
 
-import com.assist.bookingjava.model.Admins;
+import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.repositories.AdminRepository;
 import com.assist.bookingjava.repositories.CompanyRepository;
@@ -47,10 +47,10 @@ public class CompanyController {
     }
 
     @RequestMapping("/findbynameCompany")
-    public String fetchDataByLastName(@RequestParam("nameCompany") String nameCompany){
+    public String fetchDataByNameCompany(@RequestParam("nameCompany") String nameCompany){
         String result = "<html>";
 
-        for(Company cust: repository.findByLastName(nameCompany)){
+        for(Company cust: repository.findByNameCompany(nameCompany)){
             result += "<div>" + cust.toString() + "</div>";
         }
 

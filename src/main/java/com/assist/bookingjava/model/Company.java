@@ -15,9 +15,9 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idCompany;
 
-    @ManyToOne
-    @JoinColumn(name="idAdmins", table="admins")
-    private long idAdmins;
+    //@ManyToOne
+   // @JoinColumn(name="idAdmin", table="admins")
+    private long idAdmin;
 
     @Column(name = "nameCompany")
     private String nameCompany;
@@ -32,8 +32,8 @@ public class Company implements Serializable {
     }
 
 
-    public Company(long idAdmins, String nameCompany, String descriptionCompany, String urlImage) {
-        this.idAdmins = idAdmins;
+    public Company(long idAdmin, String nameCompany, String descriptionCompany, String urlImage) {
+        this.idAdmin = idAdmin;
         this.nameCompany = nameCompany;
         this.descriptionCompany = descriptionCompany;
         this.urlImage = urlImage;
@@ -43,7 +43,7 @@ public class Company implements Serializable {
     public String toString() {
         return "Company{" +
                 "idCompany=" + idCompany +
-                ", admins=" + idAdmins +
+                ", admin=" + idAdmin +
                 ", nameCompany='" + nameCompany + '\'' +
                 ", descriptionCompany='" + descriptionCompany + '\'' +
                 ", urlImage='" + urlImage + '\'' +
@@ -56,7 +56,7 @@ public class Company implements Serializable {
     }
 
     public long getIdAdmins() {
-        return idAdmins;
+        return idAdmin;
     }
 
     public String getNameCompany() {
@@ -76,7 +76,7 @@ public class Company implements Serializable {
     }
 
     public void setIdAdmins(long idAdmins) {
-        this.idAdmins = idAdmins;
+        this.idAdmin = idAdmins;
     }
 
     public void setNameCompany(String nameCompany) {
