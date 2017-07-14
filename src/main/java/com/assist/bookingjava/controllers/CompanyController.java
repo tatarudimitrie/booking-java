@@ -1,7 +1,6 @@
 package com.assist.bookingjava.controllers;
 
 import com.assist.bookingjava.model.Company;
-
 import com.assist.bookingjava.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
-
 
     @RequestMapping(method=RequestMethod.GET, value="/companies")
     public ResponseEntity findAll(){
@@ -38,7 +36,6 @@ public class CompanyController {
     public String addCompany(@RequestBody Company company) {
         return companyService.addCompany(company);
     }
-
     @RequestMapping(method=RequestMethod.PUT, value="/companies")
     public void editCompany(@RequestBody Company company) {
         companyService.editCompany(company);
@@ -48,6 +45,4 @@ public class CompanyController {
     public String deleteCompany(@PathVariable long id) {
         return companyService.deleteCompany(id);
     }
-
-
 }

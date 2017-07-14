@@ -16,12 +16,10 @@ public class ServiceController {
 
 
     @Autowired
-    ServiceRepository repository;
+    ServiceRepository serviceRepository;
 
     @RequestMapping("/services")
     public String process(){
-
-
         return "Done";
     }
 }
