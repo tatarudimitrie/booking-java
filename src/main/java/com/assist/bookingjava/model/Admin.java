@@ -14,9 +14,6 @@ public class Admin implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "admin", orphanRemoval = true)
-    private Set<Company> _company;
-
     @Column(name = "name")
     private String name;
 
@@ -34,22 +31,15 @@ public class Admin implements Serializable {
         this.pass = pass;
     }
 
+    public Admin(long id, String name, String email, String pass) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.pass = pass;
+    }
+
     public long getId() {
         return id;
-    }
-
-
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Set<Company> get_company() {
-        return _company;
-    }
-
-    public void set_company(Set<Company> _company) {
-        this._company = _company;
     }
 
     public String getName() {

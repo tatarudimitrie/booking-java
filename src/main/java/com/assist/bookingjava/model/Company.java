@@ -1,15 +1,9 @@
 package com.assist.bookingjava.model;
 
-
-
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-/**
- * Created by cosmin on 12.07.2017.
- */
 @Entity
 @Table(name = "companies")
 public class Company implements Serializable {
@@ -22,7 +16,6 @@ public class Company implements Serializable {
     //TODO id_admin
 
     @ManyToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(name = "_company")
     private Admin admin;
 
     @Column(name = "name")
@@ -37,12 +30,18 @@ public class Company implements Serializable {
     public Company() {
     }
 
-//    public Company(Admin admin, String name, String description, String image_url) {
-//        this.admin = admin;
-//        this.name = name;
-//        this.description = description;
-//        this.image_url = image_url;
-//    }
+    public Company(String name, String description, String image_url) {
+        this.name = name;
+        this.description = description;
+        this.image_url = image_url;
+    }
+
+    public Company(long id, String name, String description, String image_url) {
+        this.admin = new Admin(id, "","","");
+        this.name = name;
+        this.description = description;
+        this.image_url = image_url;
+    }
 
     public long getId() {
         return id;
