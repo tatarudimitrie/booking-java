@@ -12,6 +12,9 @@ public class Service implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Company company;
+
     @Column(name = "name")
     private String name;
 
@@ -30,7 +33,19 @@ public class Service implements Serializable {
     @Column(name = "date")
     private String date;
 
+    public Service() {}
+
     public Service(String name, String description, String duration, int free_space, double price, String date) {
+        this.name = name;
+        this.description = description;
+        this.duration = duration;
+        this.free_space = free_space;
+        this.price = price;
+        this.date = date;
+    }
+
+    public Service(long companyId, String name, String description, String duration, int free_space, double price, String date) {
+        this.company = new Company(companyId, "","","");
         this.name = name;
         this.description = description;
         this.duration = duration;
@@ -43,8 +58,12 @@ public class Service implements Serializable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getName() {
@@ -99,6 +118,7 @@ public class Service implements Serializable {
     public String toString() {
         return "Service{" +
                 "id=" + id +
+                ", company=" + company +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", duration='" + duration + '\'' +
