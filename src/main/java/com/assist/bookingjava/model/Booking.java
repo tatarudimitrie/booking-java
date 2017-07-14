@@ -1,7 +1,3 @@
-/**
- * Created by myt on 12.07.2017.
- */
-
 package com.assist.bookingjava.model;
 
 import javax.persistence.*;
@@ -16,7 +12,8 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    //TODO WACA ID_SERVICE
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Service service;
 
     @Column(name = "name")
     private String name;
@@ -34,6 +31,14 @@ public class Booking implements Serializable {
     }
 
     public Booking(String name, String email, String phone, String date) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.date = date;
+    }
+
+    public Booking(long id_service, String name, String email, String phone, String date) {
+        this.service = new Service(id_service, "", "", "", 0, 0d, "");
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -80,6 +85,7 @@ public class Booking implements Serializable {
     public String toString() {
         return "Booking{" +
                 "id=" + id +
+                ", service=" + service +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
