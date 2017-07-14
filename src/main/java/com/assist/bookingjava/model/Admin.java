@@ -8,7 +8,7 @@ import java.util.Set;
 @Table(name = "admins")
 public class Admin implements Serializable {
 
-    private static final long serialVersionUID = -3009157732242241606L;
+    private static final long serialVersionUID = -3009157732242241606L; 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
