@@ -2,6 +2,7 @@ package com.assist.bookingjava.controllers;
 
 import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.model.Recovery;
+import com.assist.bookingjava.services.AdminService;
 import com.assist.bookingjava.services.EmailServices;
 import com.assist.bookingjava.services.RecoveryServices;
 import com.sun.org.apache.regexp.internal.RE;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +33,8 @@ public class RecoveryController {
 
     @Autowired
     private EmailServices emailServices;
-
+    @Autowired
+    private AdminService adminService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -49,7 +52,9 @@ public class RecoveryController {
 
 
         Optional<Recovery> optional = recoveryServices.findByEmail(email);
+      //  List<Admin> optional1= (List<Admin>) adminService.findAdminByEmail(email);
         //verifica daca e in admin
+        //isPresent
 
         if (!optional.isPresent()) {
             modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");

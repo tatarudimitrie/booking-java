@@ -12,7 +12,7 @@ import java.util.Optional;
  * Created by cosmin on 14.07.2017.
  */
 
-@Service("recoverServices")
+@Service("recoveryServices")
 public class RecoveryServices {
     @Autowired
     private RecoveryRepository recoveryRepository;
