@@ -11,86 +11,82 @@ import java.util.Set;
  * Created by cosmin on 12.07.2017.
  */
 @Entity
-@Table(name = "company")
+@Table(name = "companies")
 public class Company implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long idCompany;
+    private long id;
 
+    //TODO id_admin
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "company", orphanRemoval = true)
-    private Set<Service> service;
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "_company")
+    private Admin admin;
 
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "nameCompany")
-    private String nameCompany;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "descriptionCompany")
-    private String descriptionCompany;
+    @Column(name = "image_url")
+    private String image_url;
 
-    @Column(name = "urlImage")
-    private String urlImage;
-
-    protected Company() {
+    public Company() {
     }
 
+//    public Company(Admin admin, String name, String description, String image_url) {
+//        this.admin = admin;
+//        this.name = name;
+//        this.description = description;
+//        this.image_url = image_url;
+//    }
 
-    public Company(long idAdmin, String nameCompany, String descriptionCompany, String urlImage) {
-      //  this.idAdmin = idAdmin;
-        this.nameCompany = nameCompany;
-        this.descriptionCompany = descriptionCompany;
-        this.urlImage = urlImage;
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
 
     @Override
     public String toString() {
         return "Company{" +
-                "idCompany=" + idCompany +
-            //    ", admin=" + idAdmin +
-                ", nameCompany='" + nameCompany + '\'' +
-                ", descriptionCompany='" + descriptionCompany + '\'' +
-                ", urlImage='" + urlImage + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", image_url='" + image_url + '\'' +
                 '}';
     }
-
-
-    public long getIdCompany() {
-        return idCompany;
-    }
-
-
-
-    public String getNameCompany() {
-        return nameCompany;
-    }
-
-    public String getDescriptionCompany() {
-        return descriptionCompany;
-    }
-
-    public String getUrlImage() {
-        return urlImage;
-    }
-
-    public void setIdCompany(long idCompany) {
-        this.idCompany = idCompany;
-    }
-
-
-    public void setNameCompany(String nameCompany) {
-        this.nameCompany = nameCompany;
-    }
-
-    public void setDescriptionCompany(String descriptionCompany) {
-        this.descriptionCompany = descriptionCompany;
-    }
-
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
-    }
-
-
-
 }
