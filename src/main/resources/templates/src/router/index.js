@@ -8,8 +8,6 @@ import Dashboard from '@/components/Dashboard'
 import Description from '@/components/Description'
 import AddService from '@/components/AddService'
 
-
-
 Vue.use(Router)
 
 export default new Router({
