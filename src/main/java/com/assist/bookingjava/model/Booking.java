@@ -1,18 +1,22 @@
+/**
+ * Created by myt on 12.07.2017.
+ */
+
 package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
-@Table(name = "admins")
-public class Admin implements Serializable {
+@Table(name = "bookings")
+public class Booking implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    //TODO WACA ID_SERVICE
 
     @Column(name = "name")
     private String name;
@@ -20,15 +24,20 @@ public class Admin implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "pass")
-    private String pass;
+    @Column(name ="phone")
+    private String phone;
 
-    public Admin(){}
+    @Column(name="date")
+    private String date;
 
-    public Admin(String name, String email, String pass) {
+    protected Booking() {
+    }
+
+    public Booking(String name, String email, String phone, String date) {
         this.name = name;
         this.email = email;
-        this.pass = pass;
+        this.phone = phone;
+        this.date = date;
     }
 
     public long getId() {
@@ -51,21 +60,30 @@ public class Admin implements Serializable {
         this.email = email;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override
     public String toString() {
-        return "Admin{" +
+        return "Booking{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", pass='" + pass + '\'' +
+                ", phone='" + phone + '\'' +
+                ", date='" + date + '\'' +
                 '}';
     }
 }
