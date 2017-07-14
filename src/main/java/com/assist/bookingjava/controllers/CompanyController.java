@@ -13,7 +13,7 @@ public class CompanyController {
     private CompanyService companyService;
 
     @RequestMapping(method=RequestMethod.GET, value="/companies")
-    public ResponseEntity findAll(){
+    public ResponseEntity findAllCompanies(){
         return companyService.findAllCompanies();
     }
 
@@ -36,6 +36,7 @@ public class CompanyController {
     public String addCompany(@RequestBody Company company) {
         return companyService.addCompany(company);
     }
+
     @RequestMapping(method=RequestMethod.PUT, value="/companies")
     public void editCompany(@RequestBody Company company) {
         companyService.editCompany(company);

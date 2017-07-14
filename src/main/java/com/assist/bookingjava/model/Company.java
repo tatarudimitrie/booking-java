@@ -12,8 +12,6 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    //TODO id_admin
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Admin admin;
 
@@ -26,10 +24,10 @@ public class Company implements Serializable {
     @Column(name = "image_url")
     private String image_url;
 
-    public Company() {
-    }
+    public Company() {}
 
-    public Company(String name, String description, String image_url) {
+    public Company(long id_admin, String name, String description, String image_url) {
+        this.admin = new Admin(id_admin, "","","");
         this.name = name;
         this.description = description;
         this.image_url = image_url;

@@ -1,6 +1,7 @@
 package com.assist.bookingjava.repositories;
 
 import com.assist.bookingjava.model.Booking;
+
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 

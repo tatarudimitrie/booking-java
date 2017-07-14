@@ -2,7 +2,6 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "admins")
@@ -26,6 +25,13 @@ public class Admin implements Serializable {
     public Admin(){}
 
     public Admin(String name, String email, String pass) {
+        this.name = name;
+        this.email = email;
+        this.pass = pass;
+    }
+
+    public Admin(long id, String name, String email, String pass) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.pass = pass;
