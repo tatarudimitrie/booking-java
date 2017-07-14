@@ -4,11 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue';
-
-
 import Icon from 'vue-awesome/components/Icon'
-
-
+import Vuelidate from 'vuelidate'
 
 
 import 'vue-awesome/icons'
@@ -20,6 +17,7 @@ Vue.component('icon', Icon);
 
 Vue.config.productionTip = false
 Vue.component('icon', Icon)
+Vue.use(Vuelidate)
 
 /* eslint-disable no-new */
 new Vue({

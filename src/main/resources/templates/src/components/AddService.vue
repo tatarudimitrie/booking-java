@@ -22,6 +22,7 @@
 				:label-cols="3"
 				>
 				<b-form-input v-model="s_name"></b-form-input>
+				 <p v-if="!$v.s_name.required">The field is required!</p>
 			</b-form-fieldset>
 		</div>
 
@@ -31,6 +32,7 @@
 			:label-cols="3"
 			>
 			<b-form-input v-model="s_duration"></b-form-input>
+			<p v-if="!$v.s_duration.required">The field is required!</p>
 		</b-form-fieldset>
 	</div>
 
@@ -49,26 +51,23 @@
 	:label-cols="3"
 	>
 	<b-form-input v-model="spaces"></b-form-input>
+	<p v-if="!$v.spaces.required">The field is required!</p>
 </b-form-fieldset>
-			<!-- </div>
-			<div class="input-field col-lg-6"> -->
 				<b-form-fieldset
 				label="Price"
 				:label-cols="3"
 				>
 				<b-form-input v-model="price"></b-form-input>
+				<p v-if="!$v.price.required">The field is required!</p>
 			</b-form-fieldset>
 		</div>
-	<!-- 	<div class="button col-sm-6">
-				<button type="submit" class="btn btn-default circle" aria-label="Right Align">
-					<icon name="plus" scale="3" style="color:white"></icon>
-				</button>
-				<p>Add service</p>
-			</div> -->
 	</div>
 	<div class="availability text-left">
 		<p class="details">AVAILABILITY</p>
-	</div>
+		<div id="boxes">
+		
+</div>
+</div>
 
 </div>
 </div>
@@ -78,7 +77,8 @@
 
 
 <script>
-import Navbar from '@/components/Navbar'
+	import Navbar from '@/components/Navbar'
+	import { required, email, minLength, between } from 'vuelidate/lib/validators'
 	export default {
 		data () {
 			return {
@@ -99,8 +99,34 @@ import Navbar from '@/components/Navbar'
 			}
 		},
 		name:"app",
-		components: { Navbar }
+		components: { Navbar },
+
+		validations: {
+			s_name: {
+				required
+			},
+			s_duration: {
+				required
+			},
+			spaces: {
+				required
+			},
+			price: {
+				required
+			}
+		}
 	}
+
+	// function newCheckbox(name, id){
+	// 	var checkB = document.createElement('input');
+	// 		checkB.type = 'checkbox';
+	// 		checkB.name = name;
+	// 		checkB.id = id;
+	// 	return checkB;
+	// };
+	// var iDiv = document.createElement('div');
+	// iDiv.innerHTML =  newCheckbox("box", "b1");
+	// document.getElementById("boxes").innerHTML += iDiv;
 </script>
 
 <style>
@@ -142,5 +168,8 @@ import Navbar from '@/components/Navbar'
 		width:100px;
 		height:100px;
 		background-color: #8a2be2;
+	}
+	p{
+		font-size:10px;
 	}
 </style>
