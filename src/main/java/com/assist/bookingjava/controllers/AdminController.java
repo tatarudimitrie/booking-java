@@ -1,101 +1,71 @@
 /*
 * Admin Controller
 *
-* GET, POST, PUT, DELETE
+* CRUD OPERATIONS
+*
+* POST      = C create
+* GET       = R read
+* PUT       = U update
+* DELETE    = D delete
 *
 * */
 
 package com.assist.bookingjava.controllers;
 
 import com.assist.bookingjava.model.Admin;
-import com.assist.bookingjava.repositories.AdminRepository;
+import com.assist.bookingjava.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class AdminController {
 
     @Autowired
-    AdminRepository adminRepository;
+    private AdminService adminService;
 
     @RequestMapping(method=RequestMethod.GET, value="/admins")
-    public List<Admin> findAllAdmins(){
-        List<Admin> adminList = new ArrayList<>();
-
-        for(Admin a : adminRepository.findAll()) {
-            adminList.add(a);
-        }
-
-        return adminList;
+    public ResponseEntity findAllAdmins(){
+        return adminService.findAllAdmins();
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/id/{id}")
-    public Admin getAdminById(@PathVariable long id) {
-        return adminRepository.findOne(id);
+    public ResponseEntity findAdminById(@PathVariable long id) {
+        return adminService.findAdminById(id);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/name/{name}")
-    public List<Admin> getAdminByName(@PathVariable String name){
-        List<Admin> adminList = new ArrayList<>();
-
-        for(Admin a: adminRepository.findByName(name)){
-            adminList.add(a);
-        }
-
-        return adminList;
+    public ResponseEntity findAdminByName(@PathVariable String name){
+        return adminService.findAdminByName(name);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/mail/{mail}")
-    public List<Admin> getAdminByMail(@PathVariable String mail){
-        List<Admin> adminList = new ArrayList<>();
-
-        for(Admin a: adminRepository.findByName(mail)){
-            adminList.add(a);
-        }
-
-        return adminList;
+    @RequestMapping(method=RequestMethod.GET, value="/admins/email/{email}")
+    public ResponseEntity findAdminByEmail(@PathVariable String email){
+        return adminService.findAdminByEmail(email);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/add")
+    @RequestMapping(method=RequestMethod.GET, value="/admins/input")
     public String bulkAddAdmin() {
-        adminRepository.save(new Admin("Jack", "jack@assist.ro", "Jack_pass"));
-        adminRepository.save(new Admin("Adam Johnson", "johnson@assist.ro", "Johnson_pass"));
-        adminRepository.save(new Admin("Kim Smith", "kim@assist.ro", "Kim_pass"));
-        adminRepository.save(new Admin("David Williams", "david@assist.ro", "David_pass"));
-        adminRepository.save(new Admin("Peter Davis", "peter@assist.ro", "Peter_pass"));
-        return "Done";
+        return adminService.bulkAddAdmin();
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/admins")
-    public String addAdmin(@RequestBody Admin admin) {
-
-        if (adminRepository.findByMail(admin.getMail()).isEmpty()) {
-            adminRepository.save(admin);
-            return "OK";
-        } else {
-            return "Duplicate mail";
-        }
-
-        //TODO PASS ENCRYPT
-        //TODO CHECK PASS LENGTH
+    public String editAdmin(@RequestBody Admin admin) {
+        return adminService.editAdmin(admin);
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/admins")
-    public void editAdmin(@RequestBody Admin admin)
-    {
-        adminRepository.save(admin);
+    public String addAdmin(@RequestBody Admin admin) {
+        return adminService.addAdmin(admin);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/admins/{idAdmin}")
-    public void deleteAdmin(@PathVariable long idAdmin)
-    {
-        adminRepository.delete(idAdmin);
+    @RequestMapping(method=RequestMethod.DELETE, value="/admins/{id}")
+
+    public String deleteAdmin(@PathVariable long id) {
+        return adminService.deleteAdmin(id);
     }
 }
 
 /*      ADMIN JSON TEMPLATE
-        {"name" : "Admin name", "mail" : "admin@assist.ro", "pass" : "pass"}
+        { "name" : "Admin name", "mail" : "admin@assist.ro", "pass" : "pass" }
 */
