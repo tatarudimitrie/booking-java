@@ -14,6 +14,5 @@ public class MainController  {
     @RequestMapping(value = "/echo/{in}", method = RequestMethod.GET)
     public String echo(@PathVariable(value = "in") final String in, @AuthenticationPrincipal final Admin user) {
         return "Hello " +  ", you said: " + in;
-
     }
 }

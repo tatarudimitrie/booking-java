@@ -29,7 +29,8 @@ public class Company implements Serializable {
     public Company() {
     }
 
-    public Company(String name, String description, String image_url) {
+    public Company(long idAdmin, String name, String description, String image_url) {
+        this.admin = new Admin (idAdmin, "", "", "");
         this.name = name;
         this.description = description;
         this.image_url = image_url;
