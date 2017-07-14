@@ -2,6 +2,7 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "companies")
@@ -11,8 +12,6 @@ public class Company implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    //TODO id_admin
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Admin admin;
@@ -26,11 +25,10 @@ public class Company implements Serializable {
     @Column(name = "image_url")
     private String image_url;
 
-    public Company() {
-    }
+    public Company() {}
 
-    public Company(long idAdmin, String name, String description, String image_url) {
-        this.admin = new Admin (idAdmin, "", "", "");
+    public Company(long adminId, String name, String description, String image_url) {
+        this.admin = new Admin(adminId, "","","");
         this.name = name;
         this.description = description;
         this.image_url = image_url;
