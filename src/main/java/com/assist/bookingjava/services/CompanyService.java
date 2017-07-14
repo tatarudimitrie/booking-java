@@ -40,11 +40,11 @@ public class CompanyService implements CompanyInterface {
     }
 
     public String addBulkCompany() {
-        companyRepository.save(new Company("Assist", "Assist software", "C:/Assist.png"));
-        companyRepository.save(new Company("Google", "Google _search_", "C:/Google.png"));
-        companyRepository.save(new Company("PayPal", "PayPal _banking", "C:/PayPal.png"));
-        companyRepository.save(new Company("Amazon", "Amazon delivery", "C:/Amazon.png"));
-        companyRepository.save(new Company("GitHub", "GitHub headache", "C:/GitHub.png"));
+        companyRepository.save(new Company(30, "Assist", "Assist software", "C:/Assist.png"));
+        companyRepository.save(new Company(31, "Google", "Google _search_", "C:/Google.png"));
+        companyRepository.save(new Company(32, "PayPal", "PayPal _banking", "C:/PayPal.png"));
+        companyRepository.save(new Company(33, "Amazon", "Amazon delivery", "C:/Amazon.png"));
+        companyRepository.save(new Company(34, "GitHub", "GitHub headache", "C:/GitHub.png"));
         return "Company table was updated with five DEFAULT ROWS!";
     }
 

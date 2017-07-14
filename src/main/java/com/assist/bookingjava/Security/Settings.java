@@ -20,9 +20,6 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by root on 13.07.2017.
- */
 @Configuration
 public class Settings extends WebSecurityConfigurerAdapter {
 

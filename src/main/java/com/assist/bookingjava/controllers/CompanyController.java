@@ -1,7 +1,6 @@
 package com.assist.bookingjava.controllers;
 
 import com.assist.bookingjava.model.Company;
-
 import com.assist.bookingjava.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +12,8 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-
     @RequestMapping(method=RequestMethod.GET, value="/companies")
-    public ResponseEntity findAll(){
+    public ResponseEntity findAllCompanies(){
         return companyService.findAllCompanies();
     }
 
@@ -48,6 +46,4 @@ public class CompanyController {
     public String deleteCompany(@PathVariable long id) {
         return companyService.deleteCompany(id);
     }
-
-
 }

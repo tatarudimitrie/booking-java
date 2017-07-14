@@ -2,7 +2,6 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "admins")
@@ -13,9 +12,6 @@ public class Admin implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "admin", orphanRemoval = true)
-    private Set<Company> companies;
 
     @Column(name = "name")
     private String name;
@@ -34,16 +30,15 @@ public class Admin implements Serializable {
         this.pass = pass;
     }
 
+    public Admin(long id, String name, String email, String pass) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.pass = pass;
+    }
+
     public long getId() {
         return id;
-    }
-
-    public Set<Company> getCompanies() {
-        return companies;
-    }
-
-    public void setCompanies(Set<Company> companies) {
-        this.companies = companies;
     }
 
     public String getName() {
@@ -74,7 +69,6 @@ public class Admin implements Serializable {
     public String toString() {
         return "Admin{" +
                 "id=" + id +
-                ", companies=" + companies +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", pass='" + pass + '\'' +
