@@ -2,7 +2,6 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "admins")

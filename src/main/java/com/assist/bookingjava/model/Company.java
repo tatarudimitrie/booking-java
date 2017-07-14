@@ -2,7 +2,6 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "companies")
@@ -27,8 +26,8 @@ public class Company implements Serializable {
 
     public Company() {}
 
-    public Company(long adminId, String name, String description, String image_url) {
-        this.admin = new Admin(adminId, "","","");
+    public Company(long id_admin, String name, String description, String image_url) {
+        this.admin = new Admin(id_admin, "","","");
         this.name = name;
         this.description = description;
         this.image_url = image_url;
