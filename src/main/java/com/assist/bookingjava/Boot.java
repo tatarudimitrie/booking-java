@@ -5,9 +5,6 @@ import com.assist.bookingjava.model.Company;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * Created by frunza on 07.07.2017.
- */
 @SpringBootApplication
 public class Boot {
 
@@ -15,7 +12,6 @@ public class Boot {
 
 
         SpringApplication.run(Boot.class, args);
-
     }
 }
 

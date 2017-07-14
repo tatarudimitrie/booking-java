@@ -16,7 +16,7 @@
 			<div class="form-input">
 				<label><b>Password</b></label>
 				<b-form-input v-model="password"
-                  type="text"
+                  type="password"
                   placeholder="Enter password"
                   :state="password.length?'success':'warning'"
                   :formatter="format"
