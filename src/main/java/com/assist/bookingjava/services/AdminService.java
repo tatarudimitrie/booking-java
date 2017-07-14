@@ -1,11 +1,11 @@
 package com.assist.bookingjava.services;
 
+import com.assist.bookingjava.services.interfaces.AdminInterface;
+import org.springframework.stereotype.Service;
 import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.repositories.AdminRepository;
-import com.assist.bookingjava.services.interfaces.AdminInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;

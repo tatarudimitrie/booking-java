@@ -40,6 +40,7 @@ public class AdminController {
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/email/{email}")
+
     public ResponseEntity findAdminByEmail(@PathVariable String email){
         return adminService.findAdminByEmail(email);
     }
@@ -50,6 +51,7 @@ public class AdminController {
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/admins")
+
     public String editAdmin(@RequestBody Admin admin) {
         return adminService.editAdmin(admin);
     }
@@ -60,6 +62,7 @@ public class AdminController {
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/admins/{id}")
+
     public String deleteAdmin(@PathVariable long id) {
         return adminService.deleteAdmin(id);
     }
