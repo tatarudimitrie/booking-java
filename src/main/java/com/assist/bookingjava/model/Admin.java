@@ -15,7 +15,7 @@ public class Admin implements Serializable {
     private long id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "admin", orphanRemoval = true)
-    private Set<Company> _company;
+    private Set<Company> companies;
 
     @Column(name = "name")
     private String name;
@@ -38,18 +38,12 @@ public class Admin implements Serializable {
         return id;
     }
 
-
-
-    public void setId(long id) {
-        this.id = id;
+    public Set<Company> getCompanies() {
+        return companies;
     }
 
-    public Set<Company> get_company() {
-        return _company;
-    }
-
-    public void set_company(Set<Company> _company) {
-        this._company = _company;
+    public void setCompanies(Set<Company> companies) {
+        this.companies = companies;
     }
 
     public String getName() {
@@ -80,6 +74,7 @@ public class Admin implements Serializable {
     public String toString() {
         return "Admin{" +
                 "id=" + id +
+                ", companies=" + companies +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", pass='" + pass + '\'' +
