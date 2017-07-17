@@ -6,7 +6,7 @@ import com.assist.bookingjava.model.ConfirmPass;
 import com.assist.bookingjava.model.Recovery;
 import com.assist.bookingjava.repositories.AdminRepository;
 import com.assist.bookingjava.services.AdminService;
-import com.assist.bookingjava.services.RecoveryServices;
+import com.assist.bookingjava.services.RecoveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ import java.util.*;
 public class RecoveryController {
 
     @Autowired
-    private RecoveryServices recoveryServices;
+    private RecoveryService recoveryService;
     @Autowired
     private AdminService adminService;
     @Autowired
@@ -40,12 +40,14 @@ public class RecoveryController {
     {
         Admin admin = adminRepository.findByEmail(email);
 
+        System.out.println(admin.toString());
+
         if(admin!=null)
         {
             Recovery recovery = new Recovery();
             recovery.setEmail(email);
             recovery.setResetToken(UUID.randomUUID().toString());
-            recoveryServices.saveRecovery(recovery);
+            recoveryService.saveRecovery(recovery);
 
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
@@ -84,7 +86,7 @@ public class RecoveryController {
     public void setNewPassword(@RequestBody ConfirmPass confirmPass) {
 
         System.out.println("===>> "+confirmPass.toString());
-        Recovery recovery1= recoveryServices.findByResetToken(confirmPass.getToken());
+        Recovery recovery1= recoveryService.findByResetToken(confirmPass.getToken());
         System.out.println("===>> "+recovery1.toString());
         // This should always be non-null but we check just in case
        /* if (recovery.isPresent()) {

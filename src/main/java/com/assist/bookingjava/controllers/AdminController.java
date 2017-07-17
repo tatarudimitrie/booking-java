@@ -44,6 +44,11 @@ public class AdminController {
         return adminService.findAdminByEmail(email);
     }
 
+    @RequestMapping(method=RequestMethod.GET, value="/admins/{name}/{pass}")
+    public boolean findAdminByNameAndPass(@PathVariable String name, @PathVariable String pass){
+        return adminService.findAdminByNameAndPass(name, pass);
+    }
+
     @RequestMapping(method=RequestMethod.GET, value="/admins/input")
     public String bulkAddAdmin() {
         return adminService.bulkAddAdmin();

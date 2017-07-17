@@ -35,10 +35,19 @@ public class AdminService implements AdminInterface {
         return ResponseEntity.ok(adminRepository.findOne(id));
     }
 
-
     public ResponseEntity findAdminByName(String name){
         Admin admin = adminRepository.findByName(name);
         return ResponseEntity.ok(admin);
+    }
+
+    public boolean findAdminByNameAndPass(String name, String pass){
+        System.out.println("Input pass: " + pass);
+        System.out.println("Encrypted pass: " + encryptPassword(pass));
+
+        Admin admin = adminRepository.findByName(name);
+        System.out.println(admin.toString());
+
+        return admin.getPass().equals(encryptPassword(pass));
     }
 
     public ResponseEntity findAdminByEmail(String email){
