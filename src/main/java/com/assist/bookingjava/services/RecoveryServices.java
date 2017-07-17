@@ -17,10 +17,10 @@ public class RecoveryServices {
     @Autowired
     private RecoveryRepository recoveryRepository;
 
-    public Optional findByEmail(String email) {
+    public List<Recovery> findByEmail(String email) {
         return recoveryRepository.findByEmail(email);
     }
-    public Optional findByResetToken(String resetToken) {
+    public List<Recovery> findByResetToken(String resetToken) {
         return recoveryRepository.findByResetToken(resetToken);
     }
     public void saveRecovery(Recovery recovery) {

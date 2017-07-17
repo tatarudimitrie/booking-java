@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/")
 public class MainController  {
@@ -14,5 +16,11 @@ public class MainController  {
     @RequestMapping(value = "/echo/{in}", method = RequestMethod.GET)
     public String echo(@PathVariable(value = "in") final String in, @AuthenticationPrincipal final Admin user) {
         return "Hello " +  ", you said: " + in;
+
     }
+    public String currentUserName(Principal principal) {
+
+        return principal.getName();
+    }
+
 }
