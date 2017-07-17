@@ -1,27 +1,33 @@
 package com.assist.bookingjava.controllers;
 
-import com.assist.bookingjava.model.Admin;
-import com.assist.bookingjava.repositories.AdminRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- * Created by root on 17.07.2017.
- */
+
 @RestController
 public class UserController {
-    @Autowired
-    private AdminRepository adminRepository;
 
 
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public String listUsero() {
-        return "Succes";
+    @RequestMapping(path="/login", method = RequestMethod.POST)
+    public ResponseEntity<String>  login(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            return new ResponseEntity<>("Session created for "+currentUserName, HttpStatus.OK);
+
+        }
+        else
+            return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
     }
+
+
 }
