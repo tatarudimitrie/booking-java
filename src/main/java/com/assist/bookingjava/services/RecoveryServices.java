@@ -26,5 +26,8 @@ public class RecoveryServices {
     public void saveRecovery(Recovery recovery) {
         recoveryRepository.save(recovery);
     }
-
+    public String deleteRecovery(long id) {
+        recoveryRepository.delete(id);
+        return "DELETE: Success!";
+    }
 }
