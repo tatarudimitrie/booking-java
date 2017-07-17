@@ -5,7 +5,7 @@
 		<div class="container">
 			<b-form class="form-horizontal">
 				<br>
-				<div class="form-input">
+				<div class="form-group" v-bind:class="{ 'form-group--error': $v.name.$error }">
 					<label><b>Your name</b></label>
 					<b-form fieldset>
 						<b-form-input v-model="name"
@@ -14,9 +14,10 @@
 						:state="name.length?'success':'warning'"
 						:formatter="format"
 						></b-form-input>
+						<p v-if="!$v.name.required">This field is required!</p>
 					</b-form fieldset>
 				</div>
-				<div class="form-input">
+				<div class="form-group" v-bind:class="{ 'form-group--error': $v.email.$error }">
 					<label><b>Email address</b></label>
 					<b-form-input v-model="email"
 					type="text"
@@ -24,8 +25,9 @@
 					:state="email.length?'success':'warning'"
 					:formatter="format"
 					></b-form-input>
+					<p v-if="!$v.email.email">This field must be an email!</p>
 				</div>
-				<div class="form-input">
+				<div class="form-group" v-bind:class="{ 'form-group--error': $v.password.$error }">
 					<label><b>Password</b></label>
 					<b-form-input v-model="password"
 					type="password"
@@ -33,8 +35,10 @@
 					:state="password.length?'success':'warning'"
 					:formatter="format"
 					></b-form-input>
+					<p v-if="!$v.password.minLength">The password must be 6 characters or longer!</p>
+					<p v-if="!$v.password.maxLength">The password must be less than 16 characters!</p>
 				</div>
-				<div class="form-input">
+				<div class="form-group" v-bind:class="{ 'form-group--error': $v.pass_confirm.$error }">
 					<label><b>Confirm password</b></label>
 					<b-form-input v-model="pass_confirm"
 					type="password"
@@ -43,67 +47,20 @@
 					:formatter="format"
 					:required="true"
 					></b-form-input>
+					<p v-if="!$v.pass_confirm.sameAs">This field must be the same as password!</p>
 				</div>
-				<b-form class="form-horizontal">
-					<br>
-					<div class="form-group" v-bind:class="{ 'form-group--error': $v.name.$error }">
-						<label><b>Your name</b></label>
-						<b-form fieldset>
-							<b-form-input v-model="name"
-							type="text"
-							placeholder="Enter your name"
-							:state="name.length?'success':'warning'"
-							:formatter="format"
-							></b-form-input>
-							<p v-if="!$v.name.required">This field is required!</p>
-						</b-form fieldset>
-					</div>
-					<div class="form-group" v-bind:class="{ 'form-group--error': $v.email.$error }">
-						<label><b>Email address</b></label>
-						<b-form-input v-model="email"
-						type="text"
-						placeholder="Enter email"
-						:state="email.length?'success':'warning'"
-						:formatter="format"
-						></b-form-input>
-						<p v-if="!$v.email.email">This field must be an email!</p>
-					</div>
-					<div class="form-group" v-bind:class="{ 'form-group--error': $v.password.$error }">
-						<label><b>Password</b></label>
-						<b-form-input v-model="password"
-						type="password"
-						placeholder="Password"
-						:state="password.length?'success':'warning'"
-						:formatter="format"
-						></b-form-input>
-						<p v-if="!$v.password.minLength">The password must be 6 characters or longer!</p>
-						<p v-if="!$v.password.maxLength">The password must be less than 16 characters!</p>
-					</div>
-					<div class="form-group" v-bind:class="{ 'form-group--error': $v.pass_confirm.$error }">
-						<label><b>Confirm password</b></label>
-						<b-form-input v-model="pass_confirm"
-						type="password"
-						placeholder="Confirm password"
-						:state="pass_confirm.length?'success':'warning'"
-						:formatter="format"
-						:required="true"
-						></b-form-input>
-						<p v-if="!$v.pass_confirm.sameAs">This field must be the same as password!</p>
-					</div>
-					<br>
-					<b-button @click="submit" class="btn btn-success">REGISTER</b-button>
-					<br>
-					<a href="/Login">You already have an account?</a>
-				</b-form>
 				<br>
+				<b-button @click="submit" class="btn btn-success">REGISTER</b-button>
+				<br>
+				<a href="/Login">You already have an account?</a>
 			</b-form>
 		</div>
 	</div>
 </template>
 
 <script>
-	import { required, email, minLength,maxLength, between, sameAs } from 'vuelidate/lib/validators'
 
+	import { required, email, minLength,maxLength, between, sameAs } from 'vuelidate/lib/validators'
 	export default {
 		data()  {
 			return {
@@ -120,7 +77,17 @@
 			},
 			submit() {
 				if (this.$v.email.email && this.$v.name.required && this.$v.password.minLength && this.$v.password.maxLength && this.$v.pass_confirm.sameAs) {
-					console.log(this.name, this.email, this.password, this.pass_confirm);
+					debugger;
+					this.$http.post('localhost:9999/admins',  {
+						"name": this.name,
+						"email": this.email,
+						"pass": this.password
+					},
+					{
+						headers: {
+							'Accept': 'application/json'
+						}
+					});
 				}
 			}
 		},
@@ -137,6 +104,7 @@
 			},
 			pass_confirm:{
 				sameAs: sameAs('password')
+
 			}
 		}
 	}
@@ -181,7 +149,9 @@
 		background-color: blue;
 		border-bottom: 4px solid blue;
 		margin-bottom: 20px;
+
 	} 
+
 	.title{
 		font-size:80px;
 		font-family: Arial;
@@ -190,6 +160,7 @@
 	.app{
 		color:skyblue;
 	}
+
 	p{
 		font-size:10px;
 	}
