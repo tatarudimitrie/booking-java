@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="myform.cgi">
+<form action="/forgot/password/" method="post">
     <input type="email" name="email" id="email" maxlength="20">
     <label for="email"> Type a email here</label>
     <br><input type="submit" value="Submit">

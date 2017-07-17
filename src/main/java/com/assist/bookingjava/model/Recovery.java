@@ -10,7 +10,7 @@ public class Recovery implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
     @Column(name = "email")
     private String email;
 
@@ -21,7 +21,9 @@ public class Recovery implements Serializable {
         this.email = email;
         this.resetToken = resetToken;
     }
+    public Recovery() {
 
+    }
     public String getEmail() {
         return email;
     }

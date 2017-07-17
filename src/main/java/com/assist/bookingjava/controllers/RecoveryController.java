@@ -1,60 +1,102 @@
 package com.assist.bookingjava.controllers;
 
+
 import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.model.Recovery;
+import com.assist.bookingjava.repositories.AdminRepository;
 import com.assist.bookingjava.services.AdminService;
 import com.assist.bookingjava.services.EmailServices;
 import com.assist.bookingjava.services.RecoveryServices;
 import com.sun.org.apache.regexp.internal.RE;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by cosmin on 14.07.2017.
  */
+@RestController
 public class RecoveryController {
+
 
     @Autowired
     private RecoveryServices recoveryServices;
 
-    @Autowired
     private EmailServices emailServices;
+
     @Autowired
     private AdminService adminService;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private AdminRepository adminRepository;
+
 
     // Display forgotPassword page
-    @RequestMapping(value = "/forgot", method = RequestMethod.GET)
-    public ModelAndView displayForgotPasswordPage() {
-        return new ModelAndView("forgotPassword");
-    }
+   // @RequestMapping(value = "/forgot", method = RequestMethod.GET)
+  //  public ModelAndView displayForgotPasswordPage() {
+  //      return new ModelAndView("forgotPassword");
+   // }
 
     // Process form submission from forgotPassword page
-    @RequestMapping(value = "/forgot", method = RequestMethod.POST)
-    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String email, HttpServletRequest request) {
+    @RequestMapping(value = "/forgot/password", method = RequestMethod.PUT)
+    public String processForgotPasswordForm(@RequestBody String email) throws JSONException {
 
         // Lookup user in database by e-mail
 
 
-        Optional<Recovery> optional = recoveryServices.findByEmail(email);
-      //  List<Admin> optional1= (List<Admin>) adminService.findAdminByEmail(email);
+
+           System.out.println("aici"  + email);
+       List<Recovery> optional= recoveryServices.findByEmail(email);
+
+      // List<Admin> adminSearchEmail= adminRepository.findByEmail(email);
+       //  Optional<Recovery> optional = recoveryServices.findByEmail(email);
+     //   List<Admin> optional1= (List<Admin>) adminService.findAdminByEmail(email.toString());
         //verifica daca e in admin
         //isPresent
+
+
+        if (!optional.isEmpty()) {
+            // adminRepository.save(admin);
+            //return "PUT: Success!";
+            // Generate random 36-character string token for reset password
+            String emailsave = email.toString();
+            Recovery recovery = new Recovery();
+            recovery.setEmail(emailsave);
+            recovery.setResetToken(UUID.randomUUID().toString());
+            recoveryServices.saveRecovery(recovery);
+            // Save token to database
+            //recoveryServices.saveRecovery(recovery);
+
+            //String appUrl = request.getScheme() + "://" + request.getServerName();
+            //  String appUrl="test";
+
+            // Email message
+        /*    SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
+            passwordResetEmail.setFrom("alexbolohan@stud.usv.ro");
+            passwordResetEmail.setTo(recovery.getEmail());
+            passwordResetEmail.setSubject("Password Reset Request");
+            passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl
+                    + "/reset?token=" + recovery.getResetToken());
+
+
+            emailServices.sendEmail(passwordResetEmail);
+*/
+            // Add success message to view
+            return "PUT: Success!";
+
+        } else {
+            return "Error! Email invalid";
+        }
+    }
+        /*
 
         if (!optional.isPresent()) {
             modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");
@@ -83,11 +125,12 @@ public class RecoveryController {
             modelAndView.addObject("successMessage", "A password reset link has been sent to " + email);
         }
 
-        modelAndView.setViewName("git ");
+        modelAndView.setViewName("forgotPassword");
         return modelAndView;
-
-    }
-
+        return "ok";
+*/
+        //  }
+/*
     // Display form to reset password
     @RequestMapping(value = "/reset", method = RequestMethod.GET)
     public ModelAndView displayResetPasswordPage(ModelAndView modelAndView, @RequestParam("resetToken") String resetToken) {
@@ -145,5 +188,6 @@ public class RecoveryController {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
         return new ModelAndView("redirect:login");
+    }*/
+
     }
-}
