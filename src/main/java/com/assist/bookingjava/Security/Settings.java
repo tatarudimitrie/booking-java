@@ -63,7 +63,4 @@ public class Settings extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/*.js");
     }
 
-
-
-
 }
