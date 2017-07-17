@@ -54,7 +54,7 @@ public class AdminController {
         return adminService.editAdmin(admin);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/new/account")
+    @RequestMapping(method=RequestMethod.POST, value="/admins")
     public String addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     }
