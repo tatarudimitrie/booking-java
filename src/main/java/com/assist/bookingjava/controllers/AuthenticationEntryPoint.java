@@ -18,4 +18,5 @@ import org.springframework.stereotype.Component;
     public void afterPropertiesSet() throws Exception {
         setRealmName("DeveloperStack");
         super.afterPropertiesSet();
-    } }
+    }
+}

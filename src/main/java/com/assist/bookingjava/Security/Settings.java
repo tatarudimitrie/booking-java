@@ -45,9 +45,10 @@ public class Settings extends WebSecurityConfigurerAdapter {
            auth.inMemoryAuthentication().withUser(a.getName()).password(a.getPass()).roles("USER");
            adminList.add(a);
        }
-       auth.userDetailsService(detailsService).passwordEncoder(PASSWORD_ENCODER);
-
+      // auth.userDetailsService(detailsService).passwordEncoder(PASSWORD_ENCODER);
+       auth.inMemoryAuthentication().withUser("john123").password("password").roles("USER");
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        /// http
