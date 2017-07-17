@@ -55,7 +55,7 @@ public class Settings extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/companies")
-                .loginPage("/login")
+                .loginPage("http://192.168.150.225:8080/login")
                 .permitAll()
                 .and()
                 .logout()
