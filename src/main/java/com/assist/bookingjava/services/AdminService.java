@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -33,17 +32,13 @@ public class AdminService implements AdminInterface{
     }
 
     public ResponseEntity findAdminByName(String name){
-        Collection<Admin> adminList = new ArrayList<>();
-        adminList.addAll(adminRepository.findByName(name));
-
-        return ResponseEntity.ok(adminList);
+        Admin admin = adminRepository.findByName(name);
+        return ResponseEntity.ok(admin);
     }
 
     public ResponseEntity findAdminByEmail(@PathVariable String email){
-        Collection<Admin> adminList = new ArrayList<>();
-        adminList.addAll(adminRepository.findByEmail(email));
-
-        return ResponseEntity.ok(adminList);
+        Admin admin = adminRepository.findByEmail(email);
+        return ResponseEntity.ok(admin);
     }
 
     public String bulkAddAdmin() {
@@ -57,12 +52,11 @@ public class AdminService implements AdminInterface{
 
     public String editAdmin(Admin admin) {
 
-        if (adminRepository.findByEmail(admin.getEmail()).isEmpty()) {
-            adminRepository.save(admin);
-            return "PUT: Success!";
-        } else {
-            return "Error! Duplicate email";
-        }
+        Admin tempAdmin = adminRepository.findByName(admin.getName());
+        tempAdmin.setEmail(admin.getEmail());
+
+        adminRepository.save(tempAdmin);
+        return "PUT: Success!";
         //TODO PASS ENCRYPT
         //TODO CHECK PASS LENGTH
     }
@@ -77,18 +71,3 @@ public class AdminService implements AdminInterface{
         return "DELETE: Success!";
     }
 }
-
-
-
-
-                /*"....._......_______..._______..._   _______   _______ " + "<br/>" +
-                "    #@#    |*#*#*#*| |*#*#*#*| |*| |*#*#*#*| |*#*#*#*|" + "<br/>" +
-                "  *|---|#  |#* ----  |#* ----  |#| |#* ----  '-- * --'" + "<br/>" +
-                " |#|   |*| |*#|      |*#|      |*| |*#|         |#|   " + "<br/>" +
-                " |*|   |#| |#* ----  |#* ----  |#| |#* ----     |#|   " + "<br/>" +
-                " |#|___|*| |*#*#*#*| |*#*#*#*| |*| |*#*#*#*|    |#|   " + "<br/>" +
-                " |*#*@#*#| '---- *#| '---- *#| |#| '---- *#|    |#|   " + "<br/>" +
-                " |#|---|*|      |#*|      |#*| |*|      |#*|    |#|   " + "<br/>" +
-                " |*|   |#|  ----'*#|  ----'*#| |#|  ----'*#|    |#|   " + "<br/>" +
-                " |#|   |*| |*#*#*#*| |*#*#*#*| |*| |*#*#*#*|    |#|   " + "<br/>" +
-                " |#|   |*| '_______' '_______'  _  '_______'    |#|   #ASSIST.RO";*/
