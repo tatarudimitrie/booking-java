@@ -119,6 +119,7 @@ public class RecoveryController {
         System.out.println("===>> "+confirmPass.toString());
         Recovery recovery1= recoveryServices.findByResetToken(confirmPass.getToken());
         System.out.println("===>> "+recovery1.toString());
+       // Admin admin1 = adminRepository.findByEmail(email);
         // This should always be non-null but we check just in case
        /* if (recovery.isPresent()) {
 
