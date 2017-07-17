@@ -67,7 +67,7 @@ public class Settings extends WebSecurityConfigurerAdapter {
        //         .loginPage("/login").and().logout().permitAll();
       //  http.headers().frameOptions().disable().addHeaderWriter(new StaticHeadersWriter("X-FRAME-OPTIONS", "SAMEORIGIN"));
 
-
+        http.csrf().disable();
     }
     @Override
     public void configure(WebSecurity web) throws Exception {
