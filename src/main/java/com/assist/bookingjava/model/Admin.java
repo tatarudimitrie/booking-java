@@ -4,22 +4,22 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "admins")
+@Table(name = "admins", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "email"})})
 public class Admin implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(name = "name", unique=true)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", unique=true)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "pass")
+    @Column(name = "pass", nullable = false)
     private String pass;
 
     public Admin(){}

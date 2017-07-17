@@ -47,11 +47,11 @@ public class AdminService implements AdminInterface {
     }
 
     public String bulkAddAdmin() {
-        adminRepository.save(new Admin("andrei", "peter@assist.ro", "test"));
-        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", "#stan123"));
-        adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", "kim*i23"));
-        adminRepository.save(new Admin("David Willie", "david@assist.ro", "david123"));
-        adminRepository.save(new Admin("Peter Divide", "peter@assist.ro", "peter123"));
+        adminRepository.save(new Admin("andrei", "peter@assist.ro", encryptPassword("test")));
+        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("#stan123")));
+        adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", encryptPassword("kim*i23")));
+        adminRepository.save(new Admin("David Willie", "david@assist.ro", encryptPassword("david123")));
+        adminRepository.save(new Admin("Peter Divide", "peter@assist.ro", encryptPassword("peter123")));
         return "Admin table was updated with five DEFAULT ROWS!";
     }
 
@@ -66,6 +66,9 @@ public class AdminService implements AdminInterface {
     }
 
     public String addAdmin(Admin admin) {
+
+        //ResponseEntity<>
+
         String inputPass = admin.getPass();
         admin.setPass(encryptPassword(inputPass));
         adminRepository.save(admin);

@@ -53,7 +53,7 @@ public class AdminController {
     public String editAdmin(@RequestBody Admin admin) {
         return adminService.editAdmin(admin);
     }
-
+    @CrossOrigin(origins = "*")
     @RequestMapping(method=RequestMethod.POST, value="/admins")
     public String addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
