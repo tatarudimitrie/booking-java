@@ -60,6 +60,7 @@
 
 <script>
 
+
 	import { required, email, minLength,maxLength, between, sameAs } from 'vuelidate/lib/validators'
 	export default {
 		data()  {
@@ -77,17 +78,26 @@
 			},
 			submit() {
 				if (this.$v.email.email && this.$v.name.required && this.$v.password.minLength && this.$v.password.maxLength && this.$v.pass_confirm.sameAs) {
-					debugger;
-					this.$http.post('localhost:9999/admins',  {
+					debugger
+					this.$http.post("http://192.168.151.51:8080/admins", {
 						"name": this.name,
 						"email": this.email,
 						"pass": this.password
+						// "name": "Andrei",
+						// "email": "andrei@mail.ro",
+						// "pass": "andrei"
 					},
 					{
-						headers: {
-							'Accept': 'application/json'
+						headers:{
+							'Accept':'application/json'
 						}
-					});
+
+					}).then(response => {
+						console.log("success");
+					}, response => {
+						console.log("error");
+					})
+
 				}
 			}
 		},

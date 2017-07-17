@@ -32,6 +32,7 @@
       return value.toLowerCase();
     },
     submit(){
+      debugger;
       if (this.$v.email.email) {
         console.log(this.email);
       }
