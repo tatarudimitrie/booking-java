@@ -18,8 +18,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 public class Settings extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AdminRepository adminRepository;
-    @Autowired
     private UserDetailsService detailsService;
     @Autowired
     private AuthenticationEntryPoint authEntryPoint;
