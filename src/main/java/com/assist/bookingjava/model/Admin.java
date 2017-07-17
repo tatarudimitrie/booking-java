@@ -1,5 +1,8 @@
 package com.assist.bookingjava.model;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,7 +11,7 @@ import java.io.Serializable;
 public class Admin implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
-
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,16 +30,19 @@ public class Admin implements Serializable {
     public Admin(String name, String email, String pass) {
         this.name = name;
         this.email = email;
-        this.pass = pass;
+        setPassword(pass);
     }
 
     public Admin(long id, String name, String email, String pass) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.pass = pass;
+        setPassword(pass);
     }
 
+    public void setPassword(String password) {
+        this.pass = PASSWORD_ENCODER.encode(password);
+    }
     public long getId() {
         return id;
     }
@@ -62,7 +68,7 @@ public class Admin implements Serializable {
     }
 
     public void setPass(String pass) {
-        this.pass = pass;
+        setPassword(pass);
     }
 
     @Override

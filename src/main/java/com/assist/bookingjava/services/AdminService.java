@@ -42,7 +42,7 @@ public class AdminService implements AdminInterface{
     }
 
     public String bulkAddAdmin() {
-        adminRepository.save(new Admin("Peter George", "peter@assist.ro", "peter"));
+        adminRepository.save(new Admin("andrei", "peter@assist.ro", "test"));
         adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", "#stan"));
         adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", "kim*i"));
         adminRepository.save(new Admin("David Willie", "david@assist.ro", "david"));
