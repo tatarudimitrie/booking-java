@@ -41,7 +41,7 @@ public class AdminService implements AdminInterface {
         return ResponseEntity.ok(admin);
     }
 
-    public ResponseEntity findAdminByEmail(@PathVariable String email){
+    public ResponseEntity findAdminByEmail(String email){
         Admin admin = adminRepository.findByEmail(email);
         return ResponseEntity.ok(admin);
     }
