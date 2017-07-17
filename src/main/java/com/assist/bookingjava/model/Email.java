@@ -5,6 +5,12 @@ package com.assist.bookingjava.model;
  */
 public class Email {
     private String email;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Email() {
+    }
 
     public Email(String email) {
         this.email = email;
@@ -14,7 +20,5 @@ public class Email {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+
 }
