@@ -29,7 +29,7 @@ public class Webconfig extends WebMvcConfigurerAdapter {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods("POST", "PUT");
+                .allowedMethods("POST", "PUT", "GET");
     }
 
     @Override
