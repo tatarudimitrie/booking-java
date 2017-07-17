@@ -13,15 +13,15 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class AdminService implements AdminInterface{
+public class AdminService implements AdminInterface {
 
     @Autowired
     private AdminRepository adminRepository;
 
-    public ResponseEntity findAllAdmins(){
+    public ResponseEntity findAllAdmins() {
         List<Admin> adminList = new ArrayList<>();
 
-        for(Admin a : adminRepository.findAll()) {
+        for (Admin a : adminRepository.findAll()) {
             adminList.add(a);
         }
 
@@ -32,14 +32,14 @@ public class AdminService implements AdminInterface{
         return ResponseEntity.ok(adminRepository.findOne(id));
     }
 
-    public ResponseEntity findAdminByName(String name){
+    public ResponseEntity findAdminByName(String name) {
         Collection<Admin> adminList = new ArrayList<>();
         adminList.addAll(adminRepository.findByName(name));
 
         return ResponseEntity.ok(adminList);
     }
 
-    public ResponseEntity findAdminByEmail(@PathVariable String email){
+    public ResponseEntity findAdminByEmail(@PathVariable String email) {
         Collection<Admin> adminList = new ArrayList<>();
         adminList.addAll(adminRepository.findByName(email));
 
@@ -77,18 +77,3 @@ public class AdminService implements AdminInterface{
         return "DELETE: Success!";
     }
 }
-
-
-
-
-                /*"....._......_______..._______..._   _______   _______ " + "<br/>" +
-                "    #@#    |*#*#*#*| |*#*#*#*| |*| |*#*#*#*| |*#*#*#*|" + "<br/>" +
-                "  *|---|#  |#* ----  |#* ----  |#| |#* ----  '-- * --'" + "<br/>" +
-                " |#|   |*| |*#|      |*#|      |*| |*#|         |#|   " + "<br/>" +
-                " |*|   |#| |#* ----  |#* ----  |#| |#* ----     |#|   " + "<br/>" +
-                " |#|___|*| |*#*#*#*| |*#*#*#*| |*| |*#*#*#*|    |#|   " + "<br/>" +
-                " |*#*@#*#| '---- *#| '---- *#| |#| '---- *#|    |#|   " + "<br/>" +
-                " |#|---|*|      |#*|      |#*| |*|      |#*|    |#|   " + "<br/>" +
-                " |*|   |#|  ----'*#|  ----'*#| |#|  ----'*#|    |#|   " + "<br/>" +
-                " |#|   |*| |*#*#*#*| |*#*#*#*| |*| |*#*#*#*|    |#|   " + "<br/>" +
-                " |#|   |*| '_______' '_______'  _  '_______'    |#|   #ASSIST.RO";*/
