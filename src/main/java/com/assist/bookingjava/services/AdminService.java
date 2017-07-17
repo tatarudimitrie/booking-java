@@ -41,7 +41,7 @@ public class AdminService implements AdminInterface{
 
     public ResponseEntity findAdminByEmail(@PathVariable String email){
         Collection<Admin> adminList = new ArrayList<>();
-        adminList.addAll(adminRepository.findByName(email));
+        adminList.addAll(adminRepository.findByEmail(email));
 
         return ResponseEntity.ok(adminList);
     }
