@@ -35,7 +35,6 @@ public class RecoveryController {
     private final static String emailPassword = "Assist2017";
     private final static String recoveryURL = "localhost:8080/reset?token=";
 
-
     @RequestMapping(value = "/forgot/password", method = RequestMethod.PUT)
     public String processForgotPasswordForm(@RequestBody String email)
     {
