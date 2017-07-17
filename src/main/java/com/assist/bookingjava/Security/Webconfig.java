@@ -29,17 +29,17 @@ public class Webconfig extends WebMvcConfigurerAdapter {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods("POST", "PUT");
+                .allowedMethods("POST", "PUT", "GET");
     }
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("http://192.168.150.225:8080/login");
-        registry.addViewController("/http://192.168.150.225:8080/login").setViewName("login");
+   // @Override
+  //  public void addViewControllers(ViewControllerRegistry registry) {
+   //     registry.addViewController("/").setViewName("http://192.168.150.225:8080/login");
+  //      registry.addViewController("/http://192.168.150.225:8080/login").setViewName("login");
+//
+ //   }
 
-    }
-
-   @Override
+  /* @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/*.js/**").addResourceLocations("/ui/static/");
         registry.addResourceHandler("/*.css/**").addResourceLocations("/ui/static/");
@@ -53,5 +53,5 @@ public class Webconfig extends WebMvcConfigurerAdapter {
         resolver.setViewClass (JstlView.class);
         return resolver;
     }
-
+*/
 }

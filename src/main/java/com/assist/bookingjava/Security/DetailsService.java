@@ -26,11 +26,11 @@ public class DetailsService implements UserDetailsService {
         Admin user = adminRepository.findByName(username);
         if (user == null){
             throw new UsernameNotFoundException(username + " was not found");
-        }
-        return new org.springframework.security.core.userdetails.User(
-                user.getName(),
-                user.getPass(),
-                AuthorityUtils.createAuthorityList(new String[] {"USER"})
+        }return new org.springframework.security.core.userdetails.User(
+               user.getName(),
+               user.getPass(),
+               AuthorityUtils.createAuthorityList(new String[] {"USER"})
         );
+
     }
 }

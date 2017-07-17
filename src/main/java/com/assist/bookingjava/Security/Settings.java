@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,8 @@ public class Settings extends WebSecurityConfigurerAdapter {
     private AdminRepository adminRepository;
     @Autowired
     DetailsService detailsService;
-
+    @Autowired
+    private AuthenticationEntryPoint authEntryPoint;
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @Override
@@ -43,25 +45,32 @@ public class Settings extends WebSecurityConfigurerAdapter {
            auth.inMemoryAuthentication().withUser(a.getName()).password(a.getPass()).roles("USER");
            adminList.add(a);
        }
-       auth.userDetailsService(detailsService).passwordEncoder(PASSWORD_ENCODER);
-
+      // auth.userDetailsService(detailsService).passwordEncoder(PASSWORD_ENCODER);
+       auth.inMemoryAuthentication().withUser("john123").password("password").roles("USER");
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-               .authorizeRequests()
-               .antMatchers("**/login").permitAll()
-               .anyRequest().authenticated()
-                .and()
+       /// http
+           //    .authorizeRequests()
+               //.antMatchers("**/login").permitAll()
+             //  .anyRequest().authenticated()
+          /*      .and()
                 .formLogin()
-                .defaultSuccessUrl("/companies")
+               // .defaultSuccessUrl("/dashboard")
                 .loginPage("http://192.168.150.225:8080/login")
                 .permitAll()
                 .and()
                 .logout()
 
-                .permitAll();
-
+                .permitAll();*/
+        http.csrf().
+                disable().
+                authorizeRequests() .
+                anyRequest().
+                authenticated() .
+                and().httpBasic() .
+                authenticationEntryPoint(authEntryPoint);
        // http.csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login")).and().authorizeRequests()
        //         .antMatchers("/companies").hasRole("USER").and().formLogin().defaultSuccessUrl("/companies")
        //         .loginPage("/login").and().logout().permitAll();
@@ -72,6 +81,7 @@ public class Settings extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/admins");
+        web.ignoring().antMatchers("http://192.168.150.225:8080/login");
         web.ignoring().antMatchers("/admins/input");
         web.ignoring().antMatchers("/admins/login");
         web.ignoring().antMatchers("/*.css");
