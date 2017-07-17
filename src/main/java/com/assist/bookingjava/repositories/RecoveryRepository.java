@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface RecoveryRepository extends CrudRepository<Recovery, Long> {
     public List<Recovery> findByEmail(String email);
-    public List<Recovery> findByResetToken(String resetToken);
+    public Recovery findByResetToken(String resetToken);
    // public void saveRecovery(Recovery recovery);
 }
