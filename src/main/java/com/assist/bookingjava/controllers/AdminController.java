@@ -44,6 +44,12 @@ public class AdminController {
         return adminService.findAdminByEmail(email);
     }
 
+    @RequestMapping(method=RequestMethod.PUT, value="/admins/login")
+    public ResponseEntity findAdminByNameAndPass(@RequestBody Admin admin){
+        return ResponseEntity.ok(adminService.findAdminbyLogin(admin));
+        //return ResponseEntity.ok(adminService.findAdminByEmail(admin.getEmail()));
+    }
+
     @RequestMapping(method=RequestMethod.GET, value="/admins/{name}/{pass}")
     public boolean findAdminByNameAndPass(@PathVariable String name, @PathVariable String pass){
         return adminService.findAdminByNameAndPass(name, pass);
@@ -58,6 +64,7 @@ public class AdminController {
     public String editAdmin(@RequestBody Admin admin) {
         return adminService.editAdmin(admin);
     }
+
     @CrossOrigin(origins = "*")
     @RequestMapping(method=RequestMethod.POST, value="/admins")
     public String addAdmin(@RequestBody Admin admin) {
@@ -65,7 +72,6 @@ public class AdminController {
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/admins/{id}")
-
     public String deleteAdmin(@PathVariable long id) {
         return adminService.deleteAdmin(id);
     }
