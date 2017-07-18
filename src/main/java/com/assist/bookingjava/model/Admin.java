@@ -1,8 +1,9 @@
 package com.assist.bookingjava.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "admins")
@@ -11,16 +12,18 @@ public class Admin implements Serializable {
     private static final long serialVersionUID = -3009157732242241606L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "pass")
+    @JsonIgnore
+    @Column(name = "pass", nullable = false)
     private String pass;
 
     public Admin(){}
@@ -40,6 +43,10 @@ public class Admin implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public long setId(long id) {
+        return this.id = id;
     }
 
     public String getName() {

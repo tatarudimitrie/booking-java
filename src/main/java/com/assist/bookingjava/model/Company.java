@@ -1,22 +1,25 @@
 package com.assist.bookingjava.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
-@Table(name = "companies")
+@Table(name = "companies", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class Company implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
+
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Admin admin;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "description")
@@ -36,6 +39,10 @@ public class Company implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public long setId(long id) {
+        return this.id = id;
     }
 
     public String getName() {

@@ -12,8 +12,8 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @RequestMapping(method=RequestMethod.GET, value="/companies")
-    public ResponseEntity findAll(){
+    @RequestMapping(method=RequestMethod.GET, value="/companies/all")
+    public ResponseEntity findAllCompanies(){
         return companyService.findAllCompanies();
     }
 
@@ -32,16 +32,17 @@ public class CompanyController {
         return companyService.addBulkCompany();
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/companies")
+    @RequestMapping(method=RequestMethod.POST, value="/companies/edit")
     public String addCompany(@RequestBody Company company) {
         return companyService.addCompany(company);
     }
-    @RequestMapping(method=RequestMethod.PUT, value="/companies")
+
+    @RequestMapping(method=RequestMethod.PUT, value="/companies/add")
     public void editCompany(@RequestBody Company company) {
         companyService.editCompany(company);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/companies/{id}")
+    @RequestMapping(method=RequestMethod.DELETE, value="/companies/delete/{id}")
     public String deleteCompany(@PathVariable long id) {
         return companyService.deleteCompany(id);
     }
