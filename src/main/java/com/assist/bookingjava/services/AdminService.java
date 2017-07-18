@@ -98,7 +98,7 @@ public class AdminService implements AdminInterface {
     }
 
     public String addAdmin(Admin admin) {
-        
+
         AdminSanitization(admin);
         if(errorInput!="")
         {
