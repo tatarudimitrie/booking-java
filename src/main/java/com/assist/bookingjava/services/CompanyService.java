@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,11 +46,11 @@ public class CompanyService implements CompanyInterface {
     }
 
     public String addBulkCompany() {
-        companyRepository.save(new Company(870, "Assist", "Assist software", "C:/Assist.png"));
-        companyRepository.save(new Company(871, "Google", "Google _search_", "C:/Google.png"));
-        companyRepository.save(new Company(872, "PayPal", "PayPal _banking", "C:/PayPal.png"));
-        companyRepository.save(new Company(873, "Amazon", "Amazon delivery", "C:/Amazon.png"));
-        companyRepository.save(new Company(874, "GitHub", "GitHub headache", "C:/GitHub.png"));
+        companyRepository.save(new Company("peter@assist.ro", "Assist", "Assist software", "C:/Assist.png"));
+        companyRepository.save(new Company("astan@assist.ro", "Google", "Google _search_", "C:/Google.png"));
+        companyRepository.save(new Company("kimii@assist.ro", "PayPal", "PayPal _banking", "C:/PayPal.png"));
+        companyRepository.save(new Company("david@assist.ro", "Amazon", "Amazon delivery", "C:/Amazon.png"));
+        companyRepository.save(new Company("mihai?@mail.ro", "GitHub", "GitHub headache", "C:/GitHub.png"));
         return "Company table was updated with five DEFAULT ROWS!";
     }
 
@@ -59,10 +58,19 @@ public class CompanyService implements CompanyInterface {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findByName(authentication.getName());
 
-        company.setAdmin(admin);
-        companyRepository.save(company);
-        return "POST: Success!" + company.toString();
+        System.out.println(admin.toString());
 
+        company.setAdmin(admin);
+        try {
+            companyRepository.save(company);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            return "Insert or update data results in violation of an integrity constraint!";
+        //} catch (org.postgresql.util.PSQLException psqlException) {
+        //    return "Company name must be unique!";
+        } catch (Exception e) {
+            return "Username is not unique!";
+        }
+        return "POST: Success!" + company.toString();
     }
 
     public String editCompany(Company company) {

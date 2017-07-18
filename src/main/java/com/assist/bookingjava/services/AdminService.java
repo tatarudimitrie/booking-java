@@ -1,7 +1,6 @@
 package com.assist.bookingjava.services;
 
 import com.assist.bookingjava.services.interfaces.AdminInterface;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +9,6 @@ import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +20,12 @@ public class AdminService implements AdminInterface {
     private AdminRepository adminRepository;
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
-    private String errorInput = "";
 
     public ResponseEntity findAllAdmins() {
         List<Admin> adminList = new ArrayList<>();
 
         for (Admin a : adminRepository.findAll()) {
+            a.setPass("*");
             adminList.add(a);
         }
 
@@ -77,31 +75,51 @@ public class AdminService implements AdminInterface {
     }
 
     public String editAdmin(Admin admin) {
-        AdminSanitization(admin);
-        if(errorInput!="")
-        {
-            return errorInput;
-        }
+        //adminSanitize(admin);
         Admin tempAdmin = adminRepository.findByName(admin.getName());
         tempAdmin.setEmail(admin.getEmail());
-        adminRepository.save(tempAdmin);
+        try
+        {
+            adminRepository.save(tempAdmin);
+        }
+        catch (Exception e)
+        {
+            return  "Eroare la salvare "+e.toString();
+        }
+
         return "PUT: Success!";
 
     }
 
-    public String addAdmin(Admin admin) {
+    public ResponseEntity<String> addAdmin(Admin admin) {
 
-        AdminSanitization(admin);
-        if(errorInput!="")
-        {
-            return errorInput;
+        System.out.println("ADD ADMIN --> " + admin.toString());
+
+        String sanitize = adminSanitize(admin);
+        if (!sanitize.equals("")) {
+            //return ResponseEntity.badRequest().body("Wrong input!\n" + sanitize);
         }
-        String inputPass = admin.getPass();
-        admin.setPass(encryptPassword(inputPass));
-        adminRepository.save(admin);
 
-        //return ResponseEntity.ok("OK");
-        return "POST: Success!";
+        if (isDuplicateName(admin.getName())) {
+            return ResponseEntity.badRequest().body("Duplicate name");
+        }
+
+        if (isDuplicateEmail(admin.getEmail())) {
+            return ResponseEntity.badRequest().body("Duplicate email");
+        }
+
+        if (isInvalidPass(admin.getPass())) {
+            return ResponseEntity.badRequest().body("Password length must be between 6..16");
+        }
+
+        try {
+            admin.setPass(encryptPassword(admin.getPass()));
+            adminRepository.save(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Something happened!");
+        }
+
+        return ResponseEntity.ok("Admin registered successfully!");
     }
 
     public String deleteAdmin(long id) {
@@ -109,12 +127,24 @@ public class AdminService implements AdminInterface {
         return "DELETE: Success!";
     }
 
+    /* ADMIN INPUT CHECKS */
+    private boolean isDuplicateName(String name) {
+        return (adminRepository.findByName(name) != null);
+    }
+
+    private boolean isDuplicateEmail(String email) {
+        return (adminRepository.findByEmail(email) != null);
+    }
+
+    private boolean isInvalidPass(String pass) {
+        return !((pass.length() >= 6) && (pass.length() <= 16));
+    }
 
     private String encryptPassword(String inputPass) {
         return PASSWORD_ENCODER.encode(inputPass);
     }
 
-    public void AdminSanitization(Admin admin) {
+    private String adminSanitize(Admin admin) {
         String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         String userEntered[][] = new String[3][2];
         userEntered[0][0] = admin.getName();
@@ -125,11 +155,14 @@ public class AdminService implements AdminInterface {
         userEntered[1][1] = "Password";
         userEntered[2][1] = "Email";
 
-        for (int i = 0; i < userEntered.length; i++) {
+        String errorString = "";
+
+        for (int i = 0; i < userEntered.length; ++i) {
             if (!allowed.contains(userEntered[i][0])) {
-                errorInput += "Eroare  " + userEntered[i][1];
+                errorString += "Error  " + userEntered[i][1] + " ";
             }
         }
 
+        return errorString;
     }
 }

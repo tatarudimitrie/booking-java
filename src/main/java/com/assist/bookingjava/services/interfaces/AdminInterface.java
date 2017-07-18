@@ -17,7 +17,7 @@ public interface AdminInterface {
 
     String editAdmin(Admin admin);
 
-    String addAdmin(Admin admin);
+    ResponseEntity<String> addAdmin(Admin admin);
 
     String deleteAdmin(long id);
 }
