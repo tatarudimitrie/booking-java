@@ -1,6 +1,8 @@
 package com.assist.bookingjava.services;
 
 import com.assist.bookingjava.services.interfaces.AdminInterface;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,18 +48,17 @@ public class AdminService implements AdminInterface {
 
         Admin admin = adminRepository.findByName(name);
         System.out.println(admin.toString());
-
         return admin.getPass().equals(encryptPassword(pass));
     }
 
-    public boolean findAdminbyLogin(Admin admin){
-        System.out.println("Input pass: " + admin.getPass());
-        System.out.println("Encrypted pass: " + encryptPassword(admin.getPass()));
+    public ResponseEntity findAdminByLogin(Admin admin){
+        Admin adminTemp = adminRepository.findByEmail(admin.getEmail());
+        if (adminTemp == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
 
-        Admin adminTemp = adminRepository.findByName(admin.getName());
-        System.out.println(admin.toString());
-
-        return admin.getPass().equals(encryptPassword(admin.getPass()));
+        boolean status = PASSWORD_ENCODER.matches(admin.getPass(), adminTemp.getPass());
+        return status? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     public ResponseEntity findAdminByEmail(String email){
@@ -67,7 +68,7 @@ public class AdminService implements AdminInterface {
 
     public String bulkAddAdmin() {
         adminRepository.save(new Admin("andrei", "peter@assist.ro", encryptPassword("test")));
-        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("#stan123")));
+        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("stan1234")));
         adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", encryptPassword("kim*i23")));
         adminRepository.save(new Admin("David Willie", "david@assist.ro", encryptPassword("david123")));
         adminRepository.save(new Admin("Peter Divide", "peter@assist.ro", encryptPassword("peter123")));

@@ -46,7 +46,7 @@ public class AdminController {
 
     @RequestMapping(method=RequestMethod.PUT, value="/admins/login")
     public ResponseEntity findAdminByNameAndPass(@RequestBody Admin admin){
-        return ResponseEntity.ok(adminService.findAdminbyLogin(admin));
+        return ResponseEntity.ok(adminService.findAdminByLogin(admin));
         //return ResponseEntity.ok(adminService.findAdminByEmail(admin.getEmail()));
     }
 
