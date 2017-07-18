@@ -34,9 +34,23 @@
     submit(){
       debugger;
       if (this.$v.email.email) {
-        console.log(this.email);
+          this.$http.post("http://192.168.150.245:8080/admins", {
+            // this.email
+          },
+          {
+            headers:{
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'plain/text',
+            }
+
+          }).then(response => {
+            console.log("success");
+          }, response => {
+            console.log(response.status, response.body);
+          })
+
+        }
       }
-    }
   },
   validations: {
     email:{

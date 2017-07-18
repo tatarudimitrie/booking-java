@@ -51,19 +51,29 @@
        return value.toLowerCase();
      },
      submit() {
-      if (this.$v.email.email && this.$v.password.minLength && this.$v.password.maxLength) {
-        debugger
-        var data = this.$http.get("http://192.168.151.51:8080/admins/", 
+       if (this.$v.email.email && this.$v.password.minLength && this.$v.password.maxLength) {
+        this.$http.post("http://192.168.151.51:8080/login", {
+          "email": this.email,
+          "pass": this.password
+        },
         {
           headers:{
-            'Accept':'application/json'
+            'Content-Type': 'application/json'
           }
 
         }).then(response => {
-          console.log("success");
+          console.log("success", response.status, response.body);
+          if(response.status === 200){
+            location.href = "/dashboard"
+          }
+          else{
+            console.log("Wrong password!")
+          }
+          
         }, response => {
-          console.log(response.body)
+          console.log(response.status, response.body);
         })
+
       }
     }
   },

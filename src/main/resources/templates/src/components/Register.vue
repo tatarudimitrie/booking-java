@@ -3,6 +3,11 @@
 		<img src="../assets/logo.jpg" alt="" width="200px" > 
 		<p class="title">Booking <span class="app">App</span></p>
 		<div class="container">
+
+		<div class="hidden" id = "hidden">
+		<p style="font-size:20px">This user already exists!</p>
+		</div>
+
 			<b-form class="form-horizontal">
 				<br>
 				<div class="form-group" v-bind:class="{ 'form-group--error': $v.name.$error }">
@@ -60,7 +65,8 @@
 
 <script>
 
-
+import Router from 'vue-router'
+var router = new Router();
 	import { required, email, minLength,maxLength, between, sameAs } from 'vuelidate/lib/validators'
 	export default {
 		data()  {
@@ -78,24 +84,26 @@
 			},
 			submit() {
 				if (this.$v.email.email && this.$v.name.required && this.$v.password.minLength && this.$v.password.maxLength && this.$v.pass_confirm.sameAs) {
-					debugger
 					this.$http.post("http://192.168.151.51:8080/admins", {
 						"name": this.name,
 						"email": this.email,
 						"pass": this.password
-						// "name": "Andrei",
-						// "email": "andrei@mail.ro",
-						// "pass": "andrei"
 					},
 					{
 						headers:{
-							'Accept':'application/json'
+							'Access-Control-Allow-Origin': '*',
+							'Content-Type': 'application/json',
 						}
 
 					}).then(response => {
-						console.log("success");
+						if(response.status === 200){
+							location.href= '/login';
+						}else{
+							document.getElementById("hidden").style.visibility = "visible";
+						}
+						
 					}, response => {
-						console.log("error");
+						console.log(response.status, response.body);
 					})
 
 				}
@@ -182,5 +190,10 @@
 	}
 	.form-group--error .form_fieldset .input{
 		color: red;
+	}
+	#hidden{
+		color:red;
+		visibility: hidden;
+		font-size:20px;
 	}
 </style>

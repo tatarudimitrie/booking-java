@@ -8,7 +8,7 @@ import Icon from 'vue-awesome/components/Icon'
 import Vuelidate from 'vuelidate'
 import VueResource from 'vue-resource'
 import Axios from 'axios'
-
+// import config from '../config';
 import 'vue-awesome/icons'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
