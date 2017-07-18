@@ -6,7 +6,7 @@ import com.assist.bookingjava.model.ConfirmPass;
 import com.assist.bookingjava.model.Recovery;
 import com.assist.bookingjava.model.SendEmail;
 import com.assist.bookingjava.repositories.AdminRepository;
-import com.assist.bookingjava.services.RecoveryServices;
+import com.assist.bookingjava.services.RecoveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 public class RecoveryController {
 
     @Autowired
-    private RecoveryServices recoveryServices;
+    private RecoveryService recoveryService;
     @Autowired
     private AdminRepository adminRepository;
 
@@ -57,7 +57,7 @@ public class RecoveryController {
                 Recovery recovery = new Recovery();
                 recovery.setEmail(email.getEmail());
                 recovery.setResetToken(UUID.randomUUID().toString());
-                recoveryServices.saveRecovery(recovery);
+                recoveryService.saveRecovery(recovery);
 
                 Properties props = new Properties();
                 props.put("mail.smtp.auth", "true");
@@ -97,11 +97,11 @@ public class RecoveryController {
     public String setNewPassword(@RequestBody ConfirmPass confirmPass) {
 
         Recovery recovery1;
-        recovery1 = recoveryServices.findByResetToken(confirmPass.getToken());
+        recovery1 = recoveryService.findByResetToken(confirmPass.getToken());
         Admin admin1 = adminRepository.findByEmail(recovery1.getEmail());
         if(admin1!=null) {
             admin1.setPass(confirmPass.getPassword());
-            recoveryServices.deleteRecovery(recovery1.getId());
+            recoveryService.deleteRecovery(recovery1.getId());
             adminRepository.save(admin1);
             return "Success!";
         }

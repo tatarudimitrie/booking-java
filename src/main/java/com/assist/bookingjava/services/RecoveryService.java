@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 
 @Service("recoveryServices")
-public class RecoveryServices {
+public class RecoveryService {
     @Autowired
     private RecoveryRepository recoveryRepository;
 
