@@ -45,10 +45,6 @@ public class Admin implements Serializable {
         return id;
     }
 
-    public long setId(long id) {
-        return this.id = id;
-    }
-
     public String getName() {
         return name;
     }

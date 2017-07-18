@@ -1,7 +1,6 @@
 package com.assist.bookingjava.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -39,10 +38,6 @@ public class Company implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public long setId(long id) {
-        return this.id = id;
     }
 
     public String getName() {
