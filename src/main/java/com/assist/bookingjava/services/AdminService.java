@@ -87,11 +87,11 @@ public class AdminService implements AdminInterface {
 
     public String addAdmin(Admin admin) {
 
-        //ResponseEntity<>
-
         String inputPass = admin.getPass();
         admin.setPass(encryptPassword(inputPass));
         adminRepository.save(admin);
+
+        //return ResponseEntity.ok("OK");
         return "POST: Success!";
     }
 

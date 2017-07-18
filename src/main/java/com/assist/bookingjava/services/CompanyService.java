@@ -57,7 +57,7 @@ public class CompanyService implements CompanyInterface {
 
     public String addCompany(Company company) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Admin admin= adminRepository.findByName(authentication.getName());
+        Admin admin = adminRepository.findByName(authentication.getName());
 
         company.setAdmin(admin);
         companyRepository.save(company);

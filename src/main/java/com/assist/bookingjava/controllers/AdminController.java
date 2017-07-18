@@ -24,7 +24,7 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins")
+    @RequestMapping(method=RequestMethod.GET, value="/admins/all")
     public ResponseEntity findAllAdmins(){
         return adminService.findAllAdmins();
     }
@@ -60,18 +60,18 @@ public class AdminController {
         return adminService.bulkAddAdmin();
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/admins")
+    @RequestMapping(method=RequestMethod.PUT, value="/admins/edit")
     public String editAdmin(@RequestBody Admin admin) {
         return adminService.editAdmin(admin);
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(method=RequestMethod.POST, value="/admins")
+    @RequestMapping(method=RequestMethod.POST, value="/admins/add")
     public String addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/admins/{id}")
+    @RequestMapping(method=RequestMethod.DELETE, value="/admins/delete/{id}")
     public String deleteAdmin(@PathVariable long id) {
         return adminService.deleteAdmin(id);
     }
