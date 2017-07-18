@@ -84,7 +84,15 @@ public class AdminService implements AdminInterface {
         }
         Admin tempAdmin = adminRepository.findByName(admin.getName());
         tempAdmin.setEmail(admin.getEmail());
-        adminRepository.save(tempAdmin);
+        try
+        {
+            adminRepository.save(tempAdmin);
+        }
+        catch (Exception e)
+        {
+            return  "Eroare la salvare "+e.toString();
+        }
+
         return "PUT: Success!";
 
     }
