@@ -106,7 +106,15 @@ public class AdminService implements AdminInterface {
         }
         String inputPass = admin.getPass();
         admin.setPass(encryptPassword(inputPass));
-        adminRepository.save(admin);
+        try
+        {
+            adminRepository.save(admin);
+        }
+        catch (Exception e)
+        {
+            return  "Eroare la salvare "+e.toString();
+        }
+
 
         //return ResponseEntity.ok("OK");
         return "POST: Success!";
