@@ -46,17 +46,19 @@ public class CompanyService implements CompanyInterface {
     }
 
     public String addBulkCompany() {
-        companyRepository.save(new Company(120, "Assist", "Assist software", "C:/Assist.png"));
-        companyRepository.save(new Company(121, "Google", "Google _search_", "C:/Google.png"));
-        companyRepository.save(new Company(122, "PayPal", "PayPal _banking", "C:/PayPal.png"));
-        companyRepository.save(new Company(123, "Amazon", "Amazon delivery", "C:/Amazon.png"));
-        companyRepository.save(new Company(124, "GitHub", "GitHub headache", "C:/GitHub.png"));
+        companyRepository.save(new Company("peter@assist.ro", "Assist", "Assist software", "C:/Assist.png"));
+        companyRepository.save(new Company("astan@assist.ro", "Google", "Google _search_", "C:/Google.png"));
+        companyRepository.save(new Company("kimii@assist.ro", "PayPal", "PayPal _banking", "C:/PayPal.png"));
+        companyRepository.save(new Company("david@assist.ro", "Amazon", "Amazon delivery", "C:/Amazon.png"));
+        companyRepository.save(new Company("mihai?@mail.ro", "GitHub", "GitHub headache", "C:/GitHub.png"));
         return "Company table was updated with five DEFAULT ROWS!";
     }
 
     public String addCompany(Company company) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findByName(authentication.getName());
+
+        System.out.println(admin.toString());
 
         company.setAdmin(admin);
         try {
