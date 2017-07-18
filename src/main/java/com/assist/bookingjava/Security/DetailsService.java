@@ -22,10 +22,10 @@ public class DetailsService implements UserDetailsService {
     private AdminRepository adminRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin user = adminRepository.findByName(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Admin user = adminRepository.findByEmail(email);
         if (user == null){
-            throw new UsernameNotFoundException(username + " was not found");
+            throw new UsernameNotFoundException(email + " was not found");
         }return new org.springframework.security.core.userdetails.User(
                user.getName(),
                user.getPass(),
