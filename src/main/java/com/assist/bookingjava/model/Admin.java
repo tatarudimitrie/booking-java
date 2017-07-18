@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "admins")
+@Table(name = "admins", uniqueConstraints=@UniqueConstraint(columnNames={"email"}))
 public class Admin implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
@@ -16,13 +16,13 @@ public class Admin implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @JsonIgnore
+    //@JsonIgnore
     @Column(name = "pass", nullable = false)
     private String pass;
 

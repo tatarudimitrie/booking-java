@@ -67,7 +67,7 @@ public class AdminController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(method=RequestMethod.POST, value="/admins/add")
-    public String addAdmin(@RequestBody Admin admin) {
+    public ResponseEntity<String> addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     }
 
