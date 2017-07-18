@@ -1,14 +1,17 @@
 package com.assist.bookingjava.model;
 
-/**
- * Created by cosmin on 15.07.2017.
- */
-public class Email {
-    private String email;
+import java.io.Serializable;
 
-    public Email(String email) {
+/**
+ * Created by cosmin on 18.07.2017.
+ */
+public class SendEmail implements Serializable{
+    String email;
+
+    public SendEmail(String email) {
         this.email = email;
     }
+    public SendEmail(){}
 
     public String getEmail() {
         return email;

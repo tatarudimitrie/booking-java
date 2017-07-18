@@ -2,25 +2,23 @@ package com.assist.bookingjava.controllers;
 
 
 import com.assist.bookingjava.model.Admin;
+import com.assist.bookingjava.model.ConfirmPass;
 import com.assist.bookingjava.model.Recovery;
+import com.assist.bookingjava.model.SendEmail;
 import com.assist.bookingjava.repositories.AdminRepository;
-import com.assist.bookingjava.services.AdminService;
-import com.assist.bookingjava.services.EmailServices;
 import com.assist.bookingjava.services.RecoveryServices;
-import com.sun.org.apache.regexp.internal.RE;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by cosmin on 14.07.2017.
@@ -28,166 +26,87 @@ import java.util.*;
 @RestController
 public class RecoveryController {
 
-
     @Autowired
     private RecoveryServices recoveryServices;
-
-    private EmailServices emailServices;
-
     @Autowired
-    private AdminService adminService;
     private AdminRepository adminRepository;
 
 
-    // Display forgotPassword page
-   // @RequestMapping(value = "/forgot", method = RequestMethod.GET)
-  //  public ModelAndView displayForgotPasswordPage() {
-  //      return new ModelAndView("forgotPassword");
-   // }
+    private final static String emailAddress = "assistbooking7@gmail.com";
+    private final static String emailPassword = "Assist2017";
+    private final static String recoveryURL = "localhost:8080/reset?token=";
+    public boolean validMail(String email){
+        Pattern p = Pattern.compile("\\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b");
+        Matcher m = p.matcher(email);
 
-    // Process form submission from forgotPassword page
-    @RequestMapping(value = "/forgot/password", method = RequestMethod.PUT)
-    public String processForgotPasswordForm(@RequestBody String email) throws JSONException {
+        if (m.find()){
+            return true;
+        }else{
+            return false;
+        }
 
-        // Lookup user in database by e-mail
+    }
+    @RequestMapping(value = "/forgot/password", method = RequestMethod.POST)
+    public String processForgotPasswordForm(@RequestBody SendEmail email)
+    {
+        if(validMail(email.getEmail())) {
+            System.out.println("===>> " + email.getEmail());
+            Admin admin = adminRepository.findByEmail(email.getEmail());
 
+            if (admin != null) {
+                Recovery recovery = new Recovery();
+                recovery.setEmail(email.getEmail());
+                recovery.setResetToken(UUID.randomUUID().toString());
+                recoveryServices.saveRecovery(recovery);
 
+                Properties props = new Properties();
+                props.put("mail.smtp.auth", "true");
+                props.put("mail.smtp.starttls.enable", "true");
+                props.put("mail.smtp.host", "smtp.gmail.com");
+                props.put("mail.smtp.port", "587");
 
-           System.out.println("aici"  + email);
-       List<Recovery> optional= recoveryServices.findByEmail(email);
-
-      // List<Admin> adminSearchEmail= adminRepository.findByEmail(email);
-       //  Optional<Recovery> optional = recoveryServices.findByEmail(email);
-     //   List<Admin> optional1= (List<Admin>) adminService.findAdminByEmail(email.toString());
-        //verifica daca e in admin
-        //isPresent
-
-
-        if (!optional.isEmpty()) {
-            // adminRepository.save(admin);
-            //return "PUT: Success!";
-            // Generate random 36-character string token for reset password
-            String emailsave = email.toString();
-            Recovery recovery = new Recovery();
-            recovery.setEmail(emailsave);
-            recovery.setResetToken(UUID.randomUUID().toString());
-            recoveryServices.saveRecovery(recovery);
-            // Save token to database
-            //recoveryServices.saveRecovery(recovery);
-
-            //String appUrl = request.getScheme() + "://" + request.getServerName();
-            //  String appUrl="test";
-
-            // Email message
-        /*    SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
-            passwordResetEmail.setFrom("alexbolohan@stud.usv.ro");
-            passwordResetEmail.setTo(recovery.getEmail());
-            passwordResetEmail.setSubject("Password Reset Request");
-            passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl
-                    + "/reset?token=" + recovery.getResetToken());
-
-
-            emailServices.sendEmail(passwordResetEmail);
-*/
-            // Add success message to view
-            return "PUT: Success!";
-
-        } else {
-            return "Error! Email invalid";
+                javax.mail.Session session = javax.mail.Session.getInstance(props,
+                        new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(emailAddress, emailPassword);
+                            }
+                        });
+                try {
+                    javax.mail.Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress("bolohan46@gmail.com"));
+                    message.setRecipients(javax.mail.Message.RecipientType.TO,
+                            InternetAddress.parse("bolohan46@gmail.com"));
+                    message.setSubject("Reset your password");
+                    message.setText("To reset your password, for mail: " +
+                            recovery.getEmail() + ". Click the link below:\n" + recoveryURL + recovery.getResetToken());
+                    Transport.send(message);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+                return "Success!";
+            } else {
+                return "Error! Email invalid";
+            }
+        }
+        else {
+            return "Invalid mail";
         }
     }
-        /*
 
-        if (!optional.isPresent()) {
-            modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");
-        } else {
-
-            // Generate random 36-character string token for reset password
-            Recovery recovery = optional.get();
-            recovery.setResetToken(UUID.randomUUID().toString());
-
-            // Save token to database
-            recoveryServices.saveRecovery(recovery);
-
-            String appUrl = request.getScheme() + "://" + request.getServerName();
-
-            // Email message
-            SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
-            passwordResetEmail.setFrom("mail_test@assist.com");
-            passwordResetEmail.setTo(recovery.getEmail());
-            passwordResetEmail.setSubject("Password Reset Request");
-            passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl
-                    + "/reset?token=" + recovery.getResetToken());
-
-            emailServices.sendEmail(passwordResetEmail);
-
-            // Add success message to view
-            modelAndView.addObject("successMessage", "A password reset link has been sent to " + email);
-        }
-
-        modelAndView.setViewName("forgotPassword");
-        return modelAndView;
-        return "ok";
-*/
-        //  }
-/*
-    // Display form to reset password
-    @RequestMapping(value = "/reset", method = RequestMethod.GET)
-    public ModelAndView displayResetPasswordPage(ModelAndView modelAndView, @RequestParam("resetToken") String resetToken) {
-
-        Optional<Recovery> recovery = recoveryServices.findByResetToken(resetToken);
-
-        if (recovery.isPresent()) { // Token found in DB
-            modelAndView.addObject("resetToken", resetToken);
-        } else { // Token not found in DB
-            modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-        }
-
-        modelAndView.setViewName("resetPassword");
-        return modelAndView;
-    }
-
-    // Process reset password form
     @RequestMapping(value = "/reset", method = RequestMethod.POST)
-    public ModelAndView setNewPassword(ModelAndView modelAndView, @RequestParam Map<String, String> requestParams, RedirectAttributes redir) {
+    public String setNewPassword(@RequestBody ConfirmPass confirmPass) {
 
-        // Find the user associated with the reset token
-        Optional<Recovery> recovery = recoveryServices.findByResetToken(requestParams.get("resetToken"));
-
-        // This should always be non-null but we check just in case
-        if (recovery.isPresent()) {
-
-            Recovery resetPasswordAdmin = recovery.get();
-
-
-            // Set new password
-            //      resetUser.setPassword(bCryptPasswordEncoder.encode(requestParams.get("password")));
-
-            // Set the reset token to null so it cannot be used again
-            //   resetUser.setResetToken(null);
-
-            // Save user
-            //  userService.saveUser(resetUser);
-
-            // In order to set a model attribute on a redirect, we must use
-            // RedirectAttributes
-            redir.addFlashAttribute("successMessage", "You have successfully reset your password.  You may now login.");
-
-            modelAndView.setViewName("redirect:login");
-            return modelAndView;
-
-        } else {
-            modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-            modelAndView.setViewName("resetPassword");
+        Recovery recovery1;
+        recovery1 = recoveryServices.findByResetToken(confirmPass.getToken());
+        Admin admin1 = adminRepository.findByEmail(recovery1.getEmail());
+        if(admin1!=null) {
+            admin1.setPass(confirmPass.getPassword());
+            recoveryServices.deleteRecovery(recovery1.getId());
+            adminRepository.save(admin1);
+            return "Success!";
         }
-
-        return modelAndView;
+        else {
+            return "Error!";
+        }
     }
-
-    // Going to reset page without a token redirects to login page
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-        return new ModelAndView("redirect:login");
-    }*/
-
-    }
+}

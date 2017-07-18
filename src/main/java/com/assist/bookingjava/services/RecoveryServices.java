@@ -20,11 +20,14 @@ public class RecoveryServices {
     public List<Recovery> findByEmail(String email) {
         return recoveryRepository.findByEmail(email);
     }
-    public List<Recovery> findByResetToken(String resetToken) {
+    public Recovery findByResetToken(String resetToken) {
         return recoveryRepository.findByResetToken(resetToken);
     }
     public void saveRecovery(Recovery recovery) {
         recoveryRepository.save(recovery);
     }
-
+    public String deleteRecovery(long id) {
+        recoveryRepository.delete(id);
+        return "DELETE: Success!";
+    }
 }
