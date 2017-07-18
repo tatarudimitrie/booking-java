@@ -20,6 +20,7 @@ public class AdminService implements AdminInterface {
     private AdminRepository adminRepository;
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    private String errorInput = "";
 
     public ResponseEntity findAllAdmins() {
         List<Admin> adminList = new ArrayList<>();
@@ -36,12 +37,12 @@ public class AdminService implements AdminInterface {
     }
 
 
-    public ResponseEntity findAdminByName(String name){
+    public ResponseEntity findAdminByName(String name) {
         Admin admin = adminRepository.findByName(name);
         return ResponseEntity.ok(admin);
     }
 
-    public ResponseEntity findAdminByEmail(@PathVariable String email){
+    public ResponseEntity findAdminByEmail(@PathVariable String email) {
         Admin admin = adminRepository.findByEmail(email);
         return ResponseEntity.ok(admin);
     }
@@ -56,19 +57,26 @@ public class AdminService implements AdminInterface {
     }
 
     public String editAdmin(Admin admin) {
-
+        AdminSanitization(admin);
+        if(errorInput!="")
+        {
+            return errorInput;
+        }
         Admin tempAdmin = adminRepository.findByName(admin.getName());
         tempAdmin.setEmail(admin.getEmail());
         adminRepository.save(tempAdmin);
         return "PUT: Success!";
-        //TODO PASS ENCRYPT
-        //TODO CHECK PASS LENGTH
+
     }
 
     public String addAdmin(Admin admin) {
 
-        //ResponseEntity<>
 
+        AdminSanitization(admin);
+        if(errorInput!="")
+        {
+            return errorInput;
+        }
         String inputPass = admin.getPass();
         admin.setPass(encryptPassword(inputPass));
         adminRepository.save(admin);
@@ -80,7 +88,27 @@ public class AdminService implements AdminInterface {
         return "DELETE: Success!";
     }
 
+
     private String encryptPassword(String inputPass) {
         return PASSWORD_ENCODER.encode(inputPass);
+    }
+
+    public void AdminSanitization(Admin admin) {
+        String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        String userEntered[][] = new String[3][2];
+        userEntered[0][0] = admin.getName();
+        userEntered[1][0] = admin.getPass();
+        userEntered[2][0] = admin.getEmail();
+
+        userEntered[0][1] = "Name";
+        userEntered[1][1] = "Password";
+        userEntered[2][1] = "Email";
+
+        for (int i = 0; i < userEntered.length; i++) {
+            if (!allowed.contains(userEntered[i][0])) {
+                errorInput += "Eroare  " + userEntered[i][1];
+            }
+        }
+
     }
 }
