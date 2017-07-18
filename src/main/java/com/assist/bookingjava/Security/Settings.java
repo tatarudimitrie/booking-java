@@ -1,7 +1,5 @@
 package com.assist.bookingjava.Security;
 
-
-import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-
 
 @Configuration
 public class Settings extends WebSecurityConfigurerAdapter {
@@ -45,5 +42,4 @@ public class Settings extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/login");
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
     }
-
 }

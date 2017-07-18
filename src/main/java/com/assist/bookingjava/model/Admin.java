@@ -1,24 +1,28 @@
 package com.assist.bookingjava.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "admins", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "email"})})
+@Table(name = "admins")
 public class Admin implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "pass", nullable = false)
     private String pass;
 
@@ -39,6 +43,10 @@ public class Admin implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public long setId(long id) {
+        return this.id = id;
     }
 
     public String getName() {

@@ -7,22 +7,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 public class UserController {
 
     @CrossOrigin
     @RequestMapping(path="/login", method = RequestMethod.POST)
-    public ResponseEntity<String>  login(){
+    public ResponseEntity<String> login(){
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
-      //      String currentUserName = authentication.getName();
             return new ResponseEntity<>("Session created for ", HttpStatus.OK);
-
+        } else {
+            return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         }
-        else
-            return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
     }
-
-
 }
