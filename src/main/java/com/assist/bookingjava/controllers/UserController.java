@@ -16,10 +16,10 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            //String currentUserName = authentication.getName();
-            return new ResponseEntity<>("Session created for ", HttpStatus.OK);
+            String currentUserName = authentication.getName();
+            return new ResponseEntity<>("Session created for " + currentUserName, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+            return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         }
     }
 }

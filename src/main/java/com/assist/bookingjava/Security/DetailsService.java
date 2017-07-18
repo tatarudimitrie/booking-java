@@ -19,12 +19,9 @@ public class DetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Admin user = adminRepository.findByEmail(email);
-
-        if (user == null) {
+        if (user == null){
             throw new UsernameNotFoundException(email + " was not found");
-        }
-
-        return new org.springframework.security.core.userdetails.User(
+        }return new org.springframework.security.core.userdetails.User(
                user.getName(),
                user.getPass(),
                AuthorityUtils.createAuthorityList(new String[] {"USER"}));
