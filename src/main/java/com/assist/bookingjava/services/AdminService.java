@@ -1,7 +1,6 @@
 package com.assist.bookingjava.services;
 
 import com.assist.bookingjava.services.interfaces.AdminInterface;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,76 +16,68 @@ public class AdminService implements AdminInterface {
 
     @Autowired
     private AdminRepository adminRepository;
+    private String defaultPass = "******";
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     public ResponseEntity findAllAdmins() {
         List<Admin> adminList = new ArrayList<>();
 
-        for (Admin a : adminRepository.findAll()) {
-            a.setPass("*");
-            adminList.add(a);
+        try {
+            for (Admin a : adminRepository.findAll()) {
+                a.setPass(defaultPass);
+                adminList.add(a);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
 
         return ResponseEntity.ok(adminList);
     }
 
     public ResponseEntity findAdminById(long id) {
-        return ResponseEntity.ok(adminRepository.findOne(id));
+        try {
+            Admin admin = adminRepository.findOne(id);
+            admin.setPass(defaultPass);
+            return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public ResponseEntity findAdminByName(String name){
-        Admin admin = adminRepository.findByName(name);
-        return ResponseEntity.ok(admin);
-    }
-
-    public boolean findAdminByNameAndPass(String name, String pass){
-        System.out.println("Input pass: " + pass);
-        System.out.println("Encrypted pass: " + encryptPassword(pass));
-
-        Admin admin = adminRepository.findByName(name);
-        System.out.println(admin.toString());
-        return admin.getPass().equals(encryptPassword(pass));
-    }
-
-    public ResponseEntity findAdminByLogin(Admin admin){
-        Admin adminTemp = adminRepository.findByEmail(admin.getEmail());
-        if (adminTemp == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        try {
+            Admin admin = adminRepository.findByName(name);
+            admin.setPass(defaultPass);
+            return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-
-        boolean status = PASSWORD_ENCODER.matches(admin.getPass(), adminTemp.getPass());
-        return status? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity findAdminByEmail(String email){
-        Admin admin = adminRepository.findByEmail(email);
-        return ResponseEntity.ok(admin);
+    public ResponseEntity findAdminByEmail(String email) {
+        try {
+            Admin admin = adminRepository.findByEmail(email);
+            admin.setPass(defaultPass);
+            return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
-    public String bulkAddAdmin() {
-        adminRepository.save(new Admin("andrei", "peter@assist.ro", encryptPassword("test")));
-        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("stan1234")));
-        adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", encryptPassword("kim*i23")));
-        adminRepository.save(new Admin("David Willie", "david@assist.ro", encryptPassword("david123")));
-        adminRepository.save(new Admin("Peter Divide", "peter@assist.ro", encryptPassword("peter123")));
-        return "Admin table was updated with five DEFAULT ROWS!";
-    }
+    public ResponseEntity<String> editAdmin(Admin admin) {
 
-    public String editAdmin(Admin admin) {
-        //adminSanitize(admin);
-        Admin tempAdmin = adminRepository.findByName(admin.getName());
-        tempAdmin.setEmail(admin.getEmail());
-        try
-        {
+        System.out.println("EDIT ADMIN --> " + admin.toString());
+
+        try {
+            Admin tempAdmin = adminRepository.findByName(admin.getName());
+            tempAdmin.setEmail(admin.getEmail());
             adminRepository.save(tempAdmin);
-        }
-        catch (Exception e)
-        {
-            return  "Eroare la salvare "+e.toString();
+        } catch (Exception e) {
+            return  ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
 
-        return "PUT: Success!";
+        return ResponseEntity.ok("Admin edited successfully!");
 
     }
 
@@ -122,9 +112,22 @@ public class AdminService implements AdminInterface {
         return ResponseEntity.ok("Admin registered successfully!");
     }
 
-    public String deleteAdmin(long id) {
-        adminRepository.delete(id);
-        return "DELETE: Success!";
+    public ResponseEntity<String> deleteAdmin(long id) {
+        try {
+            adminRepository.delete(id);
+            return ResponseEntity.ok("Admin deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public String bulkAddAdmin() {
+        adminRepository.save(new Admin("andrei", "peter@assist.ro", encryptPassword("test")));
+        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("stan1234")));
+        adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", encryptPassword("kim*i23")));
+        adminRepository.save(new Admin("David Willie", "david@assist.ro", encryptPassword("david123")));
+        adminRepository.save(new Admin("Peter Divide", "peter@assist.ro", encryptPassword("peter123")));
+        return "Admin table was updated with five DEFAULT ROWS!";
     }
 
     /* ADMIN INPUT CHECKS */

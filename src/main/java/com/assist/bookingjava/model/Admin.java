@@ -22,7 +22,6 @@ public class Admin implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    //@JsonIgnore
     @Column(name = "pass", nullable = false)
     private String pass;
 

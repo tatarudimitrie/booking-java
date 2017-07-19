@@ -34,12 +34,12 @@ public class CompanyController {
     }
 
 
-    @RequestMapping(method=RequestMethod.PUT, value="/companies/add")
+    @RequestMapping(method=RequestMethod.PUT, value="/companies/edit")
     public void editCompany(@RequestBody Company company) {
         companyService.editCompany(company);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/companies/edit")
+    @RequestMapping(method=RequestMethod.POST, value="/companies/add")
     public String addCompany(@RequestBody Company company) {
         return companyService.addCompany(company);
     }

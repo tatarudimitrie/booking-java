@@ -79,12 +79,16 @@ public class CompanyService implements CompanyInterface {
     }
 
     public ResponseEntity findbyAdminEmail(Admin admin) {
+        System.out.println("Requested company for admin: " + admin.toString());
         Admin currentAdmin = adminRepository.findByEmail(admin.getEmail());
         Company company = companyRepository.findByAdmin(currentAdmin);
         if (company == null) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("The admin with email " +
                     admin.getEmail() + "does not have a company!");
         }
+
+        System.out.println("SENT: " + company.toString());
         return ResponseEntity.ok(company);
     }
 

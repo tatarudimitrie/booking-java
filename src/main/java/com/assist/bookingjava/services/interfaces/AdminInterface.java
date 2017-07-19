@@ -13,11 +13,11 @@ public interface AdminInterface {
 
     ResponseEntity findAdminByEmail(String email);
 
-    String bulkAddAdmin();
-
-    String editAdmin(Admin admin);
-
     ResponseEntity<String> addAdmin(Admin admin);
 
-    String deleteAdmin(long id);
+    ResponseEntity<String> editAdmin(Admin admin);
+
+    ResponseEntity<String> deleteAdmin(long id);
+
+    String bulkAddAdmin();
 }
