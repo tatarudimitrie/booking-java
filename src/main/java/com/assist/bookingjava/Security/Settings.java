@@ -60,8 +60,8 @@ public class Settings extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/admins/add");
-       // web.ignoring().antMatchers("/login");
-      //  web.ignoring().antMatchers("/**");
+        // web.ignoring().antMatchers("/login");
+        web.ignoring().antMatchers("/**");
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
     }
 
