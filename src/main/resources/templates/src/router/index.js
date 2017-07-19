@@ -8,6 +8,8 @@ import Dashboard from '@/components/Dashboard'
 import Profile from '@/components/Profile'
 import AddService from '@/components/AddService'
 import Booking from '@/components/Booking'
+import ResetPassword from '@/components/ResetPassword'
+import EditService from '@/components/EditService'
 
 Vue.use(Router)
 
@@ -55,6 +57,16 @@ export default new Router({
       path: '/booking',
       name: 'Booking',
       component: Booking
+    },
+    {   
+      path: '/resetPassword',
+      name: 'ResetPassword',
+      component: ResetPassword
+    },
+    {   
+      path: '/editService',
+      name: 'EditService',
+      component: EditService
     }
   ]
 })

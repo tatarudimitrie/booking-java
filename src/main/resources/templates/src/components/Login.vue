@@ -52,7 +52,7 @@
      },
      submit() {
        if (this.$v.email.email && this.$v.password.minLength && this.$v.password.maxLength) {
-        this.$http.post("http://192.168.151.51:8080/login", {
+        this.$http.post("http://192.168.150.237:9999/login", {
           "email": this.email,
           "pass": this.password
         },
