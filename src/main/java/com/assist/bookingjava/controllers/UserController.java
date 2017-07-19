@@ -17,7 +17,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            return new ResponseEntity<>("Session created for ", HttpStatus.OK);
+            return new ResponseEntity<>("Session created", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         }
