@@ -58,13 +58,14 @@
         },
         {
           headers:{
-            'Content-Type': 'application/json'
+            'Acces-Control-Allow-Origin': '*'
           }
 
         }).then(response => {
           console.log("success", response.status, response.body);
           if(response.status === 200){
             location.href = "/dashboard"
+            sessionStorage.setItem("email", this.email)
           }
           else{
             console.log("Wrong password!")
