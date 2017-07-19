@@ -7,9 +7,7 @@ import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.ScheduleInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
-
 
 @org.springframework.stereotype.Service
 public class ScheduleService implements ScheduleInterface{
@@ -21,11 +19,11 @@ public class ScheduleService implements ScheduleInterface{
     private ServiceRepository serviceRepository;
 
 
-    public ResponseEntity findServiceByCompany(Service service) {
+    public ResponseEntity findScheduleByService(Service service) {
         try {
             System.out.println(service.toString());
             Service currentService = serviceRepository.findById(service.getId());
-            List<Schedule> scheduleList = scheduleRepository.findByService((org.springframework.stereotype.Service) currentService);
+            List<Schedule> scheduleList = scheduleRepository.findByService(currentService);
             return ResponseEntity.ok(scheduleList);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
@@ -37,12 +35,10 @@ public class ScheduleService implements ScheduleInterface{
             Service service = serviceRepository.findById(schedule.getService().getId());
             schedule.setService(service);
             scheduleRepository.save(schedule);
-            System.out.println("Schedule was added, for company: " + service.toString());
+            System.out.println("Schedule was added, for service: " + service.toString());
             return ResponseEntity.ok("Schedule added successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
-
-
 }
