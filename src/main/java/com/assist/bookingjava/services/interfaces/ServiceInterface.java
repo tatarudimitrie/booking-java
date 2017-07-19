@@ -12,13 +12,13 @@ public interface ServiceInterface {
 
     ResponseEntity findServiceByName(String name);
 
+    ResponseEntity findServiceByCompany(Company company);
+
     ResponseEntity<String> editService(Service service);
 
     ResponseEntity<String> addService(Service service);
 
     ResponseEntity<String> deleteService(long id);
-
-    ResponseEntity findServiceByCompany(Company company);
 
     String addBulkService();
 }

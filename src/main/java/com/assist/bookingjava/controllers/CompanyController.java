@@ -45,7 +45,7 @@ public class CompanyController {
 
     @RequestMapping(method=RequestMethod.POST, value="/companies/admin")
     public ResponseEntity findByAdmin(@RequestBody Admin admin) {
-        return companyService.findByAdmin(admin);
+        return companyService.findCompanyByAdmin(admin);
     }
 
     @RequestMapping(method= RequestMethod.GET, value="/companies/input")
