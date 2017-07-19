@@ -41,4 +41,18 @@ public class ScheduleService implements ScheduleInterface{
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
+
+    public ResponseEntity<String> addScheduleAll(List<Schedule> schedule) {
+        try {
+            for(Schedule s : schedule) {
+                Service service = serviceRepository.findById(s.getService().getId());
+                s.setService(service);
+                scheduleRepository.save(s);
+                System.out.println("Schedule was added, for service: " + service.toString());
+            }
+            return ResponseEntity.ok("Schedule added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
 }

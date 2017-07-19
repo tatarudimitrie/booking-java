@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ScheduleController {
 
@@ -16,7 +18,12 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/schedule/add")
-    public ResponseEntity<String> addService(@RequestBody Schedule schedule){
+    public ResponseEntity<String> addSchedule(@RequestBody Schedule schedule){
         return scheduleService.addSchedule(schedule);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/schedule/add/all")
+    public ResponseEntity<String> addScheduleAll(@RequestBody List<Schedule> schedule){
+        return scheduleService.addScheduleAll(schedule);
     }
 }
