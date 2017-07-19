@@ -78,6 +78,16 @@ public class CompanyService implements CompanyInterface {
         return "PUT: Success!";
     }
 
+    public ResponseEntity findbyAdminEmail(Admin admin) {
+        Admin currentAdmin = adminRepository.findByEmail(admin.getEmail());
+        Company company = companyRepository.findByAdmin(currentAdmin);
+        if (company == null) {
+            return ResponseEntity.badRequest().body("The admin with email " +
+                    admin.getEmail() + "does not have a company!");
+        }
+        return ResponseEntity.ok(company);
+    }
+
     public String deleteCompany(long id) {
         companyRepository.delete(id);
         return "DELETE: Success!";
