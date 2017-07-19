@@ -40,6 +40,7 @@ public class Settings extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/admins");
         web.ignoring().antMatchers("/login");
+        web.ignoring().antMatchers("/forgot/password");
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
     }
 }
