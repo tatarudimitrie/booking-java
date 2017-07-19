@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by cosmin on 14.07.2017.
- */
 
 @Service("recoveryServices")
 public class RecoveryService {

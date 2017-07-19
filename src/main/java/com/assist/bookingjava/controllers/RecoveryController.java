@@ -20,9 +20,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by cosmin on 14.07.2017.
- */
+
 @RestController
 public class RecoveryController {
 
@@ -31,10 +29,9 @@ public class RecoveryController {
     @Autowired
     private AdminRepository adminRepository;
 
-
     private final static String emailAddress = "assistbooking7@gmail.com";
     private final static String emailPassword = "Assist2017";
-    private final static String recoveryURL = "localhost:8080/reset?token=";
+    private final static String recoveryURL = "10.0.2.15:8080/resetPassword?token=";
     public boolean validMail(String email){
         Pattern p = Pattern.compile("\\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b");
         Matcher m = p.matcher(email);

@@ -2,9 +2,7 @@ package com.assist.bookingjava.model;
 
 import java.io.Serializable;
 
-/**
- * Created by cosmin on 17.07.2017.
- */
+
 public class ConfirmPass implements Serializable {
     String token;
     String password;
