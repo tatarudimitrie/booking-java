@@ -28,11 +28,10 @@ public class AdminService implements AdminInterface {
                 a.setPass(defaultPass);
                 adminList.add(a);
             }
+            return ResponseEntity.ok(adminList);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-
-        return ResponseEntity.ok(adminList);
     }
 
     public ResponseEntity findAdminById(long id) {

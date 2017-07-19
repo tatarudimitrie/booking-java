@@ -1,5 +1,6 @@
 package com.assist.bookingjava.services.interfaces;
 
+import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.model.Service;
 import org.springframework.http.ResponseEntity;
 
@@ -11,11 +12,13 @@ public interface ServiceInterface {
 
     ResponseEntity findServiceByName(String name);
 
+    ResponseEntity<String> editService(Service service);
+
+    ResponseEntity<String> addService(Service service);
+
+    ResponseEntity<String> deleteService(long id);
+
+    ResponseEntity findByCompany(Company company);
+
     String addBulkService();
-
-    String addService(Service service);
-
-    String editService(Service service);
-
-    String deleteService(long id);
 }

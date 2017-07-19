@@ -27,10 +27,10 @@ public class CompanyService implements CompanyInterface {
             for (Company c : companyRepository.findAll()) {
                 companyList.add(c);
             }
+            return ResponseEntity.ok(companyList);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-        return ResponseEntity.ok(companyList);
     }
 
     public ResponseEntity findCompanyById(long id) {
@@ -90,7 +90,7 @@ public class CompanyService implements CompanyInterface {
         }
     }
 
-    public ResponseEntity findByAdminEmail(Admin admin) {
+    public ResponseEntity findByAdmin(Admin admin) {
         System.out.println("Requested company for admin: " + admin.toString());
         Admin currentAdmin = adminRepository.findByEmail(admin.getEmail());
         Company company = companyRepository.findByAdmin(currentAdmin);
