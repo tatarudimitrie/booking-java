@@ -7,11 +7,8 @@ import com.assist.bookingjava.repositories.CompanyRepository;
 import com.assist.bookingjava.services.interfaces.CompanyInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -26,59 +23,62 @@ public class CompanyService implements CompanyInterface {
     public ResponseEntity findAllCompanies() {
         List<Company> companyList = new ArrayList<>();
 
-        for(Company c : companyRepository.findAll()) {
-            companyList.add(c);
+        try {
+            for (Company c : companyRepository.findAll()) {
+                companyList.add(c);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-
         return ResponseEntity.ok(companyList);
     }
 
     public ResponseEntity findCompanyById(long id) {
-        Company company = companyRepository.findOne(id);
-        return ResponseEntity.ok(company);
+        try {
+            Company company = companyRepository.findOne(id);
+            return ResponseEntity.ok(company);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public ResponseEntity findCompanyByName(String name) {
-        Collection<Company> companyList = new ArrayList<>();
-        companyList.addAll(companyRepository.findByName(name));
-
-        return ResponseEntity.ok(companyList);
-    }
-
-    public String addBulkCompany() {
-        companyRepository.save(new Company("peter@assist.ro", "Assist", "Assist software", "C:/Assist.png"));
-        companyRepository.save(new Company("astan@assist.ro", "Google", "Google _search_", "C:/Google.png"));
-        companyRepository.save(new Company("kimii@assist.ro", "PayPal", "PayPal _banking", "C:/PayPal.png"));
-        companyRepository.save(new Company("david@assist.ro", "Amazon", "Amazon delivery", "C:/Amazon.png"));
-        companyRepository.save(new Company("mihai?@mail.ro", "GitHub", "GitHub headache", "C:/GitHub.png"));
-        return "Company table was updated with five DEFAULT ROWS!";
-    }
-
-    public String addCompany(Company company) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Admin admin = adminRepository.findByName(authentication.getName());
-
-        System.out.println(admin.toString());
-
-        company.setAdmin(admin);
         try {
-            companyRepository.save(company);
-        } catch (org.springframework.dao.DataIntegrityViolationException e) {
-            return "Insert or update data results in violation of an integrity constraint!";
-        //} catch (org.postgresql.util.PSQLException psqlException) {
-        //    return "Company name must be unique!";
+            Company company = companyRepository.findByName(name);
+            return ResponseEntity.ok(company);
         } catch (Exception e) {
-            return "Username is not unique!";
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-        return "POST: Success!" + company.toString();
     }
 
-    public String editCompany(Company company) {
+    public ResponseEntity<String> editCompany(Company company) {
         companyRepository.save(company);
-        return "PUT: Success!";
+        return ResponseEntity.ok("Company was successfully edited");
     }
 
-    public ResponseEntity findbyAdminEmail(Admin admin) {
+    public ResponseEntity<String> addCompany(Company company) {
+        try {
+            Admin admin = adminRepository.findByEmail(company.getAdmin().getEmail());
+            admin.setPass("******");
+            company.setAdmin(admin);
+            companyRepository.save(company);
+            System.out.println("Company was added, for admin: " + admin.toString());
+            return ResponseEntity.ok("Company added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity<String> deleteCompany(long id) {
+        try {
+            companyRepository.delete(id);
+            return ResponseEntity.ok("Company deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity findByAdminEmail(Admin admin) {
         System.out.println("Requested company for admin: " + admin.toString());
         Admin currentAdmin = adminRepository.findByEmail(admin.getEmail());
         Company company = companyRepository.findByAdmin(currentAdmin);
@@ -92,8 +92,12 @@ public class CompanyService implements CompanyInterface {
         return ResponseEntity.ok(company);
     }
 
-    public String deleteCompany(long id) {
-        companyRepository.delete(id);
-        return "DELETE: Success!";
+    public String addBulkCompany() {
+        companyRepository.save(new Company("peter@assist.ro", "Assist", "Assist software", "C:/Assist.png"));
+        companyRepository.save(new Company("astan@assist.ro", "Google", "Google _search_", "C:/Google.png"));
+        companyRepository.save(new Company("kimii@assist.ro", "PayPal", "PayPal _banking", "C:/PayPal.png"));
+        companyRepository.save(new Company("david@assist.ro", "Amazon", "Amazon delivery", "C:/Amazon.png"));
+        companyRepository.save(new Company("mihai?@mail.ro", "GitHub", "GitHub headache", "C:/GitHub.png"));
+        return "Company table was updated with five DEFAULT ROWS!";
     }
 }
