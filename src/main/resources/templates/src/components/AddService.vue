@@ -139,7 +139,7 @@
 			},
 			submit(){
 				if (this.$v.s_name.required && this.$v.s_duration.required && this.$v.spaces.required && this.$v.price.required) {
-					this.$http.post("http://192.168.151.51:8080/services", {
+					this.$http.post("http://192.168.151.51:8080/services/add", {
 						"company":{
 							"id": sessionStorage.getItem('id_company')
 						},
@@ -157,7 +157,7 @@
 
 					}).then(response => {
 						console.log("response:", response);
-						location.href = "/booking"
+						location.href = "/dashboard"
 					}, response => {
 						console.log(response.status, response.body);
 					});
