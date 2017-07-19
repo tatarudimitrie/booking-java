@@ -52,8 +52,17 @@ public class CompanyService implements CompanyInterface {
     }
 
     public ResponseEntity<String> editCompany(Company company) {
-        companyRepository.save(company);
-        return ResponseEntity.ok("Company was successfully edited");
+
+        if (isDuplicateName(company)) {
+            return ResponseEntity.badRequest().body("Duplicate name");
+        }
+
+        try {
+            companyRepository.save(company);
+            return ResponseEntity.ok("Company was successfully edited");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public ResponseEntity<String> addCompany(Company company) {
@@ -99,5 +108,9 @@ public class CompanyService implements CompanyInterface {
         companyRepository.save(new Company("david@assist.ro", "Amazon", "Amazon delivery", "C:/Amazon.png"));
         companyRepository.save(new Company("mihai?@mail.ro", "GitHub", "GitHub headache", "C:/GitHub.png"));
         return "Company table was updated with five DEFAULT ROWS!";
+    }
+
+    private boolean isDuplicateName(Company company) {
+        return (companyRepository.findByName(company.getName()) != null);
     }
 }
