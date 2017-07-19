@@ -5,18 +5,18 @@
 			<div class="row text-right">
 				<div class="col-sm-6"></div>
 				<div class="col-sm-4"><br>
-					<b-button type="button" class="btn btn-default circle" aria-label="Right Align">
+					<b-button @click = "submit" type="button" class="btn btn-default circle" aria-label="Right Align">
 						<icon name="plus" style="font-size:30px;" scale=3></icon></b-button><br>
 						<span>New service</span>
 					</div>
 				</div>
-				<div class = "container">
+				<div class = "container" v-for="item in database">
 					<b-form>
 						<div>
 							<!-- Standard -->
-							<b-card header="TITLE"
+							<b-card header="item.name"
 							class="mb-2"
-							sub-title="DESCRIPTION"
+							sub-title="item.description"
 							show-footer
 							>
 							<small slot="footer" class="text-muted" id="footer">
@@ -32,10 +32,10 @@
 										</thead>
 										<tbody>
 											<tr>
-												<td>john@example.com</td>
-												<td>John</td>
-												<td>Doe</td>
-												<td>john@example</td>
+												<td>{{item.availability}}</td>
+												<td>{{item.spaces}}</td>
+												<td>{{item.duration}}</td>
+												<td>{{item.price}}</td>
 											</tr>
 										</tbody>
 									</table>
@@ -57,8 +57,22 @@
 	import Navbar from '@/components/Navbar'
 	export default {
 		name: 'app',
-		components: { Navbar }
+		data(){
+			return{
+				"database": getDatabase()
+		}
+
+	},
+	components: { Navbar },
+	methods:{
+		submit(){
+			location.href="/AddService"
+		},
+		getDatabase(){
+			this.$http.get("http://192.168.151.51:8080/services")
+		}
 	}
+}
 </script>
 
 

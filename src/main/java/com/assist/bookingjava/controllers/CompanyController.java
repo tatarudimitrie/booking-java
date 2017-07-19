@@ -42,10 +42,10 @@ public class CompanyController {
     public ResponseEntity<String> deleteCompany(@PathVariable long id) {
         return companyService.deleteCompany(id);
     }
-    
+
     @RequestMapping(method=RequestMethod.POST, value="/companies/admin")
-    public ResponseEntity findByAdminEmail(@RequestBody Admin admin) {
-        return companyService.findByAdminEmail(admin);
+    public ResponseEntity findByAdmin(@RequestBody Admin admin) {
+        return companyService.findByAdmin(admin);
     }
 
     @RequestMapping(method= RequestMethod.GET, value="/companies/input")

@@ -1,5 +1,6 @@
 package com.assist.bookingjava.controllers;
 
+import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.model.Service;
 import com.assist.bookingjava.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +29,23 @@ public class ServiceController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/services/edit")
-    public void editService(@RequestBody Service service){
-        serviceService.editService(service);
+    public ResponseEntity<String> editService(@RequestBody Service service){
+        return serviceService.editService(service);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/services/add")
-    public String addService(@RequestBody Service service){
+    public ResponseEntity<String> addService(@RequestBody Service service){
         return serviceService.addService(service);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/services/{id}")
-    public String deleteService(@PathVariable long id){
+    @RequestMapping(method = RequestMethod.DELETE, value = "/services/delete/{id}")
+    public ResponseEntity<String> deleteService(@PathVariable long id){
         return serviceService.deleteService(id);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/services/company")
+    public ResponseEntity findByCompany(@RequestBody Company company){
+        return serviceService.findServiceByCompany(company);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/services/input")

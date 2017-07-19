@@ -1,10 +1,14 @@
 package com.assist.bookingjava.services;
 
+import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.model.Service;
+import com.assist.bookingjava.repositories.CompanyRepository;
 import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,28 +19,93 @@ public class ServiceService implements ServiceInterface {
     @Autowired
     private ServiceRepository serviceRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     private String errorInput = "";
 
     public ResponseEntity findAllServices() {
         List<Service> serviceList = new ArrayList<>();
 
-        for(Service s : serviceRepository.findAll()) {
-            serviceList.add(s);
+        try {
+            for (Service s : serviceRepository.findAll()) {
+                serviceList.add(s);
+            }
+            return ResponseEntity.ok(serviceList);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-
-        return ResponseEntity.ok(serviceList);
     }
 
     public ResponseEntity findServiceById(long id) {
-        Service service = serviceRepository.findOne(id);
-        return ResponseEntity.ok(service);
+        try {
+            Service service = serviceRepository.findOne(id);
+            return ResponseEntity.ok(service);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public ResponseEntity findServiceByName(String name) {
-        Collection<Service> serviceList = new ArrayList<>();
-        serviceList.addAll(serviceRepository.findByName(name));
+        try {
+            List<Service> serviceList = serviceRepository.findByName(name);
+            return ResponseEntity.ok(serviceList);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
 
-        return ResponseEntity.ok(serviceList);
+    public ResponseEntity findServiceByCompany(Company company) {
+        try {
+            System.out.println(company.toString());
+            Company currentCompany = companyRepository.findById(company.getId());
+            List<Service> serviceList = serviceRepository.findByCompany(currentCompany);
+            return ResponseEntity.ok(serviceList);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity<String> editService(Service service) {
+        try {
+            Service currentService = serviceRepository.findOne(service.getId());
+            currentService.setName(service.getName());
+            currentService.setDescription(service.getDescription());
+            currentService.setDescription(service.getDuration());
+            currentService.setFree_space(service.getFree_space());
+            currentService.setPrice(service.getPrice());
+            currentService.setDate(service.getDate());
+            serviceRepository.save(currentService);
+            return ResponseEntity.ok("Service was successfully edited!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity<String> addService(Service service) {
+        try {
+            Company company = companyRepository.findById(service.getCompany().getId());
+            service.setCompany(company);
+            serviceRepository.save(service);
+            System.out.println("Service was added, for company: " + company.toString());
+            return ResponseEntity.ok("Service added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity<String> deleteService(long id) {
+
+        if (serviceNotExists(id)) {
+            return ResponseEntity.badRequest().body("There is no service with id " + id + " in DB!");
+        }
+
+        try {
+            serviceRepository.delete(id);
+            return ResponseEntity.ok("Service with id " + id + " was successfully deleted!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public String addBulkService() {
@@ -48,20 +117,10 @@ public class ServiceService implements ServiceInterface {
         return "Service table was updated with five DEFAULT ROWS!";
     }
 
-    public String addService(Service service) {
-        serviceRepository.save(service);
-        return "POST: Success!";
+    private boolean serviceNotExists(long id) {
+        return (serviceRepository.findById(id) == null);
     }
 
-    public String editService(Service service) {
-        serviceRepository.save(service);
-        return "PUT: Success!";
-    }
-
-    public String deleteService(long id) {
-        serviceRepository.delete(id);
-        return "DELETE: Success!";
-    }
     public void ServiceSanitization(Service service) {
         String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         String ServiceEntered[][] = new String[3][2];

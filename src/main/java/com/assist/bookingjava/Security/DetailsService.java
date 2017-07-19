@@ -18,12 +18,12 @@ public class DetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Admin user = adminRepository.findByEmail(email);
+        Admin user = adminRepository.findByEmail("andrei@mail.ro");
         if (user == null){
             throw new UsernameNotFoundException(email + " was not found");
         }return new org.springframework.security.core.userdetails.User(
-               user.getName(),
-               user.getPass(),
-               AuthorityUtils.createAuthorityList(new String[] {"USER"}));
+                user.getName(),
+                user.getPass(),
+                AuthorityUtils.createAuthorityList(new String[] {"USER"}));
     }
 }
