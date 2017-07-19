@@ -10,6 +10,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.16.2",
+    "axios-version": "^1.0.0",
     "bootstrap-vue": "^0.18.0",
     "gulp": "^3.9.1",
     "node": "0.0.0",

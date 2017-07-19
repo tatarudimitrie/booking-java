@@ -10,9 +10,9 @@
     <b-collapse is-nav id="nav_collapse">
 
       <b-nav is-nav-bar>
-        <b-nav-item to="/Bookings">Bookings</b-nav-item>
-        <b-nav-item to="/Calendar">Calendar</b-nav-item>
-        <b-nav-item to="/Profile">Profile</b-nav-item>
+        <b-nav-item to="/booking">Bookings</b-nav-item>
+        <b-nav-item to="/calendar">Calendar</b-nav-item>
+        <b-nav-item to="/profile">Profile</b-nav-item>
 
       </b-nav>
       <b-nav is-nav-bar class="ml-auto">

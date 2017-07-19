@@ -5,8 +5,10 @@ import Recover from '@/components/Recover'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Dashboard from '@/components/Dashboard'
-import Description from '@/components/Description'
+import Profile from '@/components/Profile'
 import AddService from '@/components/AddService'
+import Booking from '@/components/Booking'
+
 
 Vue.use(Router)
 
@@ -41,14 +43,19 @@ export default new Router({
       component: Dashboard
     },
     {
-      path: '/description',
+      path: '/profile',
       name: 'Description',
-      component: Description
+      component: Profile
     },
      {   
       path: '/addService',
       name: 'AddService',
       component: AddService
+    },
+    {   
+      path: '/booking',
+      name: 'Booking',
+      component: Booking
     }
   ]
 })
