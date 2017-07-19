@@ -1,5 +1,6 @@
 package com.assist.bookingjava.controllers;
 
+import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,20 @@ public class CompanyController {
         return companyService.addBulkCompany();
     }
 
+
+    @RequestMapping(method=RequestMethod.PUT, value="/companies/add")
+    public void editCompany(@RequestBody Company company) {
+        companyService.editCompany(company);
+    }
+
     @RequestMapping(method=RequestMethod.POST, value="/companies/edit")
     public String addCompany(@RequestBody Company company) {
         return companyService.addCompany(company);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/companies/add")
-    public void editCompany(@RequestBody Company company) {
-        companyService.editCompany(company);
+    @RequestMapping(method=RequestMethod.PUT, value="/companies/email")
+    public ResponseEntity findbyAdminEmail(@RequestBody Admin admin) {
+        return companyService.findbyAdminEmail(admin);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/companies/delete/{id}")
