@@ -12,7 +12,7 @@ public class ServiceController {
     @Autowired
     ServiceService serviceService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/services")
+    @RequestMapping(method = RequestMethod.GET, value = "/services/all")
     public ResponseEntity findAllServices() {
         return serviceService.findAllServices();
     }
@@ -27,22 +27,23 @@ public class ServiceController {
         return serviceService.findServiceByName(name);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/services/input")
-    public String addBulkService () {
-        return serviceService.addBulkService();
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/services")
-    public String addService(@RequestBody Service service){
-        return serviceService.addService(service);
-    }
-    @RequestMapping(method = RequestMethod.PUT, value = "/services")
+    @RequestMapping(method = RequestMethod.PUT, value = "/services/edit")
     public void editService(@RequestBody Service service){
         serviceService.editService(service);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/services/add")
+    public String addService(@RequestBody Service service){
+        return serviceService.addService(service);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/services/{id}")
     public String deleteService(@PathVariable long id){
         return serviceService.deleteService(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/services/input")
+    public String addBulkService () {
+        return serviceService.addBulkService();
     }
 }

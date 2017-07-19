@@ -43,7 +43,7 @@ public class CompanyController {
         return companyService.deleteCompany(id);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/companies/email")
+    @RequestMapping(method=RequestMethod.POST, value="/companies/admin")
     public ResponseEntity findByAdminEmail(@RequestBody Admin admin) {
         return companyService.findByAdminEmail(admin);
     }
