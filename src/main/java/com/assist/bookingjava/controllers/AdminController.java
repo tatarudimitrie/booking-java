@@ -1,15 +1,3 @@
-/*
-* Admin Controller
-*
-* CRUD OPERATIONS
-*
-* POST      = C create
-* GET       = R read
-* PUT       = U update
-* DELETE    = D delete
-*
-* */
-
 package com.assist.bookingjava.controllers;
 
 import com.assist.bookingjava.model.Admin;
@@ -44,39 +32,24 @@ public class AdminController {
         return adminService.findAdminByEmail(email);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/admins/login")
-    public ResponseEntity findAdminByNameAndPass(@RequestBody Admin admin){
-        return ResponseEntity.ok(adminService.findAdminByLogin(admin));
-        //return ResponseEntity.ok(adminService.findAdminByEmail(admin.getEmail()));
+
+    @RequestMapping(method=RequestMethod.PUT, value="/admins/edit")
+    public ResponseEntity<String> editAdmin(@RequestBody Admin admin) {
+        return adminService.editAdmin(admin);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/{name}/{pass}")
-    public boolean findAdminByNameAndPass(@PathVariable String name, @PathVariable String pass){
-        return adminService.findAdminByNameAndPass(name, pass);
+    @RequestMapping(method=RequestMethod.POST, value="/admins/add")
+    public ResponseEntity<String> addAdmin(@RequestBody Admin admin) {
+        return adminService.addAdmin(admin);
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/admins/delete/{id}")
+    public ResponseEntity<String> deleteAdmin(@PathVariable long id) {
+        return adminService.deleteAdmin(id);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/admins/input")
     public String bulkAddAdmin() {
         return adminService.bulkAddAdmin();
     }
-
-    @RequestMapping(method=RequestMethod.PUT, value="/admins/edit")
-    public String editAdmin(@RequestBody Admin admin) {
-        return adminService.editAdmin(admin);
-    }
-
-    @CrossOrigin(origins = "*")
-    @RequestMapping(method=RequestMethod.POST, value="/admins/add")
-    public String addAdmin(@RequestBody Admin admin) {
-        return adminService.addAdmin(admin);
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/admins/delete/{id}")
-    public String deleteAdmin(@PathVariable long id) {
-        return adminService.deleteAdmin(id);
-    }
 }
-
-/*      ADMIN JSON TEMPLATE
-        { "name" : "Admin name", "mail" : "admin@assist.ro", "pass" : "pass" }
-*/

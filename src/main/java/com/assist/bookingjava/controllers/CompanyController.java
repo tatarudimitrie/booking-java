@@ -1,5 +1,6 @@
 package com.assist.bookingjava.controllers;
 
+import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,23 +28,28 @@ public class CompanyController {
         return companyService.findCompanyByName(name);
     }
 
-    @RequestMapping(method= RequestMethod.GET, value="/companies/input")
-    public String addBulkCompany(){
-        return companyService.addBulkCompany();
+    @RequestMapping(method=RequestMethod.PUT, value="/companies/edit")
+    public ResponseEntity<String> editCompany(@RequestBody Company company) {
+        return companyService.editCompany(company);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/companies/edit")
-    public String addCompany(@RequestBody Company company) {
+    @RequestMapping(method=RequestMethod.POST, value="/companies/add")
+    public ResponseEntity<String> addCompany(@RequestBody Company company) {
         return companyService.addCompany(company);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/companies/add")
-    public void editCompany(@RequestBody Company company) {
-        companyService.editCompany(company);
+    @RequestMapping(method=RequestMethod.DELETE, value="/companies/delete/{id}")
+    public ResponseEntity<String> deleteCompany(@PathVariable long id) {
+        return companyService.deleteCompany(id);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/companies/delete/{id}")
-    public String deleteCompany(@PathVariable long id) {
-        return companyService.deleteCompany(id);
+    @RequestMapping(method=RequestMethod.PUT, value="/companies/email")
+    public ResponseEntity findByAdminEmail(@RequestBody Admin admin) {
+        return companyService.findByAdminEmail(admin);
+    }
+
+    @RequestMapping(method= RequestMethod.GET, value="/companies/input")
+    public String addBulkCompany(){
+        return companyService.addBulkCompany();
     }
 }

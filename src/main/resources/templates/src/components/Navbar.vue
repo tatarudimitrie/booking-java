@@ -3,16 +3,16 @@
 
     <b-nav-toggle target="nav_collapse"></b-nav-toggle>
 
-    <b-link class="navbar-brand" to="#">
+    <b-link class="navbar-brand" to="/Dashboard">
       <span>Dashboard</span>
     </b-link>
 
     <b-collapse is-nav id="nav_collapse">
 
       <b-nav is-nav-bar>
-        <b-nav-item>Bookings</b-nav-item>
-        <b-nav-item>Calendar</b-nav-item>
-        <b-nav-item>Profile</b-nav-item>
+        <b-nav-item to="/Bookings">Bookings</b-nav-item>
+        <b-nav-item to="/Calendar">Calendar</b-nav-item>
+        <b-nav-item to="/Profile">Profile</b-nav-item>
 
       </b-nav>
       <b-nav is-nav-bar class="ml-auto">
@@ -31,18 +31,17 @@
 
 <!-- Script JavaScript Dashboard -->
 <script>
-import Vue from 'vue';
-export default Vue.extend({
-});
+	import Vue from 'vue';
+	export default Vue.extend({
+	});
 </script>
 
 
 <!-- CSS Dashboard -->
 <style>
-.booking{
-	font-size: 35px;
-	color: white;
-	font-family: Arial;
-
-}
+	.booking{
+		font-size: 35px;
+		color: white;
+		font-family: Arial;
+	}
 </style>
