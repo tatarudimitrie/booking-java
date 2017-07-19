@@ -43,9 +43,9 @@ public class ServiceController {
         return serviceService.deleteService(id);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/services/company")
+    @RequestMapping(method = RequestMethod.POST, value = "/services/company")
     public ResponseEntity findByCompany(@RequestBody Company company){
-        return serviceService.findByCompany(company);
+        return serviceService.findServiceByCompany(company);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/services/input")

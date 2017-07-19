@@ -55,8 +55,9 @@ public class ServiceService implements ServiceInterface {
         }
     }
 
-    public ResponseEntity findByCompany(Company company) {
+    public ResponseEntity findServiceByCompany(Company company) {
         try {
+            System.out.println(company.toString());
             Company currentCompany = companyRepository.findById(company.getId());
             List<Service> serviceList = serviceRepository.findByCompany(currentCompany);
             return ResponseEntity.ok(serviceList);
@@ -86,7 +87,7 @@ public class ServiceService implements ServiceInterface {
             Company company = companyRepository.findById(service.getCompany().getId());
             service.setCompany(company);
             serviceRepository.save(service);
-            System.out.println("Company was added, for admin: " + company.toString());
+            System.out.println("Service was added, for company: " + company.toString());
             return ResponseEntity.ok("Service added successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
@@ -94,9 +95,17 @@ public class ServiceService implements ServiceInterface {
     }
 
     public ResponseEntity<String> deleteService(long id) {
-        //serviceRepository.delete(id);
-        //return "DELETE: Success!";
-        return ResponseEntity.ok("Service added successfully!");
+
+        if (serviceNotExists(id)) {
+            return ResponseEntity.badRequest().body("There is no service with id " + id + " in DB!");
+        }
+
+        try {
+            serviceRepository.delete(id);
+            return ResponseEntity.ok("Service with id " + id + " was successfully deleted!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public String addBulkService() {
@@ -106,6 +115,10 @@ public class ServiceService implements ServiceInterface {
         serviceRepository.save(new Service(57, "Service4", "Description4", "1 (hour)",4, 100, "DD/MM/YYYY HH:mm"));
         serviceRepository.save(new Service(58, "Service5", "Description5", "1 (hour)",5, 200, "DD/MM/YYYY HH:mm"));
         return "Service table was updated with five DEFAULT ROWS!";
+    }
+
+    private boolean serviceNotExists(long id) {
+        return (serviceRepository.findById(id) == null);
     }
 
     public void ServiceSanitization(Service service) {

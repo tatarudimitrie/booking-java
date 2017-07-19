@@ -18,7 +18,7 @@ public interface ServiceInterface {
 
     ResponseEntity<String> deleteService(long id);
 
-    ResponseEntity findByCompany(Company company);
+    ResponseEntity findServiceByCompany(Company company);
 
     String addBulkService();
 }
