@@ -58,7 +58,11 @@ public class CompanyService implements CompanyInterface {
         }
 
         try {
-            companyRepository.save(company);
+            Company currentCompany = companyRepository.findOne(company.getId());
+            currentCompany.setName(company.getName());
+            currentCompany.setDescription(company.getDescription());
+            currentCompany.setImage_url(company.getImage_url());
+            companyRepository.save(currentCompany);
             return ResponseEntity.ok("Company was successfully edited");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
@@ -68,7 +72,6 @@ public class CompanyService implements CompanyInterface {
     public ResponseEntity<String> addCompany(Company company) {
         try {
             Admin admin = adminRepository.findByEmail(company.getAdmin().getEmail());
-            admin.setPass("******");
             company.setAdmin(admin);
             companyRepository.save(company);
             System.out.println("Company was added, for admin: " + admin.toString());
@@ -94,7 +97,7 @@ public class CompanyService implements CompanyInterface {
         if (company == null) {
             System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("The admin with email " +
-                    admin.getEmail() + "does not have a company!");
+                    admin.getEmail() + " does not have a company!");
         }
 
         System.out.println("SENT: " + company.toString());
@@ -111,6 +114,7 @@ public class CompanyService implements CompanyInterface {
     }
 
     private boolean isDuplicateName(Company company) {
-        return (companyRepository.findByName(company.getName()) != null);
+        Company currentCompany = companyRepository.findByName(company.getName());
+        return (currentCompany.getId() != company.getId());
     }
 }
