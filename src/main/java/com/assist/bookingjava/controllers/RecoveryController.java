@@ -31,7 +31,7 @@ public class RecoveryController {
 
     private final static String emailAddress = "assistbooking7@gmail.com";
     private final static String emailPassword = "Assist2017";
-    private final static String recoveryURL = "10.0.2.15:8080/resetPassword?token=";
+    private final static String recoveryURL = "http://192.168.150.225:8080/ResetPassword?token=";
     public boolean validMail(String email){
         Pattern p = Pattern.compile("\\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b");
         Matcher m = p.matcher(email);
@@ -70,9 +70,9 @@ public class RecoveryController {
                         });
                 try {
                     javax.mail.Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress("bolohan46@gmail.com"));
+                    message.setFrom(new InternetAddress("intern.andrei.viziteu@assist.ro"));
                     message.setRecipients(javax.mail.Message.RecipientType.TO,
-                            InternetAddress.parse("bolohan46@gmail.com"));
+                            InternetAddress.parse("intern.andrei.viziteu@assist.ro"));
                     message.setSubject("Reset your password");
                     message.setText("To reset your password, for mail: " +
                             recovery.getEmail() + ". Click the link below:\n" + recoveryURL + recovery.getResetToken());
