@@ -6,10 +6,27 @@
     <div class="container">
     <br>
       <div>
-        <div class="form-group" v-bind:class="{ 'form-group--error': $v.email.$error }">
-          <label class="form__label">Email address</label>
-          <input class="form__input" v-model.trim="email" @blur="$v.email.$touch()" @input="$v.email.$touch()">
-          <p class="form-group__message" v-if="!$v.email.email">Field is required</p>
+        <div class="form-group" v-bind:class="{ 'form-group--error': $v.password.$error }">
+          <label><b>Password</b></label>
+          <b-form-input v-model="password"
+          type="password"
+          placeholder="Password"
+          :state="password.length?'success':'warning'"
+          :formatter="format"
+          ></b-form-input>
+          <p v-if="!$v.password.minLength">The password must be 6 characters or longer!</p>
+          <p v-if="!$v.password.maxLength">The password must be less than 16 characters!</p>
+        </div>
+        <div class="form-group" v-bind:class="{ 'form-group--error': $v.pass_confirm.$error }">
+          <label><b>Confirm password</b></label>
+          <b-form-input v-model="pass_confirm"
+          type="password"
+          placeholder="Confirm password"
+          :state="pass_confirm.length?'success':'warning'"
+          :formatter="format"
+          :required="true"
+          ></b-form-input>
+          <p v-if="!$v.pass_confirm.sameAs">This field must be the same as password!</p>
         </div>
       </div>
       <b-button @click="submit" class="btn btn-success">Recover</b-button>
@@ -21,25 +38,29 @@
 </template>
 
 <script>
-  import { required, email } from 'vuelidate/lib/validators'
+
+
+  import { required, email, minLength,maxLength, between, sameAs } from 'vuelidate/lib/validators'
   export default {
     data(){return {
-      email: ''
+      password: '',
+      pass_confirm:''
     };
   },
   methods: {
     format(value) {
       return value.toLowerCase();
     },
-   
-submit(){
+    
+                 submit(){
 
-                if (this.$v.email.email   ) {
+                if (this.$v.password.minLength && this.$v.password.maxLength && this.$v.pass_confirm.sameAs ) {
 
                     this.$http.post("http://192.168.150.245:8080/forgot/password", {
 
-                        "email": this.email,
-                        
+                        "password": this.password,
+                        "confirm": this.pass_confirm,
+                        "token":""
 
                         
 
@@ -59,9 +80,9 @@ submit(){
 
                     }).then(response => {
                        if(response.bodyText!='Success!')
-                        console.log('E ');
+                        console.log('Dani ');
                       else
-                        console.log('S');
+                        console.log('Mocanu');
                     
                         
                     }, response => {
@@ -83,14 +104,23 @@ submit(){
 
 
 
-
-
   },
   validations: {
-    email:{
-      email
+      name: {
+        required
+      },
+      email: {
+        email
+      },
+      password: {
+        minLength: minLength(6),
+        maxLength: maxLength(16)
+      },
+      pass_confirm:{
+        sameAs: sameAs('password')
+
+      }
     }
-  }
 }
 </script>
 
