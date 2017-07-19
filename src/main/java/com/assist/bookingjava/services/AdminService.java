@@ -1,8 +1,6 @@
 package com.assist.bookingjava.services;
 
 import com.assist.bookingjava.services.interfaces.AdminInterface;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,8 +8,6 @@ import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,51 +16,109 @@ public class AdminService implements AdminInterface {
 
     @Autowired
     private AdminRepository adminRepository;
+    private String defaultPass = "******";
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
-    private String errorInput = "";
 
     public ResponseEntity findAllAdmins() {
         List<Admin> adminList = new ArrayList<>();
 
-        for (Admin a : adminRepository.findAll()) {
-            adminList.add(a);
+        try {
+            for (Admin a : adminRepository.findAll()) {
+                a.setPass(defaultPass);
+                adminList.add(a);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
 
         return ResponseEntity.ok(adminList);
     }
 
     public ResponseEntity findAdminById(long id) {
-        return ResponseEntity.ok(adminRepository.findOne(id));
+        try {
+            Admin admin = adminRepository.findOne(id);
+            admin.setPass(defaultPass);
+            return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public ResponseEntity findAdminByName(String name){
-        Admin admin = adminRepository.findByName(name);
-        return ResponseEntity.ok(admin);
+        try {
+            Admin admin = adminRepository.findByName(name);
+            admin.setPass(defaultPass);
+            return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
-    public boolean findAdminByNameAndPass(String name, String pass){
-        System.out.println("Input pass: " + pass);
-        System.out.println("Encrypted pass: " + encryptPassword(pass));
-
-        Admin admin = adminRepository.findByName(name);
-        System.out.println(admin.toString());
-        return admin.getPass().equals(encryptPassword(pass));
+    public ResponseEntity findAdminByEmail(String email) {
+        try {
+            Admin admin = adminRepository.findByEmail(email);
+            admin.setPass(defaultPass);
+            return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
-    public ResponseEntity findAdminByLogin(Admin admin){
-        Admin adminTemp = adminRepository.findByEmail(admin.getEmail());
-        if (adminTemp == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> editAdmin(Admin admin) {
+
+        System.out.println("EDIT ADMIN --> " + admin.toString());
+
+        try {
+            Admin tempAdmin = adminRepository.findByName(admin.getName());
+            tempAdmin.setEmail(admin.getEmail());
+            adminRepository.save(tempAdmin);
+        } catch (Exception e) {
+            return  ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
 
-        boolean status = PASSWORD_ENCODER.matches(admin.getPass(), adminTemp.getPass());
-        return status? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok("Admin edited successfully!");
+
     }
 
-    public ResponseEntity findAdminByEmail(String email){
-        Admin admin = adminRepository.findByEmail(email);
-        return ResponseEntity.ok(admin);
+    public ResponseEntity<String> addAdmin(Admin admin) {
+
+        System.out.println("ADD ADMIN --> " + admin.toString());
+
+        String sanitize = adminSanitize(admin);
+        if (!sanitize.equals("")) {
+            //return ResponseEntity.badRequest().body("Wrong input!\n" + sanitize);
+        }
+
+        if (isDuplicateName(admin.getName())) {
+            return ResponseEntity.badRequest().body("Duplicate name");
+        }
+
+        if (isDuplicateEmail(admin.getEmail())) {
+            return ResponseEntity.badRequest().body("Duplicate email");
+        }
+
+        if (isInvalidPass(admin.getPass())) {
+            return ResponseEntity.badRequest().body("Password length must be between 6..16");
+        }
+
+        try {
+            admin.setPass(encryptPassword(admin.getPass()));
+            adminRepository.save(admin);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Something happened!");
+        }
+
+        return ResponseEntity.ok("Admin registered successfully!");
+    }
+
+    public ResponseEntity<String> deleteAdmin(long id) {
+        try {
+            adminRepository.delete(id);
+            return ResponseEntity.ok("Admin deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public String bulkAddAdmin() {
@@ -76,45 +130,24 @@ public class AdminService implements AdminInterface {
         return "Admin table was updated with five DEFAULT ROWS!";
     }
 
-    public String editAdmin(Admin admin) {
-        AdminSanitization(admin);
-        if(errorInput!="")
-        {
-            return errorInput;
-        }
-        Admin tempAdmin = adminRepository.findByName(admin.getName());
-        tempAdmin.setEmail(admin.getEmail());
-        adminRepository.save(tempAdmin);
-        return "PUT: Success!";
-
+    /* ADMIN INPUT CHECKS */
+    private boolean isDuplicateName(String name) {
+        return (adminRepository.findByName(name) != null);
     }
 
-    public String addAdmin(Admin admin) {
-
-        AdminSanitization(admin);
-        if(errorInput!="")
-        {
-            return errorInput;
-        }
-        String inputPass = admin.getPass();
-        admin.setPass(encryptPassword(inputPass));
-        adminRepository.save(admin);
-
-        //return ResponseEntity.ok("OK");
-        return "POST: Success!";
+    private boolean isDuplicateEmail(String email) {
+        return (adminRepository.findByEmail(email) != null);
     }
 
-    public String deleteAdmin(long id) {
-        adminRepository.delete(id);
-        return "DELETE: Success!";
+    private boolean isInvalidPass(String pass) {
+        return !((pass.length() >= 6) && (pass.length() <= 16));
     }
-
 
     private String encryptPassword(String inputPass) {
         return PASSWORD_ENCODER.encode(inputPass);
     }
 
-    public void AdminSanitization(Admin admin) {
+    private String adminSanitize(Admin admin) {
         String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         String userEntered[][] = new String[3][2];
         userEntered[0][0] = admin.getName();
@@ -125,11 +158,14 @@ public class AdminService implements AdminInterface {
         userEntered[1][1] = "Password";
         userEntered[2][1] = "Email";
 
-        for (int i = 0; i < userEntered.length; i++) {
+        String errorString = "";
+
+        for (int i = 0; i < userEntered.length; ++i) {
             if (!allowed.contains(userEntered[i][0])) {
-                errorInput += "Eroare  " + userEntered[i][1];
+                errorString += "Error  " + userEntered[i][1] + " ";
             }
         }
 
+        return errorString;
     }
 }

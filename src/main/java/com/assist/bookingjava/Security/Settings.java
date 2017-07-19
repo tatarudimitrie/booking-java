@@ -34,13 +34,13 @@ public class Settings extends WebSecurityConfigurerAdapter {
                 authenticated().
                 and().httpBasic() .
                 authenticationEntryPoint(authEntryPoint);
-
     }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/admins");
+        web.ignoring().antMatchers("/admins/add");
         web.ignoring().antMatchers("/login");
-        web.ignoring().antMatchers("/forgot/password");
+        web.ignoring().antMatchers("/**");
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
     }
 }

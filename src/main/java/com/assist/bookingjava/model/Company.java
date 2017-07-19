@@ -1,7 +1,6 @@
 package com.assist.bookingjava.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,7 +11,6 @@ public class Company implements Serializable {
     private static final long serialVersionUID = -3009157732242241606L;
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
@@ -30,8 +28,15 @@ public class Company implements Serializable {
 
     public Company() {}
 
-    public Company(long adminId, String name, String description, String image_url) {
-        this.admin = new Admin(adminId, "","","");
+    public Company(long idAdmin, String name, String description, String image_url) {
+        this.admin = new Admin(idAdmin,"", "","");
+        this.name = name;
+        this.description = description;
+        this.image_url = image_url;
+    }
+
+    public Company(String adminEmail, String name, String description, String image_url) {
+        this.admin = new Admin(0,"",adminEmail,"");
         this.name = name;
         this.description = description;
         this.image_url = image_url;
@@ -39,10 +44,6 @@ public class Company implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public long setId(long id) {
-        return this.id = id;
     }
 
     public String getName() {
