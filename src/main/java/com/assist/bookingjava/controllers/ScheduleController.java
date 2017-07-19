@@ -18,6 +18,6 @@ public class ScheduleController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/schedule/add")
     public ResponseEntity<String> addService(@RequestBody Schedule schedule){
-        return scheduleService.addService(service);
+        return scheduleService.addSchedule(schedule);
     }
 }

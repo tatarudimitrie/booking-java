@@ -11,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 
-/**
- * Created by root on 19.07.2017.
- */
+@org.springframework.stereotype.Service
 public class ScheduleService implements ScheduleInterface{
 
     @Autowired
@@ -34,7 +32,7 @@ public class ScheduleService implements ScheduleInterface{
         }
     }
 
-    public ResponseEntity<String> addService(Schedule schedule) {
+    public ResponseEntity<String> addSchedule(Schedule schedule) {
         try {
             Service service = serviceRepository.findById(schedule.getService().getId());
             schedule.setService(service);

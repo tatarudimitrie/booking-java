@@ -1,10 +1,11 @@
 package com.assist.bookingjava.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "Schedule")
-public class Schedule {
+@Table(name = "schedule")
+public class Schedule implements Serializable {
 
     private static final long serialVersionUID = -3009157732242241606L;
     @Id
@@ -16,9 +17,14 @@ public class Schedule {
 
     @Column(name = "time")
     private String time;
+    public Schedule(){}
 
-    public Schedule(Service service, String time) {
-        this.service = service;
+    public Schedule(long  id, String time) {
+        this.service = new Service(id,"","","",0,0d,"");
+        this.time = time;
+    }
+
+    public Schedule(String time) {
         this.time = time;
     }
 
