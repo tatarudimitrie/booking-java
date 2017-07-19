@@ -78,13 +78,6 @@ submit(){
                 }
 
             }
-
-
-
-
-
-
-
   },
   validations: {
     email:{

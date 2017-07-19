@@ -44,8 +44,8 @@ public class Service implements Serializable {
         this.date = date;
     }
 
-    public Service(long companyId, String name, String description, String duration, int free_space, double price, String date) {
-        this.company = new Company(companyId, "","","");
+    public Service(long id_company, String name, String description, String duration, int free_space, double price, String date) {
+        this.company = new Company(id_company, "","","");
         this.name = name;
         this.description = description;
         this.duration = duration;
