@@ -12,13 +12,13 @@ public interface CompanyInterface {
 
     ResponseEntity findCompanyByName(String name);
 
+    ResponseEntity findCompanyByAdmin(Admin admin);
+
     ResponseEntity<String> editCompany(Company company);
 
     ResponseEntity<String> addCompany(Company company);
 
     ResponseEntity<String> deleteCompany(long id);
-
-    ResponseEntity findByAdminEmail(Admin admin);
 
     String addBulkCompany();
 }
