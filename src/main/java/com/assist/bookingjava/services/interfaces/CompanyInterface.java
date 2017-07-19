@@ -18,7 +18,7 @@ public interface CompanyInterface {
 
     ResponseEntity<String> deleteCompany(long id);
 
-    ResponseEntity findByAdminEmail(Admin admin);
+    ResponseEntity findByAdmin(Admin admin);
 
     String addBulkCompany();
 }
