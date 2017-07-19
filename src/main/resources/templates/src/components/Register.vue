@@ -4,7 +4,7 @@
 		<p class="title">Booking <span class="app">App</span></p>
 		<div class="container">
 
-		<div class="hidden" id = "hidden">
+		<div id = "hidden">
 		<p style="font-size:20px">This user already exists!</p>
 		</div>
 
@@ -84,7 +84,7 @@ var router = new Router();
 			},
 			submit() {
 				if (this.$v.email.email && this.$v.name.required && this.$v.password.minLength && this.$v.password.maxLength && this.$v.pass_confirm.sameAs) {
-					this.$http.post("http://192.168.151.51:8080/admins", {
+					this.$http.post("http://192.168.151.51:8080/admins/add", {
 						"name": this.name,
 						"email": this.email,
 						"pass": this.password
@@ -98,12 +98,13 @@ var router = new Router();
 					}).then(response => {
 						if(response.status === 200){
 							location.href= '/login';
+							// console.log('response: ', response);
 						}else{
 							document.getElementById("hidden").style.visibility = "visible";
 						}
 						
 					}, response => {
-						console.log(response.status, response.body);
+						console.log(response);
 					})
 
 				}

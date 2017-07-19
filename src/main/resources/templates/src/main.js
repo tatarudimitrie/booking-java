@@ -15,9 +15,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.component('icon', Icon);
 
+
 Vue.use(BootstrapVue);
 Vue.use(Vuelidate)
 Vue.use(VueResource);
+
 
 new Vue({
   el: '#app',

@@ -76,15 +76,15 @@
 				</td>
 			</tr>
 		</thead>
-  <tbody>
-  <tr v-for="hour in hours">
-  <td>{{hour}}</td>
-  <td v-for="day in week">
-  <label :for="day + hour" > <input type="checkbox" :id="day + hour" ></label>
-  </td>
-  </tr>
-</tbody>
-</table>
+		<tbody>
+			<tr v-for="hour in hours">
+				<td>{{hour}}</td>
+				<td v-for="day in week">
+					<label :for="day + hour" > <input type="checkbox" :id="day + hours.indexOf(hour)" ></label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 
 
@@ -139,12 +139,16 @@
 			},
 			submit(){
 				if (this.$v.s_name.required && this.$v.s_duration.required && this.$v.spaces.required && this.$v.price.required) {
-					this.$http.post("http://192.168.150.237:8080/services", {
-						"serviceName": this.s_name,
-						"serviceDuration": this.s_duration,
-						"spaces": this.spaces,
+					this.$http.post("http://192.168.151.51:8080/services", {
+						"company":{
+							"id": sessionStorage.getItem('id_company')
+						},
+						"name": this.s_name,
+						"description": this.description,
+						"duration": this.s_duration,
+						"free_space": this.spaces,
 						"price": this.price,
-						"description": this.description
+						"date":"data de azi"
 					},
 					{
 						headers:{
@@ -152,14 +156,39 @@
 						}
 
 					}).then(response => {
-						console.log("success");
+						console.log("response:", response);
 						location.href = "/booking"
 					}, response => {
 						console.log(response.status, response.body);
 					});
+					
 
 				}
+			},
+			getUserInfo() {
+				this.$http.post("http://192.168.151.51:8080/companies/admin",{
+					"email":sessionStorage.getItem('email')
+				},
+				{
+					headers:{
+						'Content-Type': 'application/json'
+					}
+				}).then(response =>{
+					if(response.body) {
+						var company = response.body;
+						sessionStorage.setItem("id_company", company.id)
+					} else {
+						return
+					}
+
+				})
+				.then(error => {
+					console.log('error: ', error);
+				});
 			}
+		},
+		created() {
+			this.getUserInfo();
 		},
 		name:"app",
 		components: { Navbar },
@@ -186,6 +215,7 @@
 	.container{
 		width:50%;
 		min-height: 150px;
+		margin-bottom: 50px;
 	}
 	.container-service{
 		width:100%;
