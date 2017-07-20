@@ -5,12 +5,12 @@
 			<br>
 			<div class="container">
 				<div class="container-service row">
-					<h1 class="title col-sm-6">Add new service</h1>
+					<h1 class="title col-sm-6">Edit service</h1>
 					<div class="button col-sm-6">
 						<button @click="submit" class="btn btn-default circle" aria-label="Right Align">
-							<icon name="plus" scale="3" style="color:white"></icon>
+							<icon name="pencil" scale="3" style="color:white"></icon>
 						</button>
-						<p>Add service</p>
+						<p>Edit service</p>
 					</div>
 				</div>
 				<p class="text-left details">SERVICE DETAILS</p>
@@ -102,11 +102,11 @@
 	export default {
 		data () {
 			return {
-				s_name: '',
-				s_duration:'',
-				description: '',
-				spaces:'',
-				price:'',
+				s_name: sessionStorage.getItem('serviceName'),
+				s_duration: sessionStorage.getItem('serviceDuration'),
+				description: sessionStorage.getItem('serviceDescription'),
+				spaces: sessionStorage.getItem('serviceSpace'),
+				price: sessionStorage.getItem('servicePrice'),
 				week: [
 				'MON',
 				'TUE',
@@ -138,16 +138,17 @@
 			},
 			submit(){
 				if (this.$v.s_name.required && this.$v.s_duration.required && this.$v.spaces.required && this.$v.price.required) {
-					this.$http.post("http://192.168.151.51:8080/services/add", {
+					this.$http.put("http://192.168.151.51:8080/services/edit", {
 						"company":{
 							"id": sessionStorage.getItem('id_company')
 						},
+						"id":sessionStorage.getItem('id_service'),
 						"name": this.s_name,
 						"description": this.description,
 						"duration": this.s_duration,
 						"free_space": this.spaces,
 						"price": this.price,
-						"date":"data de azi"
+						"date": sessionStorage.getItem('serviceAvailability')
 					},
 					{
 						headers:{
@@ -156,7 +157,15 @@
 
 					}).then(response => {
 						console.log("response:", response);
-						location.href = "/dashboard"
+						location.href = "/dashboard";
+						sessionStorage.removeItem('id_service');
+						sessionStorage.removeItem('serviceName');
+						sessionStorage.removeItem('serviceDescription');
+						sessionStorage.removeItem('serviceDuration');
+						sessionStorage.removeItem('serviceSpace');
+						sessionStorage.removeItem('servicePrice');
+						sessionStorage.removeItem('serviceDate');
+						sessionStorage.removeItem('serviceAvailability');
 					}, response => {
 						console.log(response.status, response.body);
 					});
