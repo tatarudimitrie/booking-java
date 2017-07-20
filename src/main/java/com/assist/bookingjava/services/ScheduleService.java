@@ -31,6 +31,9 @@ public class ScheduleService implements ScheduleInterface{
     }
 
     public ResponseEntity<String> addSchedule(Schedule schedule) {
+
+        System.out.println(schedule.toString());
+
         try {
             Service service = serviceRepository.findById(schedule.getService().getId());
             schedule.setService(service);
@@ -43,6 +46,9 @@ public class ScheduleService implements ScheduleInterface{
     }
 
     public ResponseEntity<String> addScheduleAll(List<Schedule> schedule) {
+
+        System.out.println(schedule.toString());
+
         try {
             for(Schedule s : schedule) {
                 Service service = serviceRepository.findById(s.getService().getId());

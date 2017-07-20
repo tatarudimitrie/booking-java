@@ -17,12 +17,12 @@ public class ScheduleController {
     @Autowired
     ScheduleService scheduleService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/schedule/add")
+    @RequestMapping(method = RequestMethod.POST, value = "/schedules/add")
     public ResponseEntity<String> addSchedule(@RequestBody Schedule schedule){
         return scheduleService.addSchedule(schedule);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/schedule/add/all")
+    @RequestMapping(method = RequestMethod.POST, value = "/schedules/add/all")
     public ResponseEntity<String> addScheduleAll(@RequestBody List<Schedule> schedule){
         return scheduleService.addScheduleAll(schedule);
     }
