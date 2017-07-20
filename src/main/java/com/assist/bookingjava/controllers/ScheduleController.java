@@ -26,4 +26,9 @@ public class ScheduleController {
     public ResponseEntity<String> addScheduleAll(@RequestBody List<Schedule> schedule){
         return scheduleService.addScheduleAll(schedule);
     }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/schedule/edit")
+    public ResponseEntity<String> editSchedule(@RequestBody List<Schedule> schedule){
+        return scheduleService.addScheduleAll(schedule);
+    }
 }

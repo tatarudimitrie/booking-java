@@ -41,8 +41,6 @@ public class ServiceController {
 
         return serviceService.addService(service);
 
-
-
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/services/delete/{id}")
