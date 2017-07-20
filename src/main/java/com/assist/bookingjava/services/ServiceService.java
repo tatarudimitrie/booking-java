@@ -87,11 +87,9 @@ public class ServiceService implements ServiceInterface {
         try {
             Company company = companyRepository.findById(service.getCompany().getId());
             service.setCompany(company);
-            Object a = serviceRepository.save(service);
+            serviceRepository.save(service);
             long id = service.getId();
-            System.out.println(id);
-            System.out.println("Service was added, for company: " + company.toString());
-            return ResponseEntity.ok("Service added successfully!");
+            return ResponseEntity.ok(String.valueOf(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }

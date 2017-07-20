@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ServiceController {
 
@@ -35,7 +37,7 @@ public class ServiceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/services/add")
-    public ResponseEntity<String> addService(@RequestBody Service service,@RequestBody Schedule schedule){
+    public ResponseEntity<String> addService(@RequestBody Service service){
 
         return serviceService.addService(service);
 
