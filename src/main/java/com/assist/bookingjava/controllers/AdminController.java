@@ -42,7 +42,7 @@ public class AdminController {
         return adminService.deleteAdmin(id);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/input")
+    @RequestMapping(method=RequestMethod.GET, value="/admins/hack")
     public String bulkAddAdmin() {
         return adminService.bulkAddAdmin();
     }

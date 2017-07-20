@@ -84,6 +84,9 @@ public class CompanyService implements CompanyInterface {
     }
 
     public ResponseEntity<String> addCompany(Company company) {
+
+        
+
         try {
             Admin admin = adminRepository.findByEmail(company.getAdmin().getEmail());
             company.setAdmin(admin);

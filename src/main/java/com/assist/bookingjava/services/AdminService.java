@@ -71,7 +71,7 @@ public class AdminService implements AdminInterface {
     }
 
     public ResponseEntity<String> editAdmin(Admin admin) {
-        System.out.println(nl + "ADMIN PUT: /admins/edit - for " + admin.toString());
+        System.out.println("ADMIN PUT: /admins/edit - for " + admin.toString());
 
         try {
             Admin tempAdmin = adminRepository.findByName(admin.getName());
@@ -88,7 +88,7 @@ public class AdminService implements AdminInterface {
     }
 
     public ResponseEntity<String> addAdmin(Admin admin) {
-        System.out.println(nl + "ADMIN POST: /admins/add - for " + admin.toString());
+        System.out.println("ADMIN POST: /admins/add - for " + admin.toString());
 
         String sanitize = adminSanitize(admin);
         if (!sanitize.equals("")) {
@@ -120,26 +120,27 @@ public class AdminService implements AdminInterface {
     }
 
     public ResponseEntity<String> deleteAdmin(long id) {
-        System.out.println(nl + "ADMIN DELETE: /admins/delete - for admin with id " + id );
+        System.out.println("ADMIN DELETE: /admins/delete - for admin with id " + id );
 
         try {
             adminRepository.delete(id);
 
-            System.out.println("OK!");
+            System.out.println("OK: Deleted!");
             return ResponseEntity.ok("Admin deleted successfully!");
         } catch (Exception e) {
-            System.out.println("BAD REQUEST!");
+
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public String bulkAddAdmin() {
-        adminRepository.save(new Admin("andrei", "peter@assist.ro", encryptPassword("test")));
-        adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("stan1234")));
-        adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", encryptPassword("kim*i23")));
-        adminRepository.save(new Admin("David Willie", "david@assist.ro", encryptPassword("david123")));
-        adminRepository.save(new Admin("Peter Divide", "peted@assist.ro", encryptPassword("peter123")));
-        return "Admin table was updated with five DEFAULT ROWS!";
+        adminRepository.save(new Admin("Tataru Dimitrie", "intern.dimitrie.tataru@assist.ro", encryptPassword("dimitrie")));
+        adminRepository.save(new Admin("Leonte Andrei", "intern.andrei.leonte@assist.ro", encryptPassword("andrei")));
+        adminRepository.save(new Admin("Nistor Florin", "intern.florin.nistor@assist.ro", encryptPassword("florin")));
+        adminRepository.save(new Admin("Viziteu Andrei", "intern.andrei.viziteu@assist.ro", encryptPassword("andrei")));
+        adminRepository.save(new Admin("Bolohan Cosmin", "intern.cosmin.bolohan@assist.ro", encryptPassword("cosmin")));
+        adminRepository.save(new Admin("Bujdei Mihai", "intern.mihai.bujdei@assist.ro", encryptPassword("mihai")));
+        return "Admin table was updated with six DEFAULT ROWS!";
     }
 
     /* ADMIN INPUT CHECKS */
