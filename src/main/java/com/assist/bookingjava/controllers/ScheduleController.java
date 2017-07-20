@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +32,8 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/schedule/edit")
-    public ResponseEntity<String> editSchedule(@RequestBody Map<String,List<Object>> schedule){
-        System.out.println(schedule.toString());
-        return ResponseEntity.ok("ASd");
-        //return scheduleService.addScheduleAll(schedule);
+    public ResponseEntity<String> editSchedule(@RequestBody List<Schedule> schedule){
+        return scheduleService.addScheduleAll(schedule);
     }
+
 }

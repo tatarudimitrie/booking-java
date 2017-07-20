@@ -8,6 +8,7 @@ import com.assist.bookingjava.services.interfaces.ScheduleInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Service
 public class ScheduleService implements ScheduleInterface{
@@ -54,5 +55,9 @@ public class ScheduleService implements ScheduleInterface{
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
+    }
+    public ResponseEntity<String> addScheduleTest(Map<String,List<Object>> ob)
+    {
+return ResponseEntity.ok("ASD");
     }
 }
