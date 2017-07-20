@@ -104,6 +104,8 @@ public class AdminService implements AdminInterface {
         try {
             admin.setPass(encryptPassword(admin.getPass()));
             adminRepository.save(admin);
+            long id = admin.getId();
+            System.out.println("Admin was added, with id: " + id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Something happened!");
         }

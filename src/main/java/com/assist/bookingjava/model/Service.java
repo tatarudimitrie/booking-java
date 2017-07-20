@@ -2,6 +2,7 @@ package com.assist.bookingjava.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "services")
@@ -106,11 +107,11 @@ public class Service implements Serializable {
         this.price = price;
     }
 
-    public String getDate() {
+    public String getSchedule() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setSchedule(String date) {
         this.date = date;
     }
 
