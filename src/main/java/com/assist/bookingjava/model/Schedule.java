@@ -22,7 +22,7 @@ public class Schedule implements Serializable {
     public Schedule(){}
 
     public Schedule(long serviceId, String time) {
-        this.service = new Service(serviceId,"","","",0,0d,"");
+        this.service = new Service(serviceId,"","","",0,0d,null);
         this.time = time;
     }
 

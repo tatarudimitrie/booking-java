@@ -38,7 +38,7 @@ public class Booking implements Serializable {
     }
 
     public Booking(long id_service, String name, String email, String phone, String date) {
-        this.service = new Service(id_service, "", "", "", 0, 0d, "");
+        this.service = new Service(id_service, "", "", "", 0, 0d, null);
         this.name = name;
         this.email = email;
         this.phone = phone;

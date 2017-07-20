@@ -71,10 +71,10 @@ public class ServiceService implements ServiceInterface {
             Service currentService = serviceRepository.findOne(service.getId());
             currentService.setName(service.getName());
             currentService.setDescription(service.getDescription());
-            currentService.setDescription(service.getDuration());
+            currentService.setDuration(service.getDuration());
             currentService.setFree_space(service.getFree_space());
             currentService.setPrice(service.getPrice());
-            currentService.setDate(service.getDate());
+            currentService.setSchedule(service.getSchedule());
             serviceRepository.save(currentService);
             return ResponseEntity.ok("Service was successfully edited!");
         } catch (Exception e) {
@@ -83,10 +83,13 @@ public class ServiceService implements ServiceInterface {
     }
 
     public ResponseEntity<String> addService(Service service) {
+
         try {
             Company company = companyRepository.findById(service.getCompany().getId());
             service.setCompany(company);
-            serviceRepository.save(service);
+            Object a = serviceRepository.save(service);
+            long id = service.getId();
+            System.out.println(id);
             System.out.println("Service was added, for company: " + company.toString());
             return ResponseEntity.ok("Service added successfully!");
         } catch (Exception e) {
@@ -109,11 +112,11 @@ public class ServiceService implements ServiceInterface {
     }
 
     public String addBulkService() {
-        serviceRepository.save(new Service(54, "Service1", "Description1", "1 (hour)",5, 200, "DD/MM/YYYY HH:mm"));
-        serviceRepository.save(new Service(55, "Service2", "Description2", "1 (hour)",4, 100, "DD/MM/YYYY HH:mm"));
-        serviceRepository.save(new Service(56, "Service3", "Description3", "1 (hour)",3, 200, "DD/MM/YYYY HH:mm"));
-        serviceRepository.save(new Service(57, "Service4", "Description4", "1 (hour)",4, 100, "DD/MM/YYYY HH:mm"));
-        serviceRepository.save(new Service(58, "Service5", "Description5", "1 (hour)",5, 200, "DD/MM/YYYY HH:mm"));
+        //serviceRepository.save(new Service(54, "Service1", "Description1", "1 (hour)",5, 200, "DD/MM/YYYY HH:mm"));
+        //serviceRepository.save(new Service(55, "Service2", "Description2", "1 (hour)",4, 100, "DD/MM/YYYY HH:mm"));
+        //serviceRepository.save(new Service(56, "Service3", "Description3", "1 (hour)",3, 200, "DD/MM/YYYY HH:mm"));
+        //serviceRepository.save(new Service(57, "Service4", "Description4", "1 (hour)",4, 100, "DD/MM/YYYY HH:mm"));
+        //serviceRepository.save(new Service(58, "Service5", "Description5", "1 (hour)",5, 200, "DD/MM/YYYY HH:mm"));
         return "Service table was updated with five DEFAULT ROWS!";
     }
 
