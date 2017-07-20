@@ -94,78 +94,48 @@ public class BookingService implements BookingInterface {
     }
 
     public ResponseEntity<String> addBooking(Booking booking) {
-
         List<Schedule> schedules = scheduleRepository.findByService(booking.getService());
+
+        if (schedules == null) {
+            return ResponseEntity.badRequest().body("BAD REQUEST! The service does not have any schedules!");
+        }
+
         boolean findSchedule = false;
-        boolean findS = false;
+
         for (Schedule s : schedules) {
             if(booking.getDate().equals(s.getTime())){
                 findSchedule = true;
+                break;
             }
         }
-         if(findSchedule==false) {
-            return ResponseEntity.ok("The schedule is not free for the selected hour!");
-          }
+
+        if(!findSchedule) {
+            return ResponseEntity.badRequest().body("The schedule is not available for the selected hour!");
+        }
+
         List<Booking> bookings = bookingRepository.findByService(booking.getService());
+
         try {
             for (Booking b : bookings) {
                 if (b.getDate().equals(booking.getDate())) {
-                    return ResponseEntity.ok("Booking exist for that date!");
-                } else {
-                    findS = true;
+                    return ResponseEntity.badRequest().body("Booking exist for that date!");
                 }
             }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("BAD REQUEST! " + e.toString());
+        }
+
+        try {
+            com.assist.bookingjava.model.Service service = serviceRepository.findById(booking.getService().getId());
+            booking.setService(service);
+            bookingRepository.save(booking);
+            System.out.println("Booking was added, for service: " + service.toString());
+            sendBookingEmail(booking);
+            return ResponseEntity.ok("Booking added successfully!");
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body("BAD REQUEST! " + e.toString());
         }
-        if (findSchedule == true ) {
-            try {
-                com.assist.bookingjava.model.Service service = serviceRepository.findById(booking.getService().getId());
-                booking.setService(service);
-                bookingRepository.save(booking);
-                System.out.println("Booking was added, for service: " + service.toString());
-                Properties props = new Properties();
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.smtp.host", "smtp.gmail.com");
-                props.put("mail.smtp.port", "587");
-
-                javax.mail.Session session = javax.mail.Session.getInstance(props,
-                        new javax.mail.Authenticator() {
-                            protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(emailAddress, emailPassword);
-                            }
-                        });
-                try {
-                    javax.mail.Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress("bolohan46@gmail.com"));
-                    message.setRecipients(javax.mail.Message.RecipientType.TO,
-                            InternetAddress.parse("bolohan46@gmail.com"));
-                    message.setSubject("Confirm booking");
-                    message.setText("Succes.");
-                    message.setText("Your booking is: " + booking.getService().getName()+"\n"+
-                    "     phone is: " + booking.getPhone()+"\n" +
-                    "     email is: " + booking.getEmail()+"\n"+
-                    "     date is: " + booking.getDate()+"\n"+
-                    "     price is: " + booking.getService().getPrice()+"\n"+
-                    "     company is: " + booking.getService().getCompany().getName()+"\n"+
-                    " Thank you, "+booking.getName()+" because you chose us!");
-
-
-
-                    Transport.send(message);
-                } catch (MessagingException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body("Bad request! " + e.toString());
-            }
-            return ResponseEntity.ok("Booking added successfully!");
-        }
-        return ResponseEntity.ok("Bad request!");
     }
 
     public ResponseEntity<String> deleteBooking(long id) {
@@ -179,6 +149,42 @@ public class BookingService implements BookingInterface {
             return ResponseEntity.ok("Booking with id " + id + " was successfully deleted!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    private void sendBookingEmail(Booking booking) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        javax.mail.Session session = javax.mail.Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(emailAddress, emailPassword);
+                    }
+                });
+        try {
+            javax.mail.Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("bolohan46@gmail.com"));
+            message.setRecipients(javax.mail.Message.RecipientType.TO,
+                    InternetAddress.parse("bolohan46@gmail.com"));
+            message.setSubject("Confirm booking");
+            message.setText("Succes.");
+            message.setText("Your booking is: " + booking.getService().getName()+"\n"+
+                    "     phone is: " + booking.getPhone()+"\n" +
+                    "     email is: " + booking.getEmail()+"\n"+
+                    "     date is: " + booking.getDate()+"\n"+
+                    "     price is: " + booking.getService().getPrice()+"\n"+
+                    "     company is: " + booking.getService().getCompany().getName()+"\n"+
+                    " Thank you, "+booking.getName()+" because you chose us!");
+
+
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
     }
 
