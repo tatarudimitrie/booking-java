@@ -11,8 +11,6 @@ public interface AdminInterface {
 
     ResponseEntity findAdminByName(String name);
 
-    ResponseEntity findAdminByEmail(String email);
-
     ResponseEntity<String> addAdmin(Admin admin);
 
     ResponseEntity<String> editAdmin(Admin admin);

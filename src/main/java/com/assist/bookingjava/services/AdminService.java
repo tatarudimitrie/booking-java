@@ -17,72 +17,78 @@ public class AdminService implements AdminInterface {
     @Autowired
     private AdminRepository adminRepository;
     private String defaultPass = "******";
+    private String nl = "\n";
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     public ResponseEntity findAllAdmins() {
-        List<Admin> adminList = new ArrayList<>();
+        System.out.println(nl + "ADMIN GET: /admins/all");
 
         try {
+            List<Admin> adminList = new ArrayList<>();
+
             for (Admin a : adminRepository.findAll()) {
                 a.setPass(defaultPass);
                 adminList.add(a);
             }
+
+            System.out.println("OK: " + adminList.toString());
             return ResponseEntity.ok(adminList);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findAdminById(long id) {
+        System.out.println(nl + "ADMIN GET: /admins/id/{" + id + "}");
+
         try {
             Admin admin = adminRepository.findOne(id);
             admin.setPass(defaultPass);
+
+            System.out.println("OK: " + admin.toString());
             return ResponseEntity.ok(admin);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findAdminByName(String name){
+        System.out.println(nl + "ADMIN GET: /admins/name/{" + name + "}");
+
         try {
             Admin admin = adminRepository.findByName(name);
             admin.setPass(defaultPass);
-            return ResponseEntity.ok(admin);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
-        }
-    }
 
-    public ResponseEntity findAdminByEmail(String email) {
-        try {
-            Admin admin = adminRepository.findByEmail(email);
-            admin.setPass(defaultPass);
+            System.out.println("OK: " + admin.toString());
             return ResponseEntity.ok(admin);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> editAdmin(Admin admin) {
-
-        System.out.println("EDIT ADMIN --> " + admin.toString());
+        System.out.println(nl + "ADMIN PUT: /admins/edit - for " + admin.toString());
 
         try {
             Admin tempAdmin = adminRepository.findByName(admin.getName());
             tempAdmin.setEmail(admin.getEmail());
+            tempAdmin.setPass(encryptPassword(admin.getPass()));
             adminRepository.save(tempAdmin);
+
+            System.out.println("OK: " + tempAdmin.toString());
+            return ResponseEntity.ok("Admin edited successfully!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return  ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-
-        return ResponseEntity.ok("Admin edited successfully!");
-
     }
 
     public ResponseEntity<String> addAdmin(Admin admin) {
-
-        System.out.println("ADD ADMIN --> " + admin.toString());
+        System.out.println(nl + "ADMIN POST: /admins/add - for " + admin.toString());
 
         String sanitize = adminSanitize(admin);
         if (!sanitize.equals("")) {
@@ -104,20 +110,25 @@ public class AdminService implements AdminInterface {
         try {
             admin.setPass(encryptPassword(admin.getPass()));
             adminRepository.save(admin);
-            long id = admin.getId();
-            System.out.println("Admin was added, with id: " + id);
+
+            System.out.println("OK: " + admin.toString());
+            return ResponseEntity.ok("Admin registered successfully!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Something happened!");
         }
-
-        return ResponseEntity.ok("Admin registered successfully!");
     }
 
     public ResponseEntity<String> deleteAdmin(long id) {
+        System.out.println(nl + "ADMIN DELETE: /admins/delete - for admin with id " + id );
+
         try {
             adminRepository.delete(id);
+
+            System.out.println("OK!");
             return ResponseEntity.ok("Admin deleted successfully!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
