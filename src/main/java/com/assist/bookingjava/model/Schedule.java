@@ -45,4 +45,13 @@ public class Schedule implements Serializable {
     public void setTime(String time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "id=" + id +
+                ", service=" + service +
+                ", time='" + time + '\'' +
+                '}';
+    }
 }
