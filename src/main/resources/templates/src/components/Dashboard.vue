@@ -10,13 +10,21 @@
 						<span>New service</span>
 					</div>
 				</div>
-				<div class = "container" v-for="item in database">
+				<div class = "container left-align" v-for="item in services">
 					<b-form>
-						<div>
+						<div class="text-left">
+							<div class="text-right">
+								<b-button @click="removeCard(item)">
+									<icon name="trash" scale="1.5"></icon>
+								</b-button>
+								<b-button @click="editCard(item)">
+									<icon name="pencil" scale="1.5"></icon>
+								</b-button>
+							</div>
 							<!-- Standard -->
-							<b-card header="item.name"
+							<b-card :header="item.name"
 							class="mb-2"
-							sub-title="item.description"
+							:sub-title="item.description"
 							show-footer
 							>
 							<small slot="footer" class="text-muted" id="footer">
@@ -32,8 +40,8 @@
 										</thead>
 										<tbody>
 											<tr>
-												<td>{{item.availability}}</td>
-												<td>{{item.spaces}}</td>
+												<td>{{item.date}}</td>
+												<td>{{item.free_space}}</td>
 												<td>{{item.duration}}</td>
 												<td>{{item.price}}</td>
 											</tr>
@@ -59,20 +67,73 @@
 		name: 'app',
 		data(){
 			return{
-				"database": getDatabase()
-		}
-
-	},
-	components: { Navbar },
-	methods:{
-		submit(){
-			location.href="/AddService"
+				services: []
+			}
 		},
-		getDatabase(){
-			this.$http.get("http://192.168.151.51:8080/services")
+		components: { Navbar },
+		methods:{
+			submit(){
+				location.href="/AddService"
+			},
+			removeCard(serviceObject){
+				this.$http.delete("http://192.168.151.51:8080/services/delete/" + serviceObject.id);
+				let index = this.services.indexOf(serviceObject);
+				this.services.splice(index, 1);
+			},
+			editCard(serviceObject){
+				sessionStorage.setItem('id_service', serviceObject.id);
+				sessionStorage.setItem('serviceName', serviceObject.name);
+				sessionStorage.setItem('serviceDescription', serviceObject.description);
+				sessionStorage.setItem('serviceAvailability', serviceObject.date);
+				sessionStorage.setItem('servicePrice', serviceObject.price);
+				sessionStorage.setItem('serviceSpace', serviceObject.free_space);
+				sessionStorage.setItem('serviceDuration', serviceObject.duration);
+				location.href = "/EditService"
+			},
+			getServices: function (){
+				this.$http.post("http://192.168.151.51:8080/services/company", {
+					"id": sessionStorage.getItem("id_company")
+				},
+				{
+					headers:{
+						'Content-Type': 'application/json'
+					}
+				}).then(response =>{
+					this.services = response.body;
+
+
+				})
+				.then(error => {
+					console.log('error: ', error);
+				})
+			},
+			getUserInfo() {
+				this.$http.post("http://192.168.151.51:8080/companies/admin",{
+					"email":sessionStorage.getItem('email')
+				},
+				{
+					headers:{
+						'Content-Type': 'application/json'
+					}
+				}).then(response =>{
+					if(response.body) {
+						var company = response.body;
+						sessionStorage.setItem("id_company", company.id);
+					} else {
+						return
+					}
+
+				})
+				.then(error => {
+					console.log('error: ', error);
+				});
+			}
+		},
+		created() {
+			this.getUserInfo();
+			this.getServices();
 		}
 	}
-}
 </script>
 
 

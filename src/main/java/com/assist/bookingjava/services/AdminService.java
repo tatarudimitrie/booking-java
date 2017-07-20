@@ -127,7 +127,7 @@ public class AdminService implements AdminInterface {
         adminRepository.save(new Admin("Andrews Stan", "astan@assist.ro", encryptPassword("stan1234")));
         adminRepository.save(new Admin("Kim II Smith", "kimii@assist.ro", encryptPassword("kim*i23")));
         adminRepository.save(new Admin("David Willie", "david@assist.ro", encryptPassword("david123")));
-        adminRepository.save(new Admin("Peter Divide", "peter@assist.ro", encryptPassword("peter123")));
+        adminRepository.save(new Admin("Peter Divide", "peted@assist.ro", encryptPassword("peter123")));
         return "Admin table was updated with five DEFAULT ROWS!";
     }
 
