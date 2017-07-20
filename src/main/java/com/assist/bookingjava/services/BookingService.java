@@ -113,9 +113,9 @@ public class BookingService implements BookingInterface {
             }
         }
 
-        if(findSchedule) {
-            return ResponseEntity.badRequest().body("The schedule is not available for the selected hour!");
-        }
+        //if(findSchedule) {
+        //    return ResponseEntity.badRequest().body("The schedule is not available for the selected hour!");
+        //}
 
         List<Booking> bookings = bookingRepository.findByService(booking.getService());
 

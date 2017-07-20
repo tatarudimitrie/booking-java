@@ -128,19 +128,9 @@ public class AdminService implements AdminInterface {
             System.out.println("OK: Deleted!");
             return ResponseEntity.ok("Admin deleted successfully!");
         } catch (Exception e) {
-
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-    }
-
-    public String bulkAddAdmin() {
-        adminRepository.save(new Admin("Tataru Dimitrie", "intern.dimitrie.tataru@assist.ro", encryptPassword("dimitrie")));
-        adminRepository.save(new Admin("Leonte Andrei", "intern.andrei.leonte@assist.ro", encryptPassword("andrei")));
-        adminRepository.save(new Admin("Nistor Florin", "intern.florin.nistor@assist.ro", encryptPassword("florin")));
-        adminRepository.save(new Admin("Viziteu Andrei", "intern.andrei.viziteu@assist.ro", encryptPassword("andrei")));
-        adminRepository.save(new Admin("Bolohan Cosmin", "intern.cosmin.bolohan@assist.ro", encryptPassword("cosmin")));
-        adminRepository.save(new Admin("Bujdei Mihai", "intern.mihai.bujdei@assist.ro", encryptPassword("mihai")));
-        return "Admin table was updated with six DEFAULT ROWS!";
     }
 
     /* ADMIN INPUT CHECKS */
@@ -180,5 +170,15 @@ public class AdminService implements AdminInterface {
         }
 
         return errorString;
+    }
+
+    public String bulkAddAdmin() {
+        adminRepository.save(new Admin("Tataru Dimitrie", "intern.dimitrie.tataru@assist.ro", encryptPassword("dimitrie")));
+        adminRepository.save(new Admin("Leonte Andrei", "intern.andrei.leonte@assist.ro", encryptPassword("andrei")));
+        adminRepository.save(new Admin("Nistor Florin", "intern.florin.nistor@assist.ro", encryptPassword("florin")));
+        adminRepository.save(new Admin("Viziteu Andrei", "intern.andrei.viziteu@assist.ro", encryptPassword("andrei")));
+        adminRepository.save(new Admin("Bolohan Cosmin", "intern.cosmin.bolohan@assist.ro", encryptPassword("cosmin")));
+        adminRepository.save(new Admin("Bujdei Mihai", "intern.mihai.bujdei@assist.ro", encryptPassword("mihai")));
+        return "Admin table was updated with six DEFAULT ROWS!";
     }
 }

@@ -20,54 +20,74 @@ public class CompanyService implements CompanyInterface {
     @Autowired
     private AdminRepository adminRepository;
 
+    private String nl = "\n";
+
     public ResponseEntity findAllCompanies() {
-        List<Company> companyList = new ArrayList<>();
+        System.out.println(nl + "COMPANY GET: /companies/all");
 
         try {
+            List<Company> companyList = new ArrayList<>();
+
             for (Company c : companyRepository.findAll()) {
                 companyList.add(c);
             }
+
+            System.out.println("OK: " + companyList.toString());
             return ResponseEntity.ok(companyList);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findCompanyById(long id) {
+        System.out.println(nl + "COMPANY GET: /companies/id/{" + id + "}");
+
         try {
             Company company = companyRepository.findOne(id);
+
+            System.out.println("OK: " + company.toString());
             return ResponseEntity.ok(company);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findCompanyByName(String name) {
+        System.out.println(nl + "COMPANY GET: /companies/name/{" + name + "}");
+
         try {
             Company company = companyRepository.findByName(name);
+
+            System.out.println("OK: " + company.toString());
             return ResponseEntity.ok(company);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findCompanyByAdmin(Admin admin) {
-        System.out.println("Requested company for admin: " + admin.toString());
-        Admin currentAdmin = adminRepository.findByEmail(admin.getEmail());
-        Company company = companyRepository.findByAdmin(currentAdmin);
-        if (company == null) {
-            System.out.println("BAD REQUEST!");
-            return ResponseEntity.badRequest().body("The admin with email " +
-                    admin.getEmail() + " does not have a company!");
-        }
+        System.out.println(nl + "COMPANY (GET) POST: companies/admin for " + admin.toString());
 
-        System.out.println("SENT: " + company.toString());
-        return ResponseEntity.ok(company);
+        try {
+            Admin currentAdmin = adminRepository.findByEmail(admin.getEmail());
+            Company company = companyRepository.findByAdmin(currentAdmin);
+
+            System.out.println("OK: " + company.toString());
+            return ResponseEntity.ok(company);
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
     }
 
     public ResponseEntity<String> editCompany(Company company) {
+        System.out.println(nl + "COMPANY PUT: /companies/edit - for " + company.toString());
 
         if (isDuplicateName(company)) {
+            System.out.println("BAD REQUEST! Duplicate name");
             return ResponseEntity.badRequest().body("Duplicate name");
         }
 
@@ -77,43 +97,48 @@ public class CompanyService implements CompanyInterface {
             currentCompany.setDescription(company.getDescription());
             currentCompany.setImage_url(company.getImage_url());
             companyRepository.save(currentCompany);
+
+            System.out.println("OK: " + company.toString());
             return ResponseEntity.ok("Company was successfully edited");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> addCompany(Company company) {
+        System.out.println(nl + "COMPANY POST: /companies/add - for " + company.toString());
 
-        
+        if (isDuplicateName(company)) {
+            System.out.println("BAD REQUEST! Duplicate name");
+            return ResponseEntity.badRequest().body("Duplicate name");
+        }
 
         try {
             Admin admin = adminRepository.findByEmail(company.getAdmin().getEmail());
             company.setAdmin(admin);
             companyRepository.save(company);
-            System.out.println("Company was added, for admin: " + admin.toString());
+
+            System.out.println("OK: " + company.toString() + " was added for" + admin.toString());
             return ResponseEntity.ok("Company added successfully!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> deleteCompany(long id) {
+        System.out.println(nl + "COMPANY DELETE: /companies/delete - for company with id " + id );
+
         try {
             companyRepository.delete(id);
+
+            System.out.println("OK: Deleted!");
             return ResponseEntity.ok("Company deleted successfully!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
-    }
-
-    public String addBulkCompany() {
-        companyRepository.save(new Company("peter@assist.ro", "Assist", "Assist software", "C:/Assist.png"));
-        companyRepository.save(new Company("astan@assist.ro", "Google", "Google _search_", "C:/Google.png"));
-        companyRepository.save(new Company("kimii@assist.ro", "PayPal", "PayPal _banking", "C:/PayPal.png"));
-        companyRepository.save(new Company("david@assist.ro", "Amazon", "Amazon delivery", "C:/Amazon.png"));
-        companyRepository.save(new Company("mihai?@mail.ro", "GitHub", "GitHub headache", "C:/GitHub.png"));
-        return "Company table was updated with five DEFAULT ROWS!";
     }
 
     private boolean isDuplicateName(Company company) {
