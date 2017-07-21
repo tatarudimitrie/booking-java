@@ -98,7 +98,7 @@ public class CompanyService implements CompanyInterface {
             currentCompany.setImage_url(company.getImage_url());
             companyRepository.save(currentCompany);
 
-            System.out.println("OK: " + company.toString());
+            System.out.println("OK: " + currentCompany.toString());
             return ResponseEntity.ok("Company was successfully edited");
         } catch (Exception e) {
             System.out.println("BAD REQUEST!");
