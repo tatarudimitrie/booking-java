@@ -30,6 +30,14 @@ public class Schedule implements Serializable {
         this.time = time;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Service getService() {
         return service;
     }

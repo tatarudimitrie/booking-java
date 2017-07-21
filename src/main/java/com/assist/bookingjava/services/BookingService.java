@@ -173,7 +173,9 @@ public class BookingService implements BookingInterface {
                 });
         try {
             javax.mail.Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("bolohan46@gmail.com"));
+            String email = booking.getEmail();
+            message.setFrom(new InternetAddress(email));
+            //message.setFrom(new InternetAddress("bolohan46@gmail.com"));
             message.setRecipients(javax.mail.Message.RecipientType.TO,
                     InternetAddress.parse("bolohan46@gmail.com"));
             message.setSubject("Confirm booking");
@@ -247,7 +249,7 @@ public class BookingService implements BookingInterface {
         bookingEntered[1][1] = "Phone";
         bookingEntered[2][1] = "Email";
         bookingEntered[3][1] = "Date";
-        
+
         if(validMail(bookingEntered[2][0])==false){
             errorBooking+="Eroare"+bookingEntered[2][1];
         }

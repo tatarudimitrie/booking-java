@@ -146,6 +146,26 @@ public class ServiceService implements ServiceInterface {
     private boolean serviceNotExists(long id) {
         return (serviceRepository.findById(id) == null);
     }
+
+    public boolean validName(String name){
+         String expression="^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if (matcher.matches()) {
+            return true;
+        }else{
+            return false;}
+    }
+    public boolean validNumber(String number){
+        String expression="^[0-9._]*$";
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(number);
+        if (matcher.matches()) {
+            return true;
+        }else{
+            return false;}
+    }
     public void ServiceSanitization(Service service) {
         String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         String ServiceEntered[][] = new String[3][2];
@@ -161,7 +181,18 @@ public class ServiceService implements ServiceInterface {
         ServiceEntered[3][1] = "Price";
         ServiceEntered[4][1] = "Free space";
 
-
+        if(validName(ServiceEntered[0][0])==false){
+            errorInput+="Eroare"+ServiceEntered[0][1];
+        }
+        if(validNumber(ServiceEntered[2][0])==false){
+            errorInput+="Eroare"+ ServiceEntered[2][1];
+        }
+        if(validNumber(ServiceEntered[3][0])==false){
+            errorInput+="Eroare"+ ServiceEntered[3][1];
+        }
+        if(validNumber(ServiceEntered[4][0])==false){
+            errorInput+="Eroare"+ ServiceEntered[4][1];
+        }
         for (int i = 0; i < ServiceEntered.length; i++) {
             if (!allowed.contains(ServiceEntered[i][0])) {
            //     errorInput += " Eroare  " + ServiceEntered[i][1];

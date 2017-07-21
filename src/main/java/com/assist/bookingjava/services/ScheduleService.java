@@ -7,8 +7,9 @@ import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.ScheduleInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @org.springframework.stereotype.Service
 public class ScheduleService implements ScheduleInterface{
@@ -19,77 +20,151 @@ public class ScheduleService implements ScheduleInterface{
     @Autowired
     private ServiceRepository serviceRepository;
 
+    private String nl = "\n";
 
-    public ResponseEntity findScheduleByService(Service service) {
-
-        System.out.println("####  ID:  " + service.getId() + "  ####");
+    public ResponseEntity findAllSchedules() {
+        System.out.println(nl + "SCHEDULE GET: /schedules/all");
 
         try {
-            System.out.println(service.toString());
-            Service currentService = serviceRepository.findById((long) service.getId());
+            List<Schedule> scheduleList = new ArrayList<>();
+
+            for (Schedule s : scheduleRepository.findAll()) {
+                scheduleList.add(s);
+            }
+
+            System.out.println("OK: " + scheduleList.toString());
+            return ResponseEntity.ok(scheduleList);
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity findScheduleById(long id) {
+        System.out.println(nl + "SCHEDULE GET: /schedules/id/{" + id + "}");
+
+        try {
+            Schedule schedule = scheduleRepository.findOne(id);
+
+            System.out.println("OK: " + schedule.toString());
+            return ResponseEntity.ok(schedule);
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity findScheduleByTime(String time) {
+        System.out.println(nl + "SCHEDULE GET: /schedules/time/{" + time + "}");
+
+        try {
+            List<Schedule> scheduleList = scheduleRepository.findByTime(time);
+
+            System.out.println("OK: " + scheduleList.toString());
+            return ResponseEntity.ok(scheduleList);
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity findScheduleByService(Service service) {
+        System.out.println(nl + "SCHEDULE (GET) POST: /schedules/service for " + service.toString());
+
+        try {
+            Service currentService = serviceRepository.findById(service.getId());
             List<Schedule> scheduleList = scheduleRepository.findByService(currentService);
 
             for(Schedule s: scheduleList) {
                 s.setService(null);
             }
 
-            System.out.println("RESPONSE: " + scheduleList.toString());
+            System.out.println("OK: " + scheduleList.toString());
             return ResponseEntity.ok(scheduleList);
         } catch (Exception e) {
-            System.out.println("Am trimis eroare!");
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity<String> editSchedule(Schedule schedule) {
+        System.out.println(nl + "SCHEDULE PUT: /schedules/edit - for " + schedule.toString());
+
+        try {
+            Schedule currentSchedule = scheduleRepository.findOne(schedule.getId());
+            currentSchedule.setTime(schedule.getTime());
+            scheduleRepository.save(currentSchedule);
+
+            System.out.println("OK: " + currentSchedule.toString());
+            return ResponseEntity.ok("Schedule was successfully edited!");
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> addSchedule(Schedule schedule) {
+        System.out.println(nl + "SCHEDULE POST: /schedules/add - for " + schedule.toString());
 
-        System.out.println(schedule.toString());
         try {
             Service service = serviceRepository.findById(schedule.getService().getId());
             schedule.setService(service);
             scheduleRepository.save(schedule);
-            System.out.println("Schedule was added, for service: " + service.toString());
+            long id = schedule.getId();
+
+            System.out.println("OK: ID: " + id + " | " + service.toString() + " was added for" + schedule.toString());
             return ResponseEntity.ok("Schedule added successfully!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> addScheduleAll(List<Schedule> schedule) {
+        System.out.println(nl + "SCHEDULE POST ALL: /schedules/add/all - for " + schedule.toString());
 
-        System.out.println(schedule.toString());
-        String sanitize = scheduleSanitization(schedule);
-        if (!sanitize.equals("")) {
-            return ResponseEntity.badRequest().body("Eroare la introducere "+sanitize);
+        if (!scheduleSanitization(schedule)) {
+            return ResponseEntity.badRequest().body("Wrong input");
         }
+
         try {
             for(Schedule s : schedule) {
                 Service service = serviceRepository.findById(s.getService().getId());
                 s.setService(service);
                 scheduleRepository.save(s);
-                System.out.println("Schedule was added, for service: " + service.toString());
+                System.out.println("Schedule " + s.toString() + " was added, for service: " + service.toString());
             }
             return ResponseEntity.ok("Schedule added successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
-    private String scheduleSanitization(List<Schedule> schedule)
+
+    public ResponseEntity<String> deleteSchedule(long id) {
+        System.out.println(nl + "SCHEDULE DELETE: /schedules/delete - for schedule with id " + id );
+
+        try {
+            scheduleRepository.delete(id);
+
+            System.out.println("OK: Deleted!");
+            return ResponseEntity.ok("Schedule with id " + id + " was successfully deleted!");
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    private boolean scheduleSanitization(List<Schedule> schedule)
     {
-        String allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        String error="";
+        String error = "";
 
-            for(Schedule s : schedule) {
-                String schedul=s.getTime();
-                if(schedul.length()>5 || schedul.length()<3)
-                {
-                    error+="Eroare la lungime";
-                }
-                if (!allowed.contains(schedul)) {
-                 //   error += "Error  " + schedul + " ";
-                }
-
+        for(Schedule s : schedule) {
+            String scheduleString =s.getTime();
+            if(scheduleString.length()>5 || scheduleString.length()<3) {
+                error += "Length error ";
             }
-return error;
+        }
+
+        return (error.equals(""));
     }
 }
