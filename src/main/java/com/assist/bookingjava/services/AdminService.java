@@ -180,7 +180,6 @@ public class AdminService implements AdminInterface {
         } catch (AddressException ex) {
             errorString += "Email"+ex.toString();
         }
-
         return errorString;
     }
 
