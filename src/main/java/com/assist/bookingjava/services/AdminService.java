@@ -171,7 +171,6 @@ public class AdminService implements AdminInterface {
             if (allowed.contains(userEntered[i][j])==false) {
         //        errorString += "Error  " + userEntered[i][1] + " ";
             }
-
         }
 
         try {
@@ -180,6 +179,7 @@ public class AdminService implements AdminInterface {
         } catch (AddressException ex) {
             errorString += "Email"+ex.toString();
         }
+
         return errorString;
     }
 

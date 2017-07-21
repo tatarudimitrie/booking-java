@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BookingController {
-
     @Autowired
     private BookingService bookingService;
 
@@ -26,6 +25,11 @@ public class BookingController {
     @RequestMapping(method=RequestMethod.GET, value="/bookings/name/{name}"  )
     public ResponseEntity findBookingByName(@PathVariable String name){
         return bookingService.findBookingByName(name);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/bookings/company/{id}")
+    public ResponseEntity findBookingByService(@PathVariable long id){
+        return bookingService.findBookingByCompany(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/bookings/service")
@@ -46,10 +50,5 @@ public class BookingController {
     @RequestMapping(method=RequestMethod.DELETE, value="/bookings/delete/{id}")
     public ResponseEntity<String> deleteBooking(@PathVariable long id) {
         return bookingService.deleteBooking(id);
-    }
-
-    @RequestMapping(method= RequestMethod.GET, value="/bookings/input")
-    public String addBulkBooking(){
-        return bookingService.addBulkBooking();
     }
 }

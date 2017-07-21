@@ -1,6 +1,5 @@
 package com.assist.bookingjava.controllers;
 
-
 import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.model.ConfirmPass;
 import com.assist.bookingjava.model.Recovery;
@@ -8,26 +7,28 @@ import com.assist.bookingjava.model.SendEmail;
 import com.assist.bookingjava.repositories.AdminRepository;
 import com.assist.bookingjava.services.RecoveryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 @RestController
 public class RecoveryController {
 
     @Autowired
     private RecoveryService recoveryService;
+
     @Autowired
     private AdminRepository adminRepository;
+
+    private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     private final static String emailAddress = "assistbooking7@gmail.com";
     private final static String emailPassword = "Assist2017";
@@ -97,7 +98,7 @@ public class RecoveryController {
         recovery1 = recoveryService.findByResetToken(confirmPass.getToken());
         Admin admin1 = adminRepository.findByEmail(recovery1.getEmail());
         if(admin1!=null) {
-            admin1.setPass(confirmPass.getPassword());
+            admin1.setPass(encryptPassword(confirmPass.getPassword()));
             recoveryService.deleteRecovery(recovery1.getId());
             adminRepository.save(admin1);
             return "Success!";
@@ -105,5 +106,9 @@ public class RecoveryController {
         else {
             return "Error!";
         }
+    }
+
+    private String encryptPassword(String inputPass) {
+        return PASSWORD_ENCODER.encode(inputPass);
     }
 }
