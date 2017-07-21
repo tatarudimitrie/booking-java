@@ -7,8 +7,8 @@
      <br>
      <div>
        <div class="form-group" v-bind:class="{ 'form-group--error': $v.email.$error }">
-         <label class="form__label">Email address</label>
-         <input class="form__input" v-model.trim="email" @blur="$v.email.$touch()" @input="$v.email.$touch()">
+         <label class="form__label"><b>Email address:</b></label><br>
+         <input class="form__input" v-model.trim="email" placeholder="Enter your email" @blur="$v.email.$touch()" @input="$v.email.$touch()">
          <p class="form-group__message" v-if="!$v.email.email">Field is required</p>
        </div>
      </div>
@@ -137,7 +137,8 @@
    margin-bottom: 20px;
  }
  p{
-   font-size:10px;
+   font-size:15px;
+   color:red;
  }
 
 

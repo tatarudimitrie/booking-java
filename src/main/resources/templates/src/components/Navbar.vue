@@ -10,7 +10,7 @@
     <b-collapse is-nav id="nav_collapse">
 
       <b-nav is-nav-bar>
-        <b-nav-item to="/Bookings">Bookings</b-nav-item>
+        <b-nav-item to="/MyBookings">Bookings</b-nav-item>
         <b-nav-item to="/Calendar">Calendar</b-nav-item>
         <b-nav-item to="/Profile">Profile</b-nav-item>
 
@@ -19,7 +19,13 @@
       </b-nav>
     </b-collapse>
    <span class="booking">Booking&nbsp</span>
-   <span class="booking">App</span>
+   <span class="booking">App&nbsp|</span>
+   <button class="btn btn-success" @click = "SignOut">
+   <span class="logOut">Log Out</span>
+   </button>
+   <!-- <div>
+   <icon name="angle-down" scale="2" style="color:white"></icon>
+   </div> -->
 </b-navbar>
 
 <!-- navbar.vue -->
@@ -33,6 +39,12 @@
 <script>
 	import Vue from 'vue';
 	export default Vue.extend({
+    methods:{
+      SignOut(){
+        sessionStorage.clear();
+        location.href = "/Login"
+      }
+    }
 	});
 </script>
 
@@ -44,4 +56,8 @@
 		color: white;
 		font-family: Arial;
 	}
+  .logOut{
+    font-size: 20px;
+    color: #006600;
+  }
 </style>

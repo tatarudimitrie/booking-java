@@ -10,6 +10,8 @@ import AddService from '@/components/AddService'
 import Booking from '@/components/Booking'
 import ResetPassword from '@/components/ResetPassword'
 import EditService from '@/components/EditService'
+import Home from '@/components/Home'
+import MyBookings from '@/components/MyBookings'
 
 Vue.use(Router)
 
@@ -67,6 +69,16 @@ export default new Router({
       path: '/editService',
       name: 'EditService',
       component: EditService
+    },
+    {   
+      path: '/home',
+      name: 'Home',
+      component: Home
+    },
+    {   
+      path: '/myBookings',
+      name: 'MyBookings',
+      component: MyBookings
     }
   ]
 })

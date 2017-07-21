@@ -23,32 +23,41 @@
 							</div>
 							<!-- Standard -->
 							<b-card :header="item.name"
-							class="mb-2"
+							class="mb-2 bg-info"
 							:sub-title="item.description"
 							show-footer
 							>
-							<small slot="footer" class="text-muted" id="footer">
-								<div class="table">
-									<table class="table">
-										<thead>
-											<tr>
-												<th>Availability</th>
-												<th>Spaces</th>
-												<th>Duration</th>
-												<th>Price</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>{{item.date}}</td>
-												<td>{{item.free_space}}</td>
-												<td>{{item.duration}}</td>
-												<td>{{item.price}}</td>
-											</tr>
-										</tbody>
-									</table>
+							<small slot="footer" class="" id="footer">
+							<div class="table text-center">
+									<div class="theader row">
+										<div class="col-sm-3">
+											<p>Availability</p>
+										</div>
+										<div class="col-sm-3">
+											<p>Spaces</p>
+										</div>
+										<div class="col-sm-3">
+											<p>Duration</p>
+										</div>
+										<div class="col-sm-3">
+											<p>Price</p>
+										</div>
+									</div>
+									<div class="tbody row bg-info">
+										<div class="col-sm-3">
+											<p>{{item.date}}</p>
+										</div>
+										<div class="col-sm-3">
+											<p>{{item.free_space}}</p>
+										</div>
+										<div class="col-sm-3">
+											<p>{{item.duration}}</p>
+										</div>
+										<div class="col-sm-3">
+											<p>{{item.price}}</p>
+										</div>
+									</div>
 								</div>
-
 							</small>
 						</b-card>
 					</div>
@@ -76,12 +85,12 @@
 				location.href="/AddService"
 			},
 			removeCard(serviceObject){
-				this.$http.delete("http://192.168.151.51:8080/services/delete/" + serviceObject.id);
+				this.$http.delete(`${process.env["API_URL"]}/services/delete/` + serviceObject.id);
 				let index = this.services.indexOf(serviceObject);
 				this.services.splice(index, 1);
 			},
 			editCard(serviceObject){
-				sessionStorage.setItem('id_service', serviceObject.id);
+				sessionStorage.setItem('idService', serviceObject.id);
 				sessionStorage.setItem('serviceName', serviceObject.name);
 				sessionStorage.setItem('serviceDescription', serviceObject.description);
 				sessionStorage.setItem('serviceAvailability', serviceObject.date);
@@ -91,8 +100,8 @@
 				location.href = "/EditService"
 			},
 			getServices: function (){
-				this.$http.post("http://192.168.151.51:8080/services/company", {
-					"id": sessionStorage.getItem("id_company")
+				this.$http.post(`${process.env["API_URL"]}/services/company`, {
+					"id": sessionStorage.getItem("idCompany")
 				},
 				{
 					headers:{
@@ -108,7 +117,7 @@
 				})
 			},
 			getUserInfo() {
-				this.$http.post("http://192.168.151.51:8080/companies/admin",{
+				this.$http.post(`${process.env["API_URL"]}/companies/admin`,{
 					"email":sessionStorage.getItem('email')
 				},
 				{
@@ -118,7 +127,7 @@
 				}).then(response =>{
 					if(response.body) {
 						var company = response.body;
-						sessionStorage.setItem("id_company", company.id);
+						sessionStorage.setItem("idCompany", company.id);
 					} else {
 						return
 					}
@@ -139,8 +148,8 @@
 
 <style>
 	.container{
-		width: 500px;
-		height: 220px;
+		width: 50%;
+		min-height: 20px;
 		text-align: center;
 		/*background-color: white;*/
 		margin: 0 auto;
@@ -153,6 +162,12 @@
 	span{
 		text-align: left;
 	}
+	.table{
+		font-size:15px;
+	}
+	.tbody{
+		width:100%;
+	}
 	.circle{
 		border-radius: 100%;
 		background-color: #8A2BE2;
@@ -160,20 +175,10 @@
 		width: 80px;
 		height: 80px;
 	}
-	.table td {
-		text-align: left;
-		border: 0;
-	}
-
-	.table tr th {
-		border: 0;
-	}
-
-	.table {
-		margin: 0;
-	}
-
 	.card-footer {
 		padding: 0;
+	}
+	.row{
+		margin:0;
 	}
 </style>

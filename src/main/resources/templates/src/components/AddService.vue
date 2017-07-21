@@ -107,6 +107,7 @@
 				description: '',
 				spaces:'',
 				price:'',
+				availability:[],
 				week: [
 				'MON',
 				'TUE',
@@ -129,7 +130,9 @@
 				'16:00',
 				'17:00',
 				'18:00'
-				]
+				],
+				schedule:[],
+				idService: 0
 			}
 		},
 		methods: {
@@ -137,17 +140,17 @@
 				return value.toLowerCase();
 			},
 			submit(){
+				
 				if (this.$v.s_name.required && this.$v.s_duration.required && this.$v.spaces.required && this.$v.price.required) {
-					this.$http.post("http://192.168.151.51:8080/services/add", {
+					this.$http.post(`${process.env["API_URL"]}/services/add`, {
 						"company":{
-							"id": sessionStorage.getItem('id_company')
+							"id": sessionStorage.getItem('idCompany')
 						},
 						"name": this.s_name,
 						"description": this.description,
 						"duration": this.s_duration,
 						"free_space": this.spaces,
-						"price": this.price,
-						"date":"data de azi"
+						"price": this.price
 					},
 					{
 						headers:{
@@ -155,17 +158,45 @@
 						}
 
 					}).then(response => {
-						console.log("response:", response);
-						location.href = "/dashboard"
+						this.idService = response.body;
+						this.getAvailability();
+						this.$http.post(`${process.env["API_URL"]}/schedules/add/all`,
+							this.schedule,
+						{
+							headers:{
+								'Accept':'application/json'
+							}
+						}).then(response =>{
+							location.href = "/myBookings"
+						}).then(response =>{
+						})
+
 					}, response => {
-						console.log(response.status, response.body);
+
 					});
-					
+
 
 				}
 			},
+			getAvailability(){
+
+				for(var i = 0; i<this.week.length;i++){
+					for(var j = 0; j<this.hours.length; j++){
+						var myVar = this.week[i] + this.hours.indexOf(this.hours[j])
+						var test = document.getElementById(myVar).checked;		
+						if(test){
+							this.schedule.push({
+								"service":{
+									"id": this.idService
+								},
+								"time": myVar
+							})
+						}
+					}				
+				}
+			},
 			getUserInfo() {
-				this.$http.post("http://192.168.151.51:8080/companies/admin",{
+				this.$http.post(`${process.env["API_URL"]}/companies/admin`,{
 					"email":sessionStorage.getItem('email')
 				},
 				{
@@ -175,7 +206,7 @@
 				}).then(response =>{
 					if(response.body) {
 						var company = response.body;
-						sessionStorage.setItem("id_company", company.id)
+						sessionStorage.setItem("idCompany", company.id)
 					} else {
 						return
 					}

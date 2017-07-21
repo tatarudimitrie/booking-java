@@ -138,11 +138,11 @@
 			},
 			submit(){
 				if (this.$v.s_name.required && this.$v.s_duration.required && this.$v.spaces.required && this.$v.price.required) {
-					this.$http.put("http://192.168.151.51:8080/services/edit", {
+					this.$http.put(`${process.env["API_URL"]}/services/edit`, {
 						"company":{
-							"id": sessionStorage.getItem('id_company')
+							"id": sessionStorage.getItem('idCompany')
 						},
-						"id":sessionStorage.getItem('id_service'),
+						"id":sessionStorage.getItem('idService'),
 						"name": this.s_name,
 						"description": this.description,
 						"duration": this.s_duration,
@@ -157,8 +157,7 @@
 
 					}).then(response => {
 						console.log("response:", response);
-						location.href = "/dashboard";
-						sessionStorage.removeItem('id_service');
+						sessionStorage.removeItem('idService');
 						sessionStorage.removeItem('serviceName');
 						sessionStorage.removeItem('serviceDescription');
 						sessionStorage.removeItem('serviceDuration');
@@ -166,6 +165,7 @@
 						sessionStorage.removeItem('servicePrice');
 						sessionStorage.removeItem('serviceDate');
 						sessionStorage.removeItem('serviceAvailability');
+						location.href = "/myBookings";
 					}, response => {
 						console.log(response.status, response.body);
 					});
@@ -174,7 +174,7 @@
 				}
 			},
 			getUserInfo() {
-				this.$http.post("http://192.168.151.51:8080/companies/admin",{
+				this.$http.post(`${process.env["API_URL"]}/services/edit`,{
 					"email":sessionStorage.getItem('email')
 				},
 				{
@@ -184,7 +184,7 @@
 				}).then(response =>{
 					if(response.body) {
 						var company = response.body;
-						sessionStorage.setItem("id_company", company.id)
+						sessionStorage.setItem("idCompany", company.id)
 					} else {
 						return
 					}

@@ -30,7 +30,8 @@
       <b-button @click="submit" class="btn btn-warning">Save</b-button>
 
       <div class="w3-display-left">
-        <b-button @click="submit" class="btn btn-circle btn-xl">Logo</b-button>
+        <b-button @click="submit" class="btn btn-circle btn-xl" v-if="Logo">Logo</b-button>
+        <img :src="file" v-else class="image" />
         <br>
         <br>
         <b-form-file v-model="file"></b-form-file>
@@ -51,20 +52,22 @@
      return {
       Company: '',
       cDescription: '',
-      file:''
+      file:'',
+      Logo: false,
     };
   },
   methods: {
     format(value) {
       return value.toLowerCase();
     },
-    submit() {
+    submit() {     
+
       if(sessionStorage.getItem('id_company') !== null){
-        this.$http.put("http://192.168.151.51:8080/companies/edit", {
+        this.$http.put(`${process.env["API_URL"]}/companies/edit`, {
           "name": this.Company,
           "description": this.cDescription,
-          "image_url": "aceastaing",
-          "id": sessionStorage.getItem('id_company')
+          "id": sessionStorage.getItem('id_company'),
+          "image_url": "https://cdn.pixabay.com/photo/2015/11/26/07/47/hands-1063442_960_720.jpg"
         },
         {
           headers:{
@@ -75,10 +78,10 @@
           console.log("response", response);
         });
       } else {
-        this.$http.post("http://192.168.151.51:8080/companies/add", {
+        this.$http.post(`${process.env["API_URL"]}/companies/add`, {
           "name": this.Company,
           "description": this.cDescription,
-          "image_url": "aceastaing",
+          "image_url": "http://www.infotuts.com/wp-content/uploads/2012/11/image-upload.png",
           "admin":{
             "email":sessionStorage.getItem('email')
           }
@@ -99,7 +102,7 @@
       location.href="/login"
     },
     getUserInfo() {
-      this.$http.post("http://192.168.151.51:8080/companies/admin",{
+      this.$http.post(`${process.env["API_URL"]}/companies/admin`,{
         "email":sessionStorage.getItem('email')
       },
       {
@@ -111,11 +114,13 @@
           var company = response.body;
           this.Company = company.name ;
           this.cDescription = company.description;
+          this.file = company.image_url;
+          this.Logo = true
           sessionStorage.setItem("id_company", company.id)
         } else {
           return
         }
-       
+        
       })
       .then(error => {
         console.log('error: ', error);
@@ -217,5 +222,9 @@
     left: -10%;
     width: 250px;
 
+  }
+  .image{
+    max-height:200px;
+    max-width: 200px;
   }
 </style>

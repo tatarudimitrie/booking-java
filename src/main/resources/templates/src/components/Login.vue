@@ -4,34 +4,53 @@
     <p class="title">Booking <span class="app">App</span></p>
     <div class = "container">
       <b-form>
-        <div class="form-input"><br>
-          <label><b>Email address</b></label>
-          <b-form-input v-model="email"
-          type="text"
-          placeholder="Enter email"
-          :state="email.length?'success':'warning'"
-          :formatter="format"
-          ></b-form-input>
-          <p v-if="!$v.email.email">This field must be an email!</p>
-        </div>
-        <div class="form-input">
-          <label><b>Password</b></label>
-          <b-form-input v-model="password"
-          type="password"
-          placeholder="Enter password"
-          :state="password.length?'success':'warning'"
-          :formatter="format"
-          ></b-form-input>
-          <p v-if="!$v.password.minLength">The password must be 6 characters or longer!</p>
-          <p v-if="!$v.password.maxLength">The password must be less than 16 characters!</p>
-        </div>
-        <b-button @click="submit" class="btn btn-success">Submit</b-button>
         <div>
-          <a href="/Recover" id="forget">Recover password</a>
+          <p v-if = "EmailError">Wrong email!</p>
+          <p v-if = "PassError">Wrong password!</p>
         </div>
-      </b-form>   
-    </div>
+
+
+
+        <div class="form-input"><br>
+
+          <div class="form-group" v-bind:class="{ 'form-group--error': $v.email.$error }">
+           <label><b>Email address:</b></label><br>
+           <input class="form__input" 
+           v-model.trim="email" 
+           placeholder="Enter your email" 
+           :state="email.length?'success':'warning'" 
+           :formatter="format" 
+           @blur="$v.email.$touch()" 
+           type="text" 
+           @input="$v.email.$touch()">
+           <p class="form-group__message" v-if="!$v.email.email">This field must be an email!</p>
+         </div>
+       
+
+
+
+       <div class="form-input">
+        <label><b>Password:</b></label><br>
+        <input v-model="password"
+        type="password"
+        placeholder="Enter your password"
+        :state="password.length?'success':'warning'"
+        :formatter="format"
+        >
+        <p class="form-group__message" v-if="!$v.password.minLength">The password must be 6 characters or longer!</p>
+        <p class="form-group__message" v-if="!$v.password.maxLength">The password must be less than 16 characters!</p>
+      </div>
+
+      <b-button @click="submit" class="btn btn-success">Submit</b-button>
+      <div>
+        <a href="/Recover" id="forget">Recover password</a>
+      </div>
+      <br>
+      <a href="/Register" id="register">Don't have an account? Register here!</a>
+      </div>
+    </b-form>   
   </div>
+</div>
 </template>
 
 
@@ -43,7 +62,9 @@
    data() {
      return {
        email: '',
-       password: ''
+       password: '',
+       EmailError: false,
+       PassError: false
      }
    },
    methods: {
@@ -52,7 +73,14 @@
      },
      submit() {
        if (this.$v.email.email && this.$v.password.minLength && this.$v.password.maxLength) {
-        this.$http.post("http://192.168.150.237:9999/login", {
+       //  this.input = {
+       //    email: this.email,
+       // password: this.password,
+       //  }
+       //  this.$auth.login(this, this.input, "/dashboard", (errors) =>{
+       //    console.log(errors)
+       //  } );
+        this.$http.post(`${process.env["API_URL"]}/login`, {
           "email": this.email,
           "pass": this.password
         },
@@ -67,12 +95,14 @@
             location.href = "/dashboard"
             sessionStorage.setItem("email", this.email)
           }
-          else{
-            console.log("Wrong password!")
-          }
           
         }, response => {
-          console.log(response.status, response.body);
+          if(response.bodyText === "Wrong email"){
+            this.EmailError = true
+          }
+          else if(response.bodyText === "Wrong password"){
+            this.PassError = true
+          }
         })
 
       }
@@ -104,7 +134,7 @@
   }
   .container{
     width: 500px;
-    height: 350px;
+    min-height: 350px;
     text-align: center;
     background-color: #ccccff;
     margin: 0 auto;
@@ -113,7 +143,7 @@
   }
   input{
     height: 45px;
-    width: 300px;
+    width: 350px;
     font-size: 18px;
     border: none;
     margin-bottom: 20px;
@@ -126,7 +156,6 @@
     font-family: Arial;
   }
   .form-input{
-    text-align: left;
     font-size: 20px;
   }
   #forget{
@@ -140,6 +169,10 @@
     font-size:80px;
   }
   p{
-   font-size:10px;
+   font-size:15px;
+   color:red;
+ }
+ .form-group--error input{
+   color: red;
  }
 </style>
