@@ -1,10 +1,7 @@
 package com.assist.bookingjava;
 
 import com.assist.bookingjava.model.Admin;
-import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.repositories.AdminRepository;
-import com.assist.bookingjava.services.AdminService;
-import com.assist.bookingjava.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -39,7 +36,7 @@ public class Boot extends WebMvcConfigurerAdapter {
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
-    AdminRepository companyService;
+    AdminRepository adminRepository;
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService());
@@ -48,7 +45,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     @Bean
     UserDetailsService userDetailsService() {
         return email -> {
-            Admin company = companyService.findByEmail(email);
+            Admin company = adminRepository.findByEmail(email);
         if(company != null) {
             return new User(company.getEmail(), company.getPass(), true, true, true, true,
                     AuthorityUtils.createAuthorityList("USER"));

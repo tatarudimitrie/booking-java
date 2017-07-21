@@ -19,6 +19,8 @@ import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class BookingService implements BookingInterface {
@@ -204,7 +206,34 @@ public class BookingService implements BookingInterface {
     private boolean bookingNotExists(long id) {
         return (bookingRepository.findById(id) == null);
     }
+    public boolean validMail(String email){
+        Pattern p = Pattern.compile("\\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b");
+        Matcher m = p.matcher(email);
 
+        if (m.find()){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    public boolean validPhone(String phone){
+        Pattern pattern = Pattern.compile("\\d{10}");
+        Matcher m = pattern.matcher(phone);
+
+        if (m.find()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean validDate(String date){
+        String exp="^[A-Z]{3}\\d{1}$";
+        if(date.length()==3) {
+            return true;
+        }else{
+            return false;}
+    }
 
     public void BookingSanitization(Booking booking) {
         String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -218,8 +247,16 @@ public class BookingService implements BookingInterface {
         bookingEntered[1][1] = "Phone";
         bookingEntered[2][1] = "Email";
         bookingEntered[3][1] = "Date";
-
-
+        
+        if(validMail(bookingEntered[2][0])==false){
+            errorBooking+="Eroare"+bookingEntered[2][1];
+        }
+        if(validDate(bookingEntered[3][0])==false){
+            errorBooking+="Eroare"+bookingEntered[3][1];
+        }
+        if(validPhone(bookingEntered[1][0])==false){
+            errorBooking+="Eroare"+bookingEntered[1][1];
+        }
 
         for (int i = 0; i < bookingEntered.length; i++) {
             if (!allowed.contains(bookingEntered[i][0])) {
