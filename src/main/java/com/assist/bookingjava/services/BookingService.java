@@ -127,7 +127,14 @@ public class BookingService implements BookingInterface {
     public ResponseEntity<String> addBooking(Booking booking) {
         System.out.println(nl + "BOOKING  POST: /bookings/add/ for " + booking.toString());
 
-        List<Schedule> schedules = scheduleRepository.findByService(booking.getService());
+        BookingSanitization(booking);
+        if(errorBooking!="")
+          {
+             System.out.println(errorBooking);
+             return ResponseEntity.badRequest().body("BAD REQUEST! " + errorBooking);
+          }
+        List<Schedule> schedules=new ArrayList<>();
+        schedules = scheduleRepository.findByService(booking.getService());
         boolean canSchedule = false;
 
         if (schedules == null) {
@@ -265,39 +272,37 @@ public class BookingService implements BookingInterface {
     }
 
     private boolean validDate(String date){
-        String exp="^[A-Z]{3}\\d{1}$";
-        return date.length()==3;
+        if(date.length()>5 || date.length()<3) {
+            return false;
+        }
+        return true;
     }
 
     public void BookingSanitization(Booking booking) {
-        String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        String bookingEntered[][] = new String[3][2];
+
+        String bookingEntered[][] = new String[5][2];
         bookingEntered[0][0] = booking.getName();
         bookingEntered[1][0] = booking.getPhone();
         bookingEntered[2][0] = booking.getEmail();
         bookingEntered[3][0] = booking.getDate();
 
-        bookingEntered[0][1] = "Name";
-        bookingEntered[1][1] = "Phone";
-        bookingEntered[2][1] = "Email";
-        bookingEntered[3][1] = "Date";
+        bookingEntered[0][1] = "name";
+        bookingEntered[1][1] = "phone";
+        bookingEntered[2][1] = "email";
+        bookingEntered[3][1] = "date";
 
         if(validMail(bookingEntered[2][0])==false){
-            errorBooking+="Eroare"+bookingEntered[2][1];
+            errorBooking+="Eroare "+bookingEntered[2][1]+ " ";
         }
         
         if(validDate(bookingEntered[3][0])==false){
-            errorBooking+="Eroare"+bookingEntered[3][1];
+            errorBooking+="Eroare "+bookingEntered[3][1]+ " " + bookingEntered[3][0];
         }
 
         if(validPhone(bookingEntered[1][0])==false){
-            errorBooking+="Eroare"+bookingEntered[1][1];
+            errorBooking+="Eroare "+bookingEntered[1][1]+ " ";
         }
 
-        for (int i = 0; i < bookingEntered.length; i++) {
-            if (!allowed.contains(bookingEntered[i][0])) {
-           //     errorBooking += "Eroare  " + bookingEntered[i][1];
-            }
-        }
+
     }
 }
