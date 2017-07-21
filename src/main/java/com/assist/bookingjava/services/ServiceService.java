@@ -164,7 +164,7 @@ public class ServiceService implements ServiceInterface {
 
         for (int i = 0; i < ServiceEntered.length; i++) {
             if (!allowed.contains(ServiceEntered[i][0])) {
-                errorInput += " Eroare  " + ServiceEntered[i][1];
+           //     errorInput += " Eroare  " + ServiceEntered[i][1];
             }
         }
 

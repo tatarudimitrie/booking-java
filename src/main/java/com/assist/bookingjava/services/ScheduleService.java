@@ -86,7 +86,7 @@ public class ScheduleService implements ScheduleInterface{
                     error+="Eroare la lungime";
                 }
                 if (!allowed.contains(schedul)) {
-                    error += "Error  " + schedul + " ";
+                 //   error += "Error  " + schedul + " ";
                 }
 
             }

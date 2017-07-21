@@ -17,9 +17,9 @@ import java.util.List;
 import static org.hibernate.jpa.internal.EntityManagerImpl.LOG;
 
 
-@Configuration
-public class DemoAuthenticationFilter extends OncePerRequestFilter {
-
+//@Configuration
+//public class DemoAuthenticationFilter extends OncePerRequestFilter {
+/*
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         response.addHeader("Access-Control-Allow-Origin", "*");
@@ -34,5 +34,5 @@ public class DemoAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-}
+    }*/
+//}
