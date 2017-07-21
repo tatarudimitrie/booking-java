@@ -28,6 +28,11 @@ public class BookingController {
         return bookingService.findBookingByName(name);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/bookings/company/{id}")
+    public ResponseEntity findBookingByService(@PathVariable long id){
+        return bookingService.findBookingByCompany(id);
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/bookings/service")
     public ResponseEntity findBookingByService(@RequestBody Service service){
         return bookingService.findBookingByService(service);
