@@ -1,3 +1,4 @@
+/*
 package com.assist.bookingjava.Security;
 
 import com.assist.bookingjava.model.Admin;
@@ -26,4 +27,4 @@ public class DetailsService implements UserDetailsService {
                 user.getPass(),
                 AuthorityUtils.createAuthorityList(new String[] {"USER"}));
     }
-}
+}*/

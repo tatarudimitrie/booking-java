@@ -8,6 +8,9 @@ import com.assist.bookingjava.model.Admin;
 import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +95,7 @@ public class AdminService implements AdminInterface {
 
         String sanitize = adminSanitize(admin);
         if (!sanitize.equals("")) {
-            //return ResponseEntity.badRequest().body("Wrong input!\n" + sanitize);
+            return ResponseEntity.badRequest().body("Wrong input!\n" + sanitize);
         }
 
         if (isDuplicateName(admin.getName())) {
@@ -163,10 +166,19 @@ public class AdminService implements AdminInterface {
 
         String errorString = "";
 
-        for (int i = 0; i < userEntered.length; ++i) {
-            if (!allowed.contains(userEntered[i][0])) {
+        for (int i = 0; i < userEntered.length-1; ++i) {
+            for(int j=0;j<userEntered[j].length;j++)
+            if (allowed.contains(userEntered[i][j])) {
                 errorString += "Error  " + userEntered[i][1] + " ";
             }
+
+        }
+
+        try {
+            InternetAddress emailAddr = new InternetAddress(userEntered[2][0]);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            errorString += "Email"+ex.toString();
         }
 
         return errorString;

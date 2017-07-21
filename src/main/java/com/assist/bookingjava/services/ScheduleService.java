@@ -8,6 +8,7 @@ import com.assist.bookingjava.services.interfaces.ScheduleInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Service
 public class ScheduleService implements ScheduleInterface{
@@ -43,7 +44,6 @@ public class ScheduleService implements ScheduleInterface{
     public ResponseEntity<String> addSchedule(Schedule schedule) {
 
         System.out.println(schedule.toString());
-
         try {
             Service service = serviceRepository.findById(schedule.getService().getId());
             schedule.setService(service);
@@ -58,7 +58,10 @@ public class ScheduleService implements ScheduleInterface{
     public ResponseEntity<String> addScheduleAll(List<Schedule> schedule) {
 
         System.out.println(schedule.toString());
-
+        String sanitize = scheduleSanitization(schedule);
+        if (!sanitize.equals("")) {
+            return ResponseEntity.badRequest().body("Eroare la introducere "+sanitize);
+        }
         try {
             for(Schedule s : schedule) {
                 Service service = serviceRepository.findById(s.getService().getId());
@@ -70,5 +73,23 @@ public class ScheduleService implements ScheduleInterface{
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
+    }
+    private String scheduleSanitization(List<Schedule> schedule)
+    {
+        String allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        String error="";
+
+            for(Schedule s : schedule) {
+                String schedul=s.getTime();
+                if(schedul.length()>5 || schedul.length()<3)
+                {
+                    error+="Eroare la lungime";
+                }
+                if (!allowed.contains(schedul)) {
+                    error += "Error  " + schedul + " ";
+                }
+
+            }
+return error;
     }
 }
