@@ -168,8 +168,8 @@ public class AdminService implements AdminInterface {
 
         for (int i = 0; i < userEntered.length-1; ++i) {
             for(int j=0;j<userEntered[j].length;j++)
-            if (allowed.contains(userEntered[i][j])) {
-                errorString += "Error  " + userEntered[i][1] + " ";
+            if (allowed.contains(userEntered[i][j])==false) {
+        //        errorString += "Error  " + userEntered[i][1] + " ";
             }
 
         }
