@@ -14,11 +14,11 @@ public interface BookingInterface {
 
     ResponseEntity findBookingByService(Service service);
 
+    ResponseEntity findBookingByCompany(long id);
+
     ResponseEntity<String> editBooking(Booking booking);
 
     ResponseEntity<String> addBooking(Booking booking);
 
     ResponseEntity<String> deleteBooking(long id);
-
-    String addBulkBooking();
 }

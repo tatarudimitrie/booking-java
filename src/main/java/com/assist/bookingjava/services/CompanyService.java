@@ -143,6 +143,6 @@ public class CompanyService implements CompanyInterface {
 
     private boolean isDuplicateName(Company company) {
         Company currentCompany = companyRepository.findByName(company.getName());
-        return (currentCompany.getId() != company.getId());
+        return (currentCompany == null) && (currentCompany.getId() != company.getId());
     }
 }

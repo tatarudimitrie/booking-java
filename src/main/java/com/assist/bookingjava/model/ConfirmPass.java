@@ -2,18 +2,19 @@ package com.assist.bookingjava.model;
 
 import java.io.Serializable;
 
-
 public class ConfirmPass implements Serializable {
-    String token;
-    String password;
-    String confirm;
+    private String token;
+    private String password;
+    private String confirm;
 
     public ConfirmPass(String token, String password, String confirm) {
         this.token = token;
         this.password = password;
         this.confirm = confirm;
     }
+
     public ConfirmPass(){}
+
     public String getToken() {
         return token;
     }

@@ -1,16 +1,16 @@
 package com.assist.bookingjava.services;
 
 import com.assist.bookingjava.model.Booking;
+import com.assist.bookingjava.model.Company;
 import com.assist.bookingjava.model.Schedule;
+import com.assist.bookingjava.model.Service;
 import com.assist.bookingjava.repositories.BookingRepository;
+import com.assist.bookingjava.repositories.CompanyRepository;
 import com.assist.bookingjava.repositories.ScheduleRepository;
 import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.BookingInterface;
-import org.hibernate.boot.jaxb.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Transport;
@@ -22,67 +22,161 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service
+@org.springframework.stereotype.Service
 public class BookingService implements BookingInterface {
 
     @Autowired
     private BookingRepository bookingRepository;
 
     @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
     private ServiceRepository serviceRepository;
 
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private CompanyRepository companyRepository;
 
+    private String nl = "\n";
     private String errorBooking = "";
     private final static String emailAddress = "assistbooking7@gmail.com";
     private final static String emailPassword = "Assist2017";
+
     public ResponseEntity findAllBookings() {
+        System.out.println(nl + "BOOKING GET: /bookings" +
+                "/all");
         try {
             List<Booking> bookingList = new ArrayList<>();
             for(Booking b : bookingRepository.findAll()) {
                 bookingList.add(b);
             }
+
+            System.out.println("OK: " + bookingList.toString());
             return ResponseEntity.ok(bookingList);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findBookingById(long id) {
+        System.out.println(nl + "BOOKING GET: /bookings/id/{" + id + "}");
+
         try {
             Booking booking = bookingRepository.findOne(id);
+
+            System.out.println("OK: " + booking.toString());
             return ResponseEntity.ok(booking);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity findBookingByName(String name) {
+        System.out.println(nl + "SCHEDULE GET: /schedules/time/{" + name + "}");
+
         try {
             List<Booking> bookingList = bookingRepository.findByName(name);
+
+            System.out.println("OK: " + bookingList.toString());
             return ResponseEntity.ok(bookingList);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
-    public ResponseEntity findBookingByService(com.assist.bookingjava.model.Service service) {
-
-        System.out.println("####################### " + service.getId() + " ################");
+    public ResponseEntity findBookingByCompany(long id) {
+        System.out.println(nl + "BOOKING GET: /bookings/company/{" + id + "}");
 
         try {
-            System.out.println(service.toString());
-            com.assist.bookingjava.model.Service currentService = serviceRepository.findById(service.getId());
-            List<Booking> bookingList = bookingRepository.findByService(currentService);
+            Company currentCompany = companyRepository.findById(id);
+            List<Service> serviceList = serviceRepository.findByCompany(currentCompany);
+
+            List<Booking> bookingList = new ArrayList<>();
+
+            for (Service s : serviceList) {
+                List<Booking> tempList = bookingRepository.findByService(s);
+                bookingList.addAll(tempList);
+            }
+
+            System.out.println("OK: " + bookingList.toString());
             return ResponseEntity.ok(bookingList);
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity findBookingByService(Service service) {
+        System.out.println(nl + "BOOKING (GET) POST: /bookings/service/ for " + service.toString());
+
+        try {
+            Service currentService = serviceRepository.findById(service.getId());
+            List<Booking> bookingList = bookingRepository.findByService(currentService);
+
+            System.out.println("OK: " + bookingList.toString());
+            return ResponseEntity.ok(bookingList);
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("Bad request! " + e.toString());
+        }
+    }
+
+    public ResponseEntity<String> addBooking(Booking booking) {
+        System.out.println(nl + "BOOKING  POST: /bookings/add/ for " + booking.toString());
+
+        List<Schedule> schedules = scheduleRepository.findByService(booking.getService());
+        boolean canSchedule = false;
+
+        if (schedules == null) {
+            System.out.println("BAD REQUEST! The service does not have any schedules!");
+            return ResponseEntity.badRequest().body("BAD REQUEST! The service does not have any schedules!");
+        }
+
+        for (Schedule s : schedules) {
+            if(booking.getDate().equals(s.getTime())){
+                canSchedule = true;
+            }
+        }
+
+        if (!canSchedule) {
+            System.out.println("BAD REQUEST! Can't book at this hour!");
+            return ResponseEntity.badRequest().body("BAD REQUEST! Can't book at this hour!");
+        }
+
+        List<Booking> bookings = bookingRepository.findByService(booking.getService());
+
+        canSchedule = true;
+
+        for (Booking b : bookings) {
+            if (b.getDate().equals(booking.getDate())) {
+                canSchedule = false;
+            }
+        }
+
+        if (!canSchedule) {
+            System.out.println("BAD REQUEST! Booking exists at that date!");
+            return ResponseEntity.badRequest().body("BAD REQUEST! Booking exists at that date!");
+        }
+
+        try {
+            Service service = serviceRepository.findById(booking.getService().getId());
+            booking.setService(service);
+            bookingRepository.save(booking);
+            sendBookingEmail(booking);
+
+            System.out.println("OK: " + booking.toString());
+            return ResponseEntity.ok("Booking added successfully!");
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
+            return ResponseEntity.badRequest().body("BAD REQUEST! " + e.toString());
         }
     }
 
     public ResponseEntity<String> editBooking(Booking booking) {
-        //BookingSanitization(booking);
+        System.out.println(nl + "BOOKING PUT: /bookings/edit/ for " + booking.toString());
 
         try {
             Booking currentBooking = bookingRepository.findOne(booking.getId());
@@ -91,69 +185,30 @@ public class BookingService implements BookingInterface {
             currentBooking.setPhone(booking.getPhone());
             currentBooking.setDate(booking.getDate());
             bookingRepository.save(currentBooking);
+
+            System.out.println("OK: " + currentBooking.toString());
             return ResponseEntity.ok("Booking was successfully edited!");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
-    public ResponseEntity<String> addBooking(Booking booking) {
-        List<Schedule> schedules = scheduleRepository.findByService(booking.getService());
-
-        if (schedules == null) {
-            return ResponseEntity.badRequest().body("BAD REQUEST! The service does not have any schedules!");
-        }
-
-        boolean findSchedule = false;
-
-        for (Schedule s : schedules) {
-            if(booking.getDate().equals(s.getTime())){
-                findSchedule = true;
-                break;
-            }
-        }
-
-        //if(findSchedule) {
-        //    return ResponseEntity.badRequest().body("The schedule is not available for the selected hour!");
-        //}
-
-        List<Booking> bookings = bookingRepository.findByService(booking.getService());
-
-        try {
-            for (Booking b : bookings) {
-                if (b.getDate().equals(booking.getDate())) {
-                    return ResponseEntity.badRequest().body("Booking exist for that date!");
-                }
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("BAD REQUEST! " + e.toString());
-        }
-
-        try {
-            com.assist.bookingjava.model.Service service = serviceRepository.findById(booking.getService().getId());
-            booking.setService(service);
-            bookingRepository.save(booking);
-            System.out.println("Booking was added, for service: " + service.toString());
-            sendBookingEmail(booking);
-            return ResponseEntity.ok("Booking added successfully!");
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("BAD REQUEST! " + e.toString());
-        }
-    }
-
     public ResponseEntity<String> deleteBooking(long id) {
+        System.out.println(nl + "BOOKING DELETE: /bookings/delete/{" + id + "}");
 
         if (bookingNotExists(id)) {
-            return ResponseEntity.badRequest().body("There is no booking with id " + id + " in DB!");
+            System.out.println(nl + "BAD REQUEST: No booking with id " + id + "in DB!");
+            return ResponseEntity.badRequest().body("BAD REQUEST: No booking with id " + id + "in DB!");
         }
 
         try {
             serviceRepository.delete(id);
+
+            System.out.println("OK: Deleted successfully!");
             return ResponseEntity.ok("Booking with id " + id + " was successfully deleted!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
@@ -173,66 +228,45 @@ public class BookingService implements BookingInterface {
                 });
         try {
             javax.mail.Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("bolohan46@gmail.com"));
-            message.setRecipients(javax.mail.Message.RecipientType.TO,
-                    InternetAddress.parse("bolohan46@gmail.com"));
-            message.setSubject("Confirm booking");
-            message.setText("Succes.");
-            message.setText("Your booking is: " + booking.getService().getName()+"\n"+
-                    "     phone is: " + booking.getPhone()+"\n" +
-                    "     email is: " + booking.getEmail()+"\n"+
-                    "     date is: " + booking.getDate()+"\n"+
-                    "     price is: " + booking.getService().getPrice()+"\n"+
-                    "     company is: " + booking.getService().getCompany().getName()+"\n"+
-                    " Thank you, "+booking.getName()+" because you chose us!");
-
-
-
+            String email = booking.getEmail();
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("Booking confirmation");
+            message.setText("Your booking was added successfully!");
+            message.setText("Your booking is was added for service: " + booking.getService().getName() + "\n\n" +
+                    "Email:   " + booking.getEmail() + "\n" +
+                    "Phone:   " + booking.getPhone() + "\n" +
+                    "Date:    " + booking.getDate() + "\n" +
+                    "Price:   " + booking.getService().getPrice() + "\n" +
+                    "Company: " + booking.getService().getCompany().getName() + "\n" +
+                    "THANK YOU, " + booking.getName() + " for choosing us!");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String addBulkBooking() {
-        bookingRepository.save(new Booking(30, "Name 1","Email1","Phone1","Date1"));
-        bookingRepository.save(new Booking(31, "Name 2","Email2","Phone2","Date2"));
-        bookingRepository.save(new Booking(32, "Name 3","Email3","Phone3","Date3"));
-        bookingRepository.save(new Booking(33, "Name 4","Email4","Phone4","Date4"));
-        bookingRepository.save(new Booking(34, "Name 5","Email5","Phone5","Date5"));
-        return "Booking table was updated with five DEFAULT ROWS!";
-    }
-
     private boolean bookingNotExists(long id) {
         return (bookingRepository.findById(id) == null);
     }
-    public boolean validMail(String email){
+
+    private boolean validMail(String email){
         Pattern p = Pattern.compile("\\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b");
         Matcher m = p.matcher(email);
 
-        if (m.find()){
-            return true;
-        }else{
-            return false;
-        }
-
+        return m.find();
     }
-    public boolean validPhone(String phone){
+
+    private boolean validPhone(String phone){
         Pattern pattern = Pattern.compile("\\d{10}");
         Matcher m = pattern.matcher(phone);
 
-        if (m.find()){
-            return true;
-        }else{
-            return false;
-        }
+        return m.find();
     }
-    public boolean validDate(String date){
+
+    private boolean validDate(String date){
         String exp="^[A-Z]{3}\\d{1}$";
-        if(date.length()==3) {
-            return true;
-        }else{
-            return false;}
+        return date.length()==3;
     }
 
     public void BookingSanitization(Booking booking) {
@@ -247,22 +281,23 @@ public class BookingService implements BookingInterface {
         bookingEntered[1][1] = "Phone";
         bookingEntered[2][1] = "Email";
         bookingEntered[3][1] = "Date";
-        
+
         if(validMail(bookingEntered[2][0])==false){
             errorBooking+="Eroare"+bookingEntered[2][1];
         }
+
         if(validDate(bookingEntered[3][0])==false){
             errorBooking+="Eroare"+bookingEntered[3][1];
         }
+
         if(validPhone(bookingEntered[1][0])==false){
             errorBooking+="Eroare"+bookingEntered[1][1];
         }
 
         for (int i = 0; i < bookingEntered.length; i++) {
             if (!allowed.contains(bookingEntered[i][0])) {
-                errorBooking += "Eroare  " + bookingEntered[i][1];
+           //     errorBooking += "Eroare  " + bookingEntered[i][1];
             }
         }
-
     }
 }

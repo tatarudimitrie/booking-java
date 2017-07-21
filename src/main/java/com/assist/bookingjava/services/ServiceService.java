@@ -7,7 +7,6 @@ import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,14 +23,11 @@ public class ServiceService implements ServiceInterface {
 
     private String nl = "\n";
 
-    private String errorInput = "";
-
     public ResponseEntity findAllServices() {
         System.out.println(nl + "SERVICE GET: /services/all");
 
         try {
             List<Service> serviceList = new ArrayList<>();
-
             for (Service s : serviceRepository.findAll()) {
                 serviceList.add(s);
             }
@@ -146,27 +142,20 @@ public class ServiceService implements ServiceInterface {
     private boolean serviceNotExists(long id) {
         return (serviceRepository.findById(id) == null);
     }
-    public void ServiceSanitization(Service service) {
-        String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        String ServiceEntered[][] = new String[3][2];
-        ServiceEntered[0][0] = service.getName();
-        ServiceEntered[1][0] = service.getDescription();
-        ServiceEntered[2][0] = service.getDuration();
-        ServiceEntered[3][0] = String.valueOf(service.getPrice());
-        ServiceEntered[4][0] = String.valueOf(service.getFree_space());
 
-        ServiceEntered[0][1] = "Name";
-        ServiceEntered[1][1] = "Description";
-        ServiceEntered[2][1] = "Duration";
-        ServiceEntered[3][1] = "Price";
-        ServiceEntered[4][1] = "Free space";
+    private boolean validName(String name){
+        String expression="^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
 
+        return matcher.matches();
+    }
 
-        for (int i = 0; i < ServiceEntered.length; i++) {
-            if (!allowed.contains(ServiceEntered[i][0])) {
-                errorInput += " Eroare  " + ServiceEntered[i][1];
-            }
-        }
+    private boolean validNumber(String number){
+        String expression="^[0-9._]*$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(number);
 
+        return matcher.matches();
     }
 }
