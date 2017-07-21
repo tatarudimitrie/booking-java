@@ -26,7 +26,6 @@ import org.springframework.security.core.userdetails.User;
 @ComponentScan
 @EnableAutoConfiguration
 public class Boot extends WebMvcConfigurerAdapter {
-
     public static void main(String[] args) {
         SpringApplication.run(Boot.class, args);
     }
@@ -46,29 +45,28 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
     UserDetailsService userDetailsService() {
         return email -> {
             Admin company = adminRepository.findByEmail(email);
-        if(company != null) {
-            return new User(company.getEmail(), company.getPass(), true, true, true, true,
-                    AuthorityUtils.createAuthorityList("USER"));
-        }
-        else {
-            throw new UsernameNotFoundException("could not find the user '"            + email + "'");
-        }    };
+            if(company != null) {
+                return new User(company.getEmail(), company.getPass(), true, true, true, true,
+                                AuthorityUtils.createAuthorityList("USER"));
+            } else {
+                throw new UsernameNotFoundException("could not find the user '" + email + "'");
+            }
+        };
     }
 }
-
 
 @EnableWebSecurity
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().fullyAuthenticated().and().
-        httpBasic().and().        csrf().disable();
+        http.authorizeRequests().anyRequest().fullyAuthenticated().
+                and().httpBasic().
+                and().csrf().disable();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**");
-
  }
 }

@@ -173,7 +173,9 @@ public class BookingService implements BookingInterface {
                 });
         try {
             javax.mail.Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("bolohan46@gmail.com"));
+            String email = booking.getEmail();
+            message.setFrom(new InternetAddress(email));
+            //message.setFrom(new InternetAddress("bolohan46@gmail.com"));
             message.setRecipients(javax.mail.Message.RecipientType.TO,
                     InternetAddress.parse("bolohan46@gmail.com"));
             message.setSubject("Confirm booking");
