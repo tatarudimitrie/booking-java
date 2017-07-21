@@ -107,6 +107,21 @@ public class ServiceService implements ServiceInterface {
     public ResponseEntity<String> addService(Service service) {
         System.out.println(nl + "SERVICE POST: /services/add - for " + service.toString());
 
+        if(!isValidName(service.getName())) {
+            System.out.println("BAD REQUEST NAME!");
+            return ResponseEntity.badRequest().body("Bad request! invalid name");
+        }
+
+        if(!isValidPrice(String.valueOf(service.getPrice()))) {
+            System.out.println("BAD REQUEST PRICE!");
+            return ResponseEntity.badRequest().body("Bad request! invalid price");
+        }
+        
+        if(!isValidDuration(String.valueOf(service.getDuration()))) {
+            System.out.println("BAD REQUEST DURATION!");
+            return ResponseEntity.badRequest().body("Bad request! invalid duration");
+        }
+
         try {
             Company company = companyRepository.findById(service.getCompany().getId());
             service.setCompany(company);
@@ -143,7 +158,7 @@ public class ServiceService implements ServiceInterface {
         return (serviceRepository.findById(id) == null);
     }
 
-    private boolean validName(String name){
+    private boolean isValidName(String name){
         String expression="^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(name);
@@ -151,7 +166,15 @@ public class ServiceService implements ServiceInterface {
         return matcher.matches();
     }
 
-    private boolean validNumber(String number){
+    private boolean isValidPrice(String number){
+        String expression="^[0-9._]*$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(number);
+
+        return matcher.matches();
+    }
+
+    private boolean isValidDuration(String number){
         String expression="^[0-9._]*$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(number);
