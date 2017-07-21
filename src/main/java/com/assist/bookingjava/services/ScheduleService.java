@@ -7,12 +7,11 @@ import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.ScheduleInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Service
-public class ScheduleService implements ScheduleInterface{
+public class ScheduleService implements ScheduleInterface {
 
     @Autowired
     private ScheduleRepository scheduleRepository;

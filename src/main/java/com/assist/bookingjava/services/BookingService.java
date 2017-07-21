@@ -176,7 +176,7 @@ public class BookingService implements BookingInterface {
     }
 
     public ResponseEntity<String> editBooking(Booking booking) {
-        System.out.println(nl + "PUT: /bookings/service/ for " + booking.toString());
+        System.out.println(nl + "BOOKING PUT: /bookings/edit/ for " + booking.toString());
 
         try {
             Booking currentBooking = bookingRepository.findOne(booking.getId());
@@ -185,24 +185,30 @@ public class BookingService implements BookingInterface {
             currentBooking.setPhone(booking.getPhone());
             currentBooking.setDate(booking.getDate());
             bookingRepository.save(currentBooking);
+
+            System.out.println("OK: " + currentBooking.toString());
             return ResponseEntity.ok("Booking was successfully edited!");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> deleteBooking(long id) {
+        System.out.println(nl + "BOOKING DELETE: /bookings/delete/{" + id + "}");
 
         if (bookingNotExists(id)) {
-            return ResponseEntity.badRequest().body("There is no booking with id " + id + " in DB!");
+            System.out.println(nl + "BAD REQUEST: No booking with id " + id + "in DB!");
+            return ResponseEntity.badRequest().body("BAD REQUEST: No booking with id " + id + "in DB!");
         }
 
         try {
             serviceRepository.delete(id);
+
+            System.out.println("OK: Deleted successfully!");
             return ResponseEntity.ok("Booking with id " + id + " was successfully deleted!");
         } catch (Exception e) {
+            System.out.println("BAD REQUEST!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
@@ -224,66 +230,43 @@ public class BookingService implements BookingInterface {
             javax.mail.Message message = new MimeMessage(session);
             String email = booking.getEmail();
             message.setFrom(new InternetAddress(email));
-            //message.setFrom(new InternetAddress("bolohan46@gmail.com"));
-            message.setRecipients(javax.mail.Message.RecipientType.TO,
-                    InternetAddress.parse(email));
-            message.setSubject("Confirm booking");
-            message.setText("Success");
-            message.setText("Your booking is: " + booking.getService().getName()+"\n"+
-                    "     phone is: " + booking.getPhone()+"\n" +
-                    "     email is: " + booking.getEmail()+"\n"+
-                    "     date is: " + booking.getDate()+"\n"+
-                    "     price is: " + booking.getService().getPrice()+"\n"+
-                    "     company is: " + booking.getService().getCompany().getName()+"\n"+
-                    " Thank you, "+booking.getName()+" because you chose us!");
-
-
-
+            message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("Booking confirmation");
+            message.setText("Your booking was added successfully!");
+            message.setText("Your booking is was added for service: " + booking.getService().getName() + "\n\n" +
+                    "Email:   " + booking.getEmail() + "\n" +
+                    "Phone:   " + booking.getPhone() + "\n" +
+                    "Date:    " + booking.getDate() + "\n" +
+                    "Price:   " + booking.getService().getPrice() + "\n" +
+                    "Company: " + booking.getService().getCompany().getName() + "\n" +
+                    "THANK YOU, " + booking.getName() + " for choosing us!");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String addBulkBooking() {
-        bookingRepository.save(new Booking(30, "Name 1","Email1","Phone1","Date1"));
-        bookingRepository.save(new Booking(31, "Name 2","Email2","Phone2","Date2"));
-        bookingRepository.save(new Booking(32, "Name 3","Email3","Phone3","Date3"));
-        bookingRepository.save(new Booking(33, "Name 4","Email4","Phone4","Date4"));
-        bookingRepository.save(new Booking(34, "Name 5","Email5","Phone5","Date5"));
-        return "Booking table was updated with five DEFAULT ROWS!";
-    }
-
     private boolean bookingNotExists(long id) {
         return (bookingRepository.findById(id) == null);
     }
-    public boolean validMail(String email){
+
+    private boolean validMail(String email){
         Pattern p = Pattern.compile("\\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b");
         Matcher m = p.matcher(email);
 
-        if (m.find()){
-            return true;
-        }else{
-            return false;
-        }
-
+        return m.find();
     }
-    public boolean validPhone(String phone){
+
+    private boolean validPhone(String phone){
         Pattern pattern = Pattern.compile("\\d{10}");
         Matcher m = pattern.matcher(phone);
 
-        if (m.find()){
-            return true;
-        }else{
-            return false;
-        }
+        return m.find();
     }
-    public boolean validDate(String date){
+
+    private boolean validDate(String date){
         String exp="^[A-Z]{3}\\d{1}$";
-        if(date.length()==3) {
-            return true;
-        }else{
-            return false;}
+        return date.length()==3;
     }
 
     public void BookingSanitization(Booking booking) {
@@ -302,9 +285,11 @@ public class BookingService implements BookingInterface {
         if(validMail(bookingEntered[2][0])==false){
             errorBooking+="Eroare"+bookingEntered[2][1];
         }
+        
         if(validDate(bookingEntered[3][0])==false){
             errorBooking+="Eroare"+bookingEntered[3][1];
         }
+
         if(validPhone(bookingEntered[1][0])==false){
             errorBooking+="Eroare"+bookingEntered[1][1];
         }
@@ -314,6 +299,5 @@ public class BookingService implements BookingInterface {
            //     errorBooking += "Eroare  " + bookingEntered[i][1];
             }
         }
-
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BookingController {
-
     @Autowired
     private BookingService bookingService;
 
@@ -51,10 +50,5 @@ public class BookingController {
     @RequestMapping(method=RequestMethod.DELETE, value="/bookings/delete/{id}")
     public ResponseEntity<String> deleteBooking(@PathVariable long id) {
         return bookingService.deleteBooking(id);
-    }
-
-    @RequestMapping(method= RequestMethod.GET, value="/bookings/input")
-    public String addBulkBooking(){
-        return bookingService.addBulkBooking();
     }
 }

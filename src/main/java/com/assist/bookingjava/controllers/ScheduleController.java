@@ -6,12 +6,10 @@ import com.assist.bookingjava.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 public class ScheduleController {
-
     @Autowired
     ScheduleService scheduleService;
 
