@@ -19,6 +19,4 @@ public interface CompanyInterface {
     ResponseEntity<String> addCompany(Company company);
 
     ResponseEntity<String> deleteCompany(long id);
-
-    String addBulkCompany();
 }

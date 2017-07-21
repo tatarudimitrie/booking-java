@@ -27,12 +27,6 @@ public class AdminController {
         return adminService.findAdminByName(name);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/email/{email}")
-    public ResponseEntity findAdminByEmail(@PathVariable String email){
-        return adminService.findAdminByEmail(email);
-    }
-
-
     @RequestMapping(method=RequestMethod.PUT, value="/admins/edit")
     public ResponseEntity<String> editAdmin(@RequestBody Admin admin) {
         return adminService.editAdmin(admin);
@@ -48,7 +42,7 @@ public class AdminController {
         return adminService.deleteAdmin(id);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/admins/input")
+    @RequestMapping(method=RequestMethod.GET, value="/admins/hack")
     public String bulkAddAdmin() {
         return adminService.bulkAddAdmin();
     }

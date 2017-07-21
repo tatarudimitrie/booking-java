@@ -20,17 +20,30 @@ public class ScheduleService implements ScheduleInterface{
 
 
     public ResponseEntity findScheduleByService(Service service) {
+
+        System.out.println("####  ID:  " + service.getId() + "  ####");
+
         try {
             System.out.println(service.toString());
-            Service currentService = serviceRepository.findById(service.getId());
+            Service currentService = serviceRepository.findById((long) service.getId());
             List<Schedule> scheduleList = scheduleRepository.findByService(currentService);
+
+            for(Schedule s: scheduleList) {
+                s.setService(null);
+            }
+
+            System.out.println("RESPONSE: " + scheduleList.toString());
             return ResponseEntity.ok(scheduleList);
         } catch (Exception e) {
+            System.out.println("Am trimis eroare!");
             return ResponseEntity.badRequest().body("Bad request! " + e.toString());
         }
     }
 
     public ResponseEntity<String> addSchedule(Schedule schedule) {
+
+        System.out.println(schedule.toString());
+
         try {
             Service service = serviceRepository.findById(schedule.getService().getId());
             schedule.setService(service);
@@ -43,6 +56,9 @@ public class ScheduleService implements ScheduleInterface{
     }
 
     public ResponseEntity<String> addScheduleAll(List<Schedule> schedule) {
+
+        System.out.println(schedule.toString());
+
         try {
             for(Schedule s : schedule) {
                 Service service = serviceRepository.findById(s.getService().getId());

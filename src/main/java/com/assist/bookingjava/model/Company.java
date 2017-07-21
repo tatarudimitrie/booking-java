@@ -1,6 +1,8 @@
 package com.assist.bookingjava.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,7 +13,7 @@ public class Company implements Serializable {
     private static final long serialVersionUID = -3009157732242241606L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -82,6 +84,7 @@ public class Company implements Serializable {
     public String toString() {
         return "Company{" +
                 "id=" + id +
+                ", admin=" + admin + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", image_url='" + image_url + '\'' +
