@@ -249,7 +249,7 @@ public class BookingService implements BookingInterface {
         bookingEntered[1][1] = "Phone";
         bookingEntered[2][1] = "Email";
         bookingEntered[3][1] = "Date";
-        
+
         if(validMail(bookingEntered[2][0])==false){
             errorBooking+="Eroare"+bookingEntered[2][1];
         }
