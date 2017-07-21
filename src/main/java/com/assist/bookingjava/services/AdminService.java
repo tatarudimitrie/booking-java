@@ -167,13 +167,11 @@ public class AdminService implements AdminInterface {
         String errorString = "";
 
         for (int i = 0; i < userEntered.length-1; ++i) {
-            if (allowed.contains(userEntered[i][0])) {
-
-            }
-            else
-            {
+            for(int j=0;j<userEntered[j].length;j++)
+            if (allowed.contains(userEntered[i][j])) {
                 errorString += "Error  " + userEntered[i][1] + " ";
             }
+
         }
 
         try {
