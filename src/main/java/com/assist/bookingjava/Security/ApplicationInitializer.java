@@ -1,3 +1,4 @@
+/*
 package com.assist.bookingjava.Security;
 
 import org.springframework.web.WebApplicationInitializer;
@@ -18,4 +19,4 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         servlet.setLoadOnStartup(1);
         servlet.addMapping("/");
     }
-}
+}*/

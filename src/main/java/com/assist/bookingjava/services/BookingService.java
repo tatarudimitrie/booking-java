@@ -220,6 +220,7 @@ public class BookingService implements BookingInterface {
         bookingEntered[3][1] = "Date";
 
 
+
         for (int i = 0; i < bookingEntered.length; i++) {
             if (!allowed.contains(bookingEntered[i][0])) {
                 errorBooking += "Eroare  " + bookingEntered[i][1];

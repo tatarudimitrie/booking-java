@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
-
+    @CrossOrigin
     @RequestMapping(path="/login", method = RequestMethod.POST)
     public ResponseEntity<String> login(){
 
