@@ -22,7 +22,7 @@ public class AdminService implements AdminInterface {
     private String defaultPass = "******";
     private String nl = "\n";
 
-    private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    private static final git s PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     public ResponseEntity findAllAdmins() {
         System.out.println(nl + "ADMIN GET: /admins/all");
