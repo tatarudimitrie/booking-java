@@ -6,6 +6,7 @@ import com.assist.bookingjava.repositories.BookingRepository;
 import com.assist.bookingjava.repositories.ScheduleRepository;
 import com.assist.bookingjava.repositories.ServiceRepository;
 import com.assist.bookingjava.services.interfaces.BookingInterface;
+import org.hibernate.boot.jaxb.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,9 @@ public class BookingService implements BookingInterface {
     }
 
     public ResponseEntity findBookingByService(com.assist.bookingjava.model.Service service) {
+
+        System.out.println("####################### " + service.getId() + " ################");
+
         try {
             System.out.println(service.toString());
             com.assist.bookingjava.model.Service currentService = serviceRepository.findById(service.getId());
@@ -109,9 +113,9 @@ public class BookingService implements BookingInterface {
             }
         }
 
-        if(!findSchedule) {
-            return ResponseEntity.badRequest().body("The schedule is not available for the selected hour!");
-        }
+        //if(findSchedule) {
+        //    return ResponseEntity.badRequest().body("The schedule is not available for the selected hour!");
+        //}
 
         List<Booking> bookings = bookingRepository.findByService(booking.getService());
 
@@ -214,6 +218,7 @@ public class BookingService implements BookingInterface {
         bookingEntered[1][1] = "Phone";
         bookingEntered[2][1] = "Email";
         bookingEntered[3][1] = "Date";
+
 
 
         for (int i = 0; i < bookingEntered.length; i++) {

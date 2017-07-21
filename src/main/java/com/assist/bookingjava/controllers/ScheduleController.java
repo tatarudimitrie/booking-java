@@ -21,19 +21,27 @@ public class ScheduleController {
     @Autowired
     ScheduleService scheduleService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/schedule/add")
+    @RequestMapping(method = RequestMethod.POST, value="/schedules/service")
+    public ResponseEntity findScheduleByService(@RequestBody Service service) {
+        return scheduleService.findScheduleByService(service);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/schedules/add")
     public ResponseEntity<String> addSchedule(@RequestBody Schedule schedule){
         return scheduleService.addSchedule(schedule);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/schedule/add/all")
+    @RequestMapping(method = RequestMethod.POST, value = "/schedules/add/all")
     public ResponseEntity<String> addScheduleAll(@RequestBody List<Schedule> schedule){
+        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>" + schedule.toString());
         return scheduleService.addScheduleAll(schedule);
     }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/schedule/edit")
     public ResponseEntity<String> editSchedule(@RequestBody List<Schedule> schedule){
         return scheduleService.addScheduleAll(schedule);
+
     }
 
 }

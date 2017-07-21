@@ -88,7 +88,20 @@
             <artifactId>android-json</artifactId>
             <version>RELEASE</version>
         </dependency>
+<<<<<<< HEAD
 
+=======
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+>>>>>>> e7d331d629db6df3b717eb6296000d9589f1eb46
     </dependencies>
 
     <properties>

@@ -28,6 +28,11 @@ public class CompanyController {
         return companyService.findCompanyByName(name);
     }
 
+    @RequestMapping(method=RequestMethod.POST, value="/companies/admin")
+    public ResponseEntity findByAdmin(@RequestBody Admin admin) {
+        return companyService.findCompanyByAdmin(admin);
+    }
+
     @RequestMapping(method=RequestMethod.PUT, value="/companies/edit")
     public ResponseEntity<String> editCompany(@RequestBody Company company) {
         return companyService.editCompany(company);
@@ -41,15 +46,5 @@ public class CompanyController {
     @RequestMapping(method=RequestMethod.DELETE, value="/companies/delete/{id}")
     public ResponseEntity<String> deleteCompany(@PathVariable long id) {
         return companyService.deleteCompany(id);
-    }
-
-    @RequestMapping(method=RequestMethod.POST, value="/companies/admin")
-    public ResponseEntity findByAdmin(@RequestBody Admin admin) {
-        return companyService.findCompanyByAdmin(admin);
-    }
-
-    @RequestMapping(method= RequestMethod.GET, value="/companies/input")
-    public String addBulkCompany(){
-        return companyService.addBulkCompany();
     }
 }

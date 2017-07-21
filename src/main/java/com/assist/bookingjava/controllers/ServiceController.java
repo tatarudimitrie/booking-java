@@ -38,9 +38,7 @@ public class ServiceController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/services/add")
     public ResponseEntity<String> addService(@RequestBody Service service){
-
         return serviceService.addService(service);
-
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/services/delete/{id}")
