@@ -228,6 +228,7 @@ public class BookingService implements BookingInterface {
         }
     }
     public boolean validDate(String date){
+        String exp="^[A-Z]{3}\\d{1}$";
         if(date.length()==3) {
             return true;
         }else{

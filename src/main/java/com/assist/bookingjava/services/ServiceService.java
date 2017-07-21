@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @org.springframework.stereotype.Service
 public class ServiceService implements ServiceInterface {
@@ -144,7 +146,6 @@ public class ServiceService implements ServiceInterface {
     private boolean serviceNotExists(long id) {
         return (serviceRepository.findById(id) == null);
     }
-
     public void ServiceSanitization(Service service) {
         String allowed = "@._=-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         String ServiceEntered[][] = new String[3][2];
