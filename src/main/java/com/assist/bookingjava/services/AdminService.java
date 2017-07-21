@@ -1,5 +1,6 @@
 package com.assist.bookingjava.services;
 
+import com.assist.bookingjava.model.Booking;
 import com.assist.bookingjava.services.interfaces.AdminInterface;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,10 +10,15 @@ import com.assist.bookingjava.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class AdminService implements AdminInterface {
@@ -21,6 +27,8 @@ public class AdminService implements AdminInterface {
     private AdminRepository adminRepository;
     private String defaultPass = "******";
     private String nl = "\n";
+    private final static String emailAddress = "assistbooking7@gmail.com";
+    private final static String emailPassword = "Assist2017";
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -113,6 +121,7 @@ public class AdminService implements AdminInterface {
         try {
             admin.setPass(encryptPassword(admin.getPass()));
             adminRepository.save(admin);
+            sendRegisterEmail(admin);
 
             System.out.println("OK: " + admin.toString());
             return ResponseEntity.ok("Admin registered successfully!");
@@ -168,10 +177,9 @@ public class AdminService implements AdminInterface {
 
         for (int i = 0; i < userEntered.length-1; ++i) {
             for(int j=0;j<userEntered[j].length;j++)
-            if (allowed.contains(userEntered[i][j])) {
-                errorString += "Error  " + userEntered[i][1] + " ";
+            if (allowed.contains(userEntered[i][j])==false) {
+        //        errorString += "Error  " + userEntered[i][1] + " ";
             }
-
         }
 
         try {
@@ -182,6 +190,33 @@ public class AdminService implements AdminInterface {
         }
 
         return errorString;
+    }
+
+    private void sendRegisterEmail(Admin admin) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        javax.mail.Session session = javax.mail.Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(emailAddress, emailPassword);
+                    }
+                });
+        try {
+            javax.mail.Message message = new MimeMessage(session);
+            String email = admin.getEmail();
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("Account was created successfully!");
+            message.setText("Admin register");
+            message.setText("Admin registered successfully!");
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String bulkAddAdmin() {

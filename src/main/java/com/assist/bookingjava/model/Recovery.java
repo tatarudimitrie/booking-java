@@ -17,12 +17,11 @@ public class Recovery implements Serializable {
     @Column(name = "reset_token")
     private String resetToken;
 
+    public Recovery() {}
+
     public Recovery(String email, String resetToken) {
         this.email = email;
         this.resetToken = resetToken;
-    }
-    public Recovery() {
-
     }
 
     public long getId() {
