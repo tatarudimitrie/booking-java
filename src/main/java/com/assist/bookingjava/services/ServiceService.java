@@ -116,7 +116,7 @@ public class ServiceService implements ServiceInterface {
             System.out.println("BAD REQUEST PRICE!");
             return ResponseEntity.badRequest().body("Bad request! invalid price");
         }
-        
+
         if(!isValidDuration(String.valueOf(service.getDuration()))) {
             System.out.println("BAD REQUEST DURATION!");
             return ResponseEntity.badRequest().body("Bad request! invalid duration");
