@@ -294,7 +294,7 @@ public class BookingService implements BookingInterface {
         if(validMail(bookingEntered[2][0])==false){
             errorBooking+="Eroare "+bookingEntered[2][1]+ " ";
         }
-        
+
         if(validDate(bookingEntered[3][0])==false){
             errorBooking+="Eroare "+bookingEntered[3][1]+ " " + bookingEntered[3][0];
         }

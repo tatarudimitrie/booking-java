@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-   private AdminRepository adminRepository;
+    private AdminRepository adminRepository;
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -21,8 +21,8 @@ public class UserController {
     @RequestMapping(path="/login", method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestBody Admin admin){
 
-        Admin currentAdmin=new Admin();
-        currentAdmin=adminRepository.findByEmail(admin.getEmail());
+        Admin currentAdmin = new Admin();
+        currentAdmin = adminRepository.findByEmail(admin.getEmail());
 
         String pass = currentAdmin.getPass();
         String inputPass = admin.getPass();
@@ -31,7 +31,7 @@ public class UserController {
             currentAdmin = adminRepository.findByEmail(admin.getEmail());
             return new ResponseEntity<>("Session created " + currentAdmin.getEmail() , HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Somethin went wrong", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         }
     }
 

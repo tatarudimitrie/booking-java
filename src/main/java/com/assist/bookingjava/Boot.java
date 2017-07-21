@@ -36,6 +36,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
     AdminRepository adminRepository;
+
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService());
@@ -46,8 +47,8 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
         return email -> {
             Admin company = adminRepository.findByEmail(email);
             if(company != null) {
-                return new User(company.getEmail(), company.getPass(), true, true, true, true,
-                                AuthorityUtils.createAuthorityList("USER"));
+                return new User(company.getEmail(), company.getPass(), true, true,
+                        true, true, AuthorityUtils.createAuthorityList("USER"));
             } else {
                 throw new UsernameNotFoundException("could not find the user '" + email + "'");
             }
@@ -67,7 +68,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-       web.ignoring().antMatchers("/**");
-
- }
+        web.ignoring().antMatchers("/**");
+    }
 }

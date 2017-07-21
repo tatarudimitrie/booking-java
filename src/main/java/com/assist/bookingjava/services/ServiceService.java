@@ -107,24 +107,17 @@ public class ServiceService implements ServiceInterface {
     public ResponseEntity<String> addService(Service service) {
         System.out.println(nl + "SERVICE POST: /services/add - for " + service.toString());
 
-        if(!isValidName(service.getName()))
-        {
-
+        if(!isValidName(service.getName())) {
             System.out.println("BAD REQUEST NAME!");
             return ResponseEntity.badRequest().body("Bad request! invalid name");
         }
 
-        if(!isvValidPrice(String.valueOf(service.getPrice())))
-        {
-
-            System.out.println("BAD REQUEST PHONE!");
-            return ResponseEntity.badRequest().body("Bad request! invalid phone");
+        if(!isValidPrice(String.valueOf(service.getPrice()))) {
+            System.out.println("BAD REQUEST PRICE!");
+            return ResponseEntity.badRequest().body("Bad request! invalid price");
         }
 
-
-        if(!isValidDuration(String.valueOf(service.getDuration())))
-        {
-
+        if(!isValidDuration(String.valueOf(service.getDuration()))) {
             System.out.println("BAD REQUEST DURATION!");
             return ResponseEntity.badRequest().body("Bad request! invalid duration");
         }
@@ -173,7 +166,7 @@ public class ServiceService implements ServiceInterface {
         return matcher.matches();
     }
 
-    private boolean isvValidPrice(String number){
+    private boolean isValidPrice(String number){
         String expression="^[0-9._]*$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(number);
@@ -188,6 +181,4 @@ public class ServiceService implements ServiceInterface {
 
         return matcher.matches();
     }
-
-
 }

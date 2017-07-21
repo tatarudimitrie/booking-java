@@ -3,7 +3,6 @@ package com.assist.bookingjava.controllers;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,9 +14,7 @@ public class ImageController {
     private static String UPLOADED_FOLDER = "/media/myt/WORK/Upload/";
 
     @RequestMapping(method=RequestMethod.POST, value="/upload")
-    //@PostMapping("/upload")
-    public String singleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+    public String singleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
         System.out.println("UPLOAD STARTED! Try to upload on: " + UPLOADED_FOLDER);
 
@@ -32,8 +29,7 @@ public class ImageController {
             Files.write(path, bytes);
 
             redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + file.getOriginalFilename() + "'");
-
+                                                 "You successfully uploaded '" + file.getOriginalFilename() + "'");
             System.out.println("OK!");
         } catch (IOException e) {
             System.out.println("BAD REQUEST!");
@@ -41,7 +37,6 @@ public class ImageController {
         }
 
         System.out.println("UPLOAD ENDED!");
-
         return "redirect:/uploadStatus";
     }
 
@@ -49,5 +44,4 @@ public class ImageController {
     public String uploadStatus() {
         return "uploadStatus";
     }
-
 }
